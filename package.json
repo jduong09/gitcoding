@@ -1,0 +1,19 @@
+{
+  "name": "gitcoding",
+  "version": "1.0.0",
+  "description": "Keep track of code goals and be reminded, stay coding everyday!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jduong09/gitcoding.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jduong09/gitcoding/issues"
+  },
+  "homepage": "https://github.com/jduong09/gitcoding#readme"
+}
