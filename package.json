@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/jduong09/gitcoding/issues"
   },
-  "homepage": "https://github.com/jduong09/gitcoding#readme"
+  "homepage": "https://github.com/jduong09/gitcoding#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "pg": "^8.7.1"
+  }
 }
