@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const db = require('./db');
 
 const app = express();
-const port = 3000;
+const port = 5000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -15,6 +15,10 @@ app.listen(port, () => {
 app.get('/', async (req, res) => {
   await db.createUsers();
   res.send('Server is setup :)');
+});
+
+app.get('/api', (req, res) => {
+  res.status(200).json({data: 'Stuff goes here'});
 });
 
 app.get('/users', async (req, res) => {
