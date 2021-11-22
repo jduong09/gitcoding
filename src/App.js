@@ -19,6 +19,21 @@ class App extends React.Component {
     }
   }
 
+  async onCreateUser() {
+    try {
+      const res = await fetch('/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: 'jduong' }),
+      });
+      console.log('RES: ', res);
+    } catch (error) {
+      console.log('ERROR: ', error, this.foo);
+    }
+  }
+
   render() {
     return (
       <div className="App">
@@ -39,6 +54,9 @@ class App extends React.Component {
           </a>
           <button type="button" onClick={this.onGetData}>
             Click Me
+          </button>
+          <button type="button" onClick={this.onCreateUser}>
+            Create User
           </button>
         </header>
       </div>
