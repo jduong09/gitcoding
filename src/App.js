@@ -14,8 +14,23 @@ class App extends React.Component {
       console.log('RES:', res);
       const data = await res.json();
       console.log('DATA: ', data);
-    } catch(error) {
-      console.log('ERROR: ', error);
+    } catch (error) {
+      console.log('ERROR: ', error, this.foo);
+    }
+  }
+
+  async onCreateUser() {
+    try {
+      const res = await fetch('/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: 'jduong' }),
+      });
+      console.log('RES: ', res);
+    } catch (error) {
+      console.log('ERROR: ', error, this.foo);
     }
   }
 
@@ -25,7 +40,9 @@ class App extends React.Component {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
-            Edit <code>src/App.js</code> and save to reload.
+            Edit
+            <code>src/App.js</code>
+            and save to reload.
           </p>
           <a
             className="App-link"
@@ -35,7 +52,12 @@ class App extends React.Component {
           >
             Learn React
           </a>
-          <button onClick={this.onGetData}>Click Me</button>
+          <button type="button" onClick={this.onGetData}>
+            Click Me
+          </button>
+          <button type="button" onClick={this.onCreateUser}>
+            Create User
+          </button>
         </header>
       </div>
     );
