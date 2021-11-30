@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
@@ -7,7 +8,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.onGetData = this.onGetData.bind(this);
-    this.onSignIn = this.onSignIn.bind(this);
+    this.parseQueryString = this.parseQueryString.bind(this);
   }
 
   async onGetData() {
@@ -36,33 +37,57 @@ class App extends React.Component {
     }
   }
 
+  // Don't forget to put client_id into .env for good practice.
+  // Authorization and token_endpoint maybe too?
+  // eslint-disable-next-line class-methods-use-this
   async onSignIn(e) {
     // prevent default functionality of onClick event
     e.preventDefault();
+    try {
+      const config = {
+        client_id: '0oa2w7lue0U6fnn3N5d7',
+        redirect_uri: 'http://localhost:3000/',
+        authorization_endpoint: 'https://dev-88956181.okta.com/oauth2/default/v1/authorize',
+        token_endpoint: 'https://dev-88956181.okta.com/oauth2/default/v1/token',
+        request_scopes: 'openid',
+      };
+      // Create and store a random "state" value
+      const state = generateRandomString();
+      localStorage.setItem('pkce_state', state);
 
-    // Configure application and authorization server details
-    const config = {
-      client_id: '0oa2w7lue0U6fnn3N5d7',
-      redirect_uri: 'https://localhost:3000/',
-      authorization_endpoint: 'https://dev-88956181.okta.com/oauth2/default/v1/authorize',
-      token_endpoint: 'https://dev-88956181.okta.com/oauth2/default/v1/token',
-      request_scopes: 'openid',
-    };
+      // Create and store a new PKCE code_verifier (the plaintext random secret)
+      const codeVerifier = generateRandomString();
+      localStorage.setItem('pkce_code_verifier', codeVerifier);
+      const codeChallenge = await pkceChallengeFromVerifier(codeVerifier);
 
-    // Create and store a random "state" value
-    const state = generateRandomString.bind(this);
-    localStorage.setItem('pkce_state', state);
+      const url = `${config.authorization_endpoint}?response_type=code&client_id=${encodeURIComponent(config.client_id)}&state=${encodeURIComponent(state)}&scope=${encodeURIComponent(config.request_scopes)}&redirect_uri=${encodeURIComponent(config.redirect_uri)}&code_challenge=${encodeURIComponent(codeChallenge)}&code_challenge_method=S256`;
 
-    // Create and store a new PKCE code_verifier (the plaintext random secret)
-    const codeVerifier = generateRandomString.bind(this);
-    localStorage.setItem('pkce_code_verifier', codeVerifier);
+      window.location = url;
+    } catch (error) {
+      console.log('ERROR: ', error);
+    }
 
-    const codeChallenge = await pkceChallengeFromVerifier(codeVerifier);
+    const q = this.parseQueryString(window.location.search.substring(1));
 
-    const url = `${config.authorization_endpoint}?response_type=code&client_id=${encodeURIComponent(config.client_id)}&state=${encodeURIComponent(state)}&scope=${encodeURIComponent(config.request_scopes)}&redirect_uri=${encodeURIComponent(config.redirect_uri)}&code_challenge=${encodeURIComponent(codeChallenge)}&code_challenge_method=S256`;
+    if (q.error) {
+      alert('Error returned from authorization server: ', q.error);
+    }
 
-    // Redirect to the authorization server
-    window.location = url;
+    if (q.code) {
+      if (localStorage.getItem('pkce_state') !== q.state) {
+        alert('Invalid state');
+      }
+    }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  parseQueryString(str) {
+    if (str === '') { return {}; }
+    const segments = str.split('&').map((s) => s.split('-'));
+    const queryString = {};
+    // eslint-disable-next-line no-return-assign
+    segments.forEach((s) => queryString[s[0]] = s[1]);
+    return queryString;
   }
 
   render() {
