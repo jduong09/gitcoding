@@ -2,7 +2,6 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { generateRandomString, pkceChallengeFromVerifier } from './utils/pkce_helper';
 
 class App extends React.Component {
   constructor(props) {
@@ -37,46 +36,18 @@ class App extends React.Component {
     }
   }
 
-  // Don't forget to put client_id into .env for good practice.
+  // Don't forget to put clisent_id into .env for good practice.
   // Authorization and token_endpoint maybe too?
   // eslint-disable-next-line class-methods-use-this
   async onSignIn(e) {
     // prevent default functionality of onClick event
     e.preventDefault();
+
     try {
-      const config = {
-        client_id: '0oa2w7lue0U6fnn3N5d7',
-        redirect_uri: 'http://localhost:3000/',
-        authorization_endpoint: 'https://dev-88956181.okta.com/oauth2/default/v1/authorize',
-        token_endpoint: 'https://dev-88956181.okta.com/oauth2/default/v1/token',
-        request_scopes: 'openid',
-      };
-      // Create and store a random "state" value
-      const state = generateRandomString();
-      localStorage.setItem('pkce_state', state);
-
-      // Create and store a new PKCE code_verifier (the plaintext random secret)
-      const codeVerifier = generateRandomString();
-      localStorage.setItem('pkce_code_verifier', codeVerifier);
-      const codeChallenge = await pkceChallengeFromVerifier(codeVerifier);
-
-      const url = `${config.authorization_endpoint}?response_type=code&client_id=${encodeURIComponent(config.client_id)}&state=${encodeURIComponent(state)}&scope=${encodeURIComponent(config.request_scopes)}&redirect_uri=${encodeURIComponent(config.redirect_uri)}&code_challenge=${encodeURIComponent(codeChallenge)}&code_challenge_method=S256`;
-
-      window.location = url;
+      const res = await fetch('/auth/login');
+      console.log('RES: ', res);
     } catch (error) {
-      console.log('ERROR: ', error);
-    }
-
-    const q = this.parseQueryString(window.location.search.substring(1));
-
-    if (q.error) {
-      alert('Error returned from authorization server: ', q.error);
-    }
-
-    if (q.code) {
-      if (localStorage.getItem('pkce_state') !== q.state) {
-        alert('Invalid state');
-      }
+      console.log(error);
     }
   }
 
