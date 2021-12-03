@@ -44,8 +44,7 @@ class App extends React.Component {
     e.preventDefault();
 
     try {
-      const res = await fetch('/auth/login');
-      console.log('RES: ', res);
+      await fetch('/auth/login');
     } catch (error) {
       console.log(error);
     }
