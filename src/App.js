@@ -44,7 +44,8 @@ class App extends React.Component {
     e.preventDefault();
 
     try {
-      await fetch('/auth/login');
+      const response = await fetch('/auth/login').then((data) => data.json());
+      window.location = response.url;
     } catch (error) {
       console.log(error);
     }

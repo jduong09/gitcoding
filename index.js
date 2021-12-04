@@ -1,4 +1,5 @@
 const express = require('express');
+const fetch = require('node-fetch');
 const bodyParser = require('body-parser');
 const db = require('./db');
 const { generateRandomString, pkceChallengeFromVerifier } = require('./src/utils/pkce_helper');
@@ -11,12 +12,11 @@ let codeVerifier = '';
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);
 });
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.all('/*', (req, res, next) => {
+app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Accept', 'application/json');
-  res.header('Content-Type', 'application/json');
   next();
 });
 
@@ -55,11 +55,9 @@ app.post('/users', async (req, res) => {
 app.get('/auth/login', async (req, res) => {
   const config = {
     client_id: '0oa2w7lue0U6fnn3N5d7',
-    redirect_uri: 'http://localhost:3000/token',
+    redirect_uri: 'http://localhost:5000/token',
     authorization_endpoint: 'https://dev-88956181.okta.com/oauth2/default/v1/authorize',
-    token_endpoint: 'https://dev-88956181.okta.com/oauth2/default/v1/token',
     request_scopes: 'openid',
-    response_mode: 'query',
   };
 
   // Create and store a random "state" value
@@ -71,9 +69,38 @@ app.get('/auth/login', async (req, res) => {
 
   const myUrl = `${config.authorization_endpoint}?response_type=code&client_id=${encodeURIComponent(config.client_id)}&state=${encodeURIComponent(state)}&scope=${encodeURIComponent(config.request_scopes)}&redirect_uri=${encodeURIComponent(config.redirect_uri)}&code_challenge=${encodeURIComponent(codeChallenge)}&code_challenge_method=S256`;
 
-  res.redirect(myUrl);
+  res.send({ url: myUrl });
+  res.end();
 });
 
-app.use('/token', (req, res) => {
-  console.log('Hit Token endpoint');
+app.get('/token', async (req, res) => {
+  const tokenEndpoint = 'https://dev-88956181.okta.com/oauth2/default/v1/token';
+  console.log(req.query);
+  const q = req.query;
+  await fetch(tokenEndpoint, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Basic ${Buffer.from('0oa2w7lue0U6fnn3N5d7').toString('base64')}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    /*
+    data: encodeURIComponent({
+      code: q.code,
+      redirect_uri: 'http://localhost:5000/token',
+      code_verifier: codeVerifier,
+    }),
+    */
+  }).then((data) => data.json()).then((json) => console.log(json));
+  if (q.error) {
+    res.send({ error: 'Oops, theres a problem' });
+  }
+
+  if (q.code) {
+    if (state !== q.state) {
+      res.send({ error: 'Invalid State' });
+    } else {
+      // Exchange the authorization code for an access token
+    }
+  }
+  res.end();
 });
