@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const base64url = require('base64url');
 
 // Generate a secure random string using the browser crypto functions
-const generateRandomString = () => crypto.randomBytes(20).toString('hex');
+const generateRandomString = () => crypto.randomBytes(43).toString('hex');
 
 // Calculate the SHA256 hash of the input text
 // Returns a promise that resolves to an ArrayBuffer.

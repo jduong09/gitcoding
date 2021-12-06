@@ -67,7 +67,7 @@ app.get('/auth/login', async (req, res) => {
 
   const codeChallenge = await pkceChallengeFromVerifier(codeVerifier);
 
-  const myUrl = `${config.authorization_endpoint}?response_type=code&client_id=${encodeURIComponent(config.client_id)}&state=${encodeURIComponent(state)}&scope=${encodeURIComponent(config.request_scopes)}&redirect_uri=${encodeURIComponent(config.redirect_uri)}&code_challenge=${encodeURIComponent(codeChallenge)}&code_challenge_method=S256`;
+  const myUrl = `${config.authorization_endpoint}?response_type=${encodeURIComponent('code')}&client_id=${encodeURIComponent(config.client_id)}&state=${encodeURIComponent(state)}&scope=${encodeURIComponent(config.request_scopes)}&redirect_uri=${encodeURIComponent(config.redirect_uri)}&code_challenge=${encodeURIComponent(codeChallenge)}&code_challenge_method=${encodeURIComponent('S256')}`;
 
   res.send({ url: myUrl });
   res.end();
@@ -90,16 +90,18 @@ app.get('/token', async (req, res) => {
     code_verifier: codeVerifier,
   };
 
-  console.log(tokenBody.client_id);
+  const myBody = Object.keys(tokenBody).map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(tokenBody[key])}`);
+
+  const joinBody = myBody.join('&');
 
   fetch(tokenEndpoint, {
     method: 'POST',
     headers: {
-      accept: 'application/json',
+      'accept': 'application/json',
       'cache-control': 'no-cache',
       'content-type': 'application/x-www-form-urlencoded',
     },
-    body: tokenBody,
+    body: joinBody,
   }).then((data) => data.json()).then((json) => console.log(json));
   if (q.error) {
     res.send({ error: 'Oops, theres a problem' });
