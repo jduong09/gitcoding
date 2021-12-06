@@ -55,7 +55,7 @@ app.post('/users', async (req, res) => {
 app.get('/auth/login', async (req, res) => {
   const config = {
     client_id: '0oa2w7lue0U6fnn3N5d7',
-    redirect_uri: 'http://localhost:5000/token',
+    redirect_uri: 'http://localhost:3000/callback',
     authorization_endpoint: 'https://dev-88956181.okta.com/oauth2/default/v1/authorize',
     request_scopes: 'openid',
   };
@@ -73,28 +73,39 @@ app.get('/auth/login', async (req, res) => {
   res.end();
 });
 
+// After user signs into Authorization Server, the server will make a GET request
+// To our callback (localhost:5000/token)
+// This will hit this endpoint, where we want to 
+// Make a POST request to /token,
 app.get('/token', async (req, res) => {
   const tokenEndpoint = 'https://dev-88956181.okta.com/oauth2/default/v1/token';
-  console.log(req.query);
+  const clientId = '0oa2w7lue0U6fnn3N5d7';
   const q = req.query;
-  await fetch(tokenEndpoint, {
+  console.log(q);
+  const tokenBody = {
+    client_id: clientId,
+    grant_type: 'authorization_code',
+    code: q.code,
+    redirect_uri: 'http://localhost:3000/callback',
+    code_verifier: codeVerifier,
+  };
+
+  console.log(tokenBody.client_id);
+
+  fetch(tokenEndpoint, {
     method: 'POST',
     headers: {
-      'Authorization': `Basic ${Buffer.from('0oa2w7lue0U6fnn3N5d7').toString('base64')}`,
-      'Content-Type': 'application/x-www-form-urlencoded',
+      accept: 'application/json',
+      'cache-control': 'no-cache',
+      'content-type': 'application/x-www-form-urlencoded',
     },
-    /*
-    data: encodeURIComponent({
-      code: q.code,
-      redirect_uri: 'http://localhost:5000/token',
-      code_verifier: codeVerifier,
-    }),
-    */
+    body: tokenBody,
   }).then((data) => data.json()).then((json) => console.log(json));
   if (q.error) {
     res.send({ error: 'Oops, theres a problem' });
   }
 
+  /*
   if (q.code) {
     if (state !== q.state) {
       res.send({ error: 'Invalid State' });
@@ -102,5 +113,7 @@ app.get('/token', async (req, res) => {
       // Exchange the authorization code for an access token
     }
   }
+  */
+
   res.end();
 });

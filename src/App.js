@@ -1,3 +1,6 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable react/no-unused-class-component-methods */
+/* eslint-disable class-methods-use-this */
 /* eslint-disable prefer-destructuring */
 import React from 'react';
 import logo from './logo.svg';
@@ -7,7 +10,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.onGetData = this.onGetData.bind(this);
-    this.parseQueryString = this.parseQueryString.bind(this);
   }
 
   async onGetData() {
@@ -52,13 +54,20 @@ class App extends React.Component {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  parseQueryString(str) {
-    if (str === '') { return {}; }
-    const segments = str.split('&').map((s) => s.split('-'));
+  async getToken(e) {
+    e.preventDefault();
+    const q = window.location.search.substring(1);
+    console.log(q);
+    const segments = q.split('&').map((s) => s.split('='));
     const queryString = {};
     // eslint-disable-next-line no-return-assign
     segments.forEach((s) => queryString[s[0]] = s[1]);
-    return queryString;
+
+    try {
+      await fetch(`/token?code=${queryString.code}&state=${queryString.state}}`).then((data) => data.json()).then((res) => console.log(res));
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   render() {
@@ -87,6 +96,9 @@ class App extends React.Component {
           </button>
           <button type="button" onClick={this.onSignIn}>
             Click to Sign In
+          </button>
+          <button type="button" onClick={this.getToken}>
+            Get Token
           </button>
         </header>
       </div>
