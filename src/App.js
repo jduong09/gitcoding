@@ -1,6 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable react/no-unused-class-component-methods */
-/* eslint-disable class-methods-use-this */
 /* eslint-disable prefer-destructuring */
 import React from 'react';
 import logo from './logo.svg';
@@ -64,7 +61,7 @@ class App extends React.Component {
     segments.forEach((s) => queryString[s[0]] = s[1]);
 
     try {
-      await fetch(`/token?code=${queryString.code}&state=${queryString.state}}`).then((data) => data.json()).then((res) => console.log(res));
+      await fetch(`/token?code=${queryString.code}&state=${queryString.state}`).then((data) => data.json()).then((res) => console.log(res));
     } catch (error) {
       console.log(error);
     }

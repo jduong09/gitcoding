@@ -81,7 +81,6 @@ app.get('/token', async (req, res) => {
   const tokenEndpoint = 'https://dev-88956181.okta.com/oauth2/default/v1/token';
   const clientId = '0oa2w7lue0U6fnn3N5d7';
   const q = req.query;
-  console.log(q);
   const tokenBody = {
     client_id: clientId,
     grant_type: 'authorization_code',
@@ -94,28 +93,25 @@ app.get('/token', async (req, res) => {
 
   const joinBody = myBody.join('&');
 
-  fetch(tokenEndpoint, {
-    method: 'POST',
-    headers: {
-      'accept': 'application/json',
-      'cache-control': 'no-cache',
-      'content-type': 'application/x-www-form-urlencoded',
-    },
-    body: joinBody,
-  }).then((data) => data.json()).then((json) => console.log(json));
   if (q.error) {
     res.send({ error: 'Oops, theres a problem' });
   }
 
-  /*
   if (q.code) {
     if (state !== q.state) {
       res.send({ error: 'Invalid State' });
     } else {
       // Exchange the authorization code for an access token
+      fetch(tokenEndpoint, {
+        method: 'POST',
+        headers: {
+          'accept': 'application/json',
+          'cache-control': 'no-cache',
+          'content-type': 'application/x-www-form-urlencoded',
+        },
+        body: joinBody,
+      }).then((data) => data.json()).then((json) => console.log(json));
     }
   }
-  */
-
   res.end();
 });
