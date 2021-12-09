@@ -21,4 +21,4 @@ const pkceChallengeFromVerifier = async (v) => {
   return base64url.fromBase64(hashed);
 };
 
-module.exports = { generateRandomString, pkceChallengeFromVerifier };
+module.exports = { generateRandomString };

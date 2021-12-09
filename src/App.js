@@ -4,11 +4,6 @@ import logo from './logo.svg';
 import './App.css';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onGetData = this.onGetData.bind(this);
-  }
-
   async onGetData() {
     try {
       const res = await fetch('/api');
@@ -35,35 +30,13 @@ class App extends React.Component {
     }
   }
 
-  // Don't forget to put clisent_id into .env for good practice.
-  // Authorization and token_endpoint maybe too?
-  // eslint-disable-next-line class-methods-use-this
-  async onSignIn(e) {
-    // prevent default functionality of onClick event
-    e.preventDefault();
-
+  async onLogIn() {
     try {
-      const response = await fetch('/auth/login').then((data) => data.json());
-      window.location = response.url;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async getToken(e) {
-    e.preventDefault();
-    const q = window.location.search.substring(1);
-    console.log(q);
-    const segments = q.split('&').map((s) => s.split('='));
-    const queryString = {};
-    // eslint-disable-next-line no-return-assign
-    segments.forEach((s) => queryString[s[0]] = s[1]);
-
-    try {
-      await fetch(`/token?code=${queryString.code}&state=${queryString.state}`).then((data) => data.json()).then((res) => console.log(res));
-    } catch (error) {
-      console.log(error);
+      const res = await fetch('/auth/login').then(data => data.json()).then(json => json.url);
+      console.log(res);
+      window.location = res;
+    } catch(error) {
+      console.log('ERROR: ', error, this.foo);
     }
   }
 
@@ -71,31 +44,16 @@ class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
+          Home Page
           <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit
-            <code>src/App.js</code>
-            and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
           <button type="button" onClick={this.onGetData}>
             Click Me
           </button>
           <button type="button" onClick={this.onCreateUser}>
             Create User
           </button>
-          <button type="button" onClick={this.onSignIn}>
-            Click to Sign In
-          </button>
-          <button type="button" onClick={this.getToken}>
-            Get Token
+          <button type="button" onClick={this.onLogIn}>
+            Log In!
           </button>
         </header>
       </div>
