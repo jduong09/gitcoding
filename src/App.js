@@ -30,13 +30,18 @@ class App extends React.Component {
     }
   }
 
+  
+  // eslint-disable-next-line class-methods-use-this
   async onLogIn() {
     try {
-      const res = await fetch('/auth/login').then(data => data.json()).then(json => json.url);
-      console.log(res);
-      window.location = res;
-    } catch(error) {
-      console.log('ERROR: ', error, this.foo);
+      const response = await fetch('/auth/login');
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -53,7 +58,7 @@ class App extends React.Component {
             Create User
           </button>
           <button type="button" onClick={this.onLogIn}>
-            Log In!
+            Log In
           </button>
         </header>
       </div>
