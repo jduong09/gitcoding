@@ -17,9 +17,11 @@ app.listen(port, () => {
   console.log(`App running on port ${port}`);
 });
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  next();
+app.all('/auth/*', (req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
+  res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
+  return next();
 });
 
 // app.listen(5000, () => {
@@ -145,6 +147,7 @@ app.get('/auth/login', async (req, res) => {
   res.send({ url: `${process.env.ISSUER}/authorize?${paramString}`});
   res.end();
 });
+*/
 
 // after user authorizes app, Auth0 will redirect to callback URI: 'http://localhost:5000/callback'
 // it will have two keys: state and code
@@ -156,4 +159,3 @@ app.get('/callback', async (req, res) => {
   console.log(callbackQuery);
   res.end();
 });
-*/

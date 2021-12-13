@@ -39,7 +39,7 @@ class App extends React.Component {
     }
   }
 
-  
+  /*
   // eslint-disable-next-line class-methods-use-this
   async onLogIn() {
     try {
@@ -53,6 +53,7 @@ class App extends React.Component {
       console.log(error);
     }
   }
+  */
 
   render() {
     return (
@@ -66,9 +67,9 @@ class App extends React.Component {
           <button type="button" onClick={this.onCreateUser}>
             Create User
           </button>
-          <button type="button" onClick={this.onLogIn}>
-            Log In
-          </button>
+          <a href='http://localhost:5000/auth/login'>
+            Log In!
+          </a>
         </header>
         Your <FontAwesomeIcon icon="coffee" /> is hot and ready!
       </div>
