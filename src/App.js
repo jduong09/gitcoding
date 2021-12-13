@@ -1,9 +1,18 @@
 /* eslint-disable prefer-destructuring */
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import logo from './logo.svg';
 import './App.css';
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    
+    library.add(faCoffee);
+  }
+
   async onGetData() {
     try {
       const res = await fetch('/api');
@@ -61,6 +70,7 @@ class App extends React.Component {
             Log In
           </button>
         </header>
+        Your <FontAwesomeIcon icon="coffee" /> is hot and ready!
       </div>
     );
   }
