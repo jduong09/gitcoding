@@ -1,13 +1,9 @@
-/**
- * Required External Modules
- */
-
 const express = require('express');
-const router = express.Router();
 const passport = require('passport');
 const querystring = require('querystring');
 
-require("dotenv").config();
+const router = express.Router();
+require('dotenv').config();
 
 /** 
  * Routes Definitions
@@ -20,13 +16,14 @@ router.get(
   }),
   (req, res) => {
     console.log(req.query);
+    console.log('hi');
     res.send({ hello: 'hi' });
     res.end();
   }
 );
 
 router.get('callback', (req, res, next) => {
-  passport.authenticate('auth0', (err, user, info) => {
+  passport.authenticate('auth0', (err, user) => {
     if (err) {
       return next(err);
     }
@@ -39,10 +36,11 @@ router.get('callback', (req, res, next) => {
       if (error) {
         return next(error);
       }
-      const returnTo = req.session.returnTo;
+      const { returnTo } = req.session;
       delete req.session.returnTo;
-      res.redirect(returnTo || '/');
+      return res.redirect(returnTo || '/');
     });
+    return undefined;
   })(req, res, next);
 });
 
@@ -56,13 +54,11 @@ router.get('/logout', (req, res) => {
     returnTo = process.env.NODE_ENV === 'production' ? `${returnTo}/` : `${returnTo}:${port}/`;
   }
 
-  const logoutURL = new URL(
-    `${process.env.BASE_URL}/v2/logout`
-  );
+  const logoutURL = new URL(`${process.env.BASE_URL}/v2/logout`);
 
   const searchString = querystring.stringify({
     client_id: process.env.CLIENT_ID,
-    returnTo: returnTo
+    returnTo,
   });
 
   logoutURL.search = searchString;

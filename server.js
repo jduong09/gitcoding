@@ -1,9 +1,9 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const expressSession = require("express-session");
-const passport = require("passport");
-const Auth0Strategy = require("passport-auth0");
+const expressSession = require('express-session');
+const passport = require('passport');
+const Auth0Strategy = require('passport-auth0');
 const dotenv = require('dotenv');
 const db = require('./db');
 const authRouter = require('./auth');
@@ -22,23 +22,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.listen(5000, () => {
-//   console.log(`App running on port ${5000}.`);
-// });
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-/*
-const config = {
-  authRequired: false,
-  auth0Logout: true,
-  secret: process.env.CLIENT_SECRET,
-  baseURL: process.env.BASE_URL,
-  clientID: process.env.CLIENT_ID,
-  issuerBaseURL: process.env.ISSUER
-};
-*/
 
 /*
  * Session Configuration
@@ -53,18 +38,16 @@ const session = {
   saveUninitialized: false
 };
 
-if (app.get("env") === "production") {
+if (app.get('env') === 'production') {
   // Serve secure cookies, requires HTTPS
   session.cookie.secure = true;
 }
-
 
 /*
  * Passport Configuration
 */
 
-const strategy = new Auth0Strategy(
-  {
+const strategy = new Auth0Strategy({
     domain: process.env.ISSUER,
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
@@ -72,17 +55,19 @@ const strategy = new Auth0Strategy(
   },
   (accessToken, refreshToken, extraParams, profile, done) => done(null, profile)
 );
+
 /*
  * App Configuration
 */
 // auth router attaches /login, /logout, and /callback routes to the baseURL
-app.set("views", path.join(__dirname, "views"));
-app.use(express.static(path.join(__dirname, "public")));
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressSession(session));
 passport.use(strategy);
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Login, logout and callback sit on the /auth path
 app.use('/auth', authRouter);
 
 passport.serializeUser((user, done) => {
@@ -126,7 +111,6 @@ app.post('/users', async (req, res) => {
     res.status(200).json({ data });
   }
 });
-
 
 /*
 app.get('/auth/login', async (req, res) => {
