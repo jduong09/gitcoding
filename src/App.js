@@ -1,4 +1,6 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 import logo from './logo.svg';
 import './App.css';
 
@@ -58,6 +60,11 @@ class App extends React.Component {
           <button type="button" onClick={this.onCreateUser}>
             Create User
           </button>
+          <div>
+            Your
+            <FontAwesomeIcon icon={faCoffee} />
+            is hot and ready!
+          </div>
         </header>
       </div>
     );
