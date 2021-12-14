@@ -53,7 +53,12 @@ const strategy = new Auth0Strategy({
     clientSecret: process.env.CLIENT_SECRET,
     callbackURL: process.env.CALLBACK_URL
   },
-  (accessToken, refreshToken, extraParams, profile, done) => done(null, profile)
+  // verify callback, use 'passReqToCallback' in order to pass state into verify callback function? 
+  (accessToken, refreshToken, extraParams, profile, done) => {
+    console.log('hello i am the callback function in the new Auth0Strategy method');
+    console.log(profile);
+    return done(null, profile);
+  }
 );
 
 /*
@@ -111,33 +116,3 @@ app.post('/users', async (req, res) => {
     res.status(200).json({ data });
   }
 });
-
-/*
-app.get('/auth/login', async (req, res) => {
-  randomString = generateRandomString();
-
-  const params = [
-    ['response_type', 'code'],
-    ['client_id', process.env.CLIENT_ID],
-    ['state', randomString],
-    ['redirect_uri', 'http://localhost:5000/callback'],
-  ];
-  const paramString = params
-    .map(([key, val]) => `${key}=${encodeURIComponent(val)}`)
-    .join('&');
-
-  res.send({ url: `${process.env.ISSUER}/authorize?${paramString}`});
-  res.end();
-});
-
-// after user authorizes app, Auth0 will redirect to callback URI: 'http://localhost:5000/callback'
-// it will have two keys: state and code
-// Server needs to make sure the state matches up from the state that is stored locally.
-app.get('/callback', async (req, res) => {
-  // should contain an object, with state and code as keys
-  const callbackQuery = req.query;
-
-  console.log(callbackQuery);
-  res.end();
-});
-*/

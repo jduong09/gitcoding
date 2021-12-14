@@ -29,21 +29,6 @@ class App extends React.Component {
     }
   }
 
-  
-  // eslint-disable-next-line class-methods-use-this
-  async onLogIn() {
-    try {
-      const response = await fetch('/auth/login');
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   render() {
     return (
       <div className="App">
@@ -56,9 +41,12 @@ class App extends React.Component {
           <button type="button" onClick={this.onCreateUser}>
             Create User
           </button>
-          <button type="button" onClick={this.onLogIn}>
-            Log In
-          </button>
+          <a href="http://localhost:5000/auth/login">
+            Log me in friend!
+          </a>
+          <a href="http://localhost:5000/auth/logout">
+            Log me out plz!
+          </a>
         </header>
       </div>
     );
