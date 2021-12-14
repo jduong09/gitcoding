@@ -1,5 +1,4 @@
 const express = require('express');
-const path = require('path');
 const bodyParser = require('body-parser');
 const expressSession = require('express-session');
 const passport = require('passport');
@@ -29,6 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
  * Session Configuration
 */
 // ExpressSession takes a config object, session, that defines what options to enable in a session.
+// shouldn't every secret be different for each login? 
 const session = {
   secret: process.env.SESSION_SECRET,
   cookie: {
@@ -55,8 +55,6 @@ const strategy = new Auth0Strategy({
   },
   // verify callback, use 'passReqToCallback' in order to pass state into verify callback function? 
   (accessToken, refreshToken, extraParams, profile, done) => {
-    console.log('hello i am the callback function in the new Auth0Strategy method');
-    console.log(profile);
     return done(null, profile);
   }
 );
@@ -64,14 +62,14 @@ const strategy = new Auth0Strategy({
 /*
  * App Configuration
 */
+
 // auth router attaches /login, /logout, and /callback routes to the baseURL
-app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(expressSession(session));
+// middleware for passport and expressSession.
 passport.use(strategy);
+app.use(expressSession(session));
 app.use(passport.initialize());
 app.use(passport.session());
-
+// after passport.session, we would have the routes.
 // Login, logout and callback sit on the /auth path
 app.use('/auth', authRouter);
 
@@ -83,17 +81,21 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
+/** 
+* Database Queries
+*/
+
+// Query: Create users table. Send that the database is setup!
 app.get('/', async (req, res) => {
   await db.createUsers();
   res.send('Server is setup :)');
 });
 
-
 app.get('/api', (req, res) => {
   res.status(200).json({ data: 'Stuff goes here' });
 });
 
-
+// Query: Get all users in database.
 app.get('/users', async (req, res) => {
   console.log('FETCHING USERS');
   const { data, error } = await db.getAllUsers();
@@ -105,6 +107,7 @@ app.get('/users', async (req, res) => {
   }
 });
 
+// Query: Add a user to database.
 app.post('/users', async (req, res) => {
   const { name } = req.body;
   console.log('ADDING NEW USER: ', name);

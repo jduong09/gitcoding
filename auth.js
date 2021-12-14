@@ -1,6 +1,5 @@
 const express = require('express');
 const passport = require('passport');
-const querystring = require('querystring');
 
 const router = express.Router();
 require('dotenv').config();
@@ -26,6 +25,7 @@ router.get(
 );
 
 router.get('/callback', (req, res, next) => {
+  console.log(req.session);
   // req.query contains the code and state. What do we want to do with this object?
   passport.authenticate('auth0', (err, user) => {
     if (err) {
@@ -58,11 +58,10 @@ router.get('/callback', (req, res, next) => {
 router.get('/logout', (req, res) => {
   // remove the req.user property and clear the login sesssion (if any).
   req.logOut();
-  console.log(req.user);
+  console.log(req.session);
 
   // The rest of this is useless? Shouldn't user logout and be redirected to the landing page?
   let returnTo = `${req.protocol}://${req.hostname}`;
-  console.log(returnTo);
   const port = req.connection.localPort;
 
   if (port !== undefined && port !== 80 && port !== 433) {
@@ -71,9 +70,9 @@ router.get('/logout', (req, res) => {
 
   const logoutURL = new URL(`${process.env.BASE_URL}/v2/logout`);
 
-  const searchString = querystring.stringify({
+  const searchString = new URLSearchParams({
     client_id: process.env.CLIENT_ID,
-    returnTo,
+    returnTo, 
   });
 
   logoutURL.search = searchString;
