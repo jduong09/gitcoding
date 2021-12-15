@@ -5,6 +5,11 @@ import logo from './logo.svg';
 import './App.css';
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onGetData = this.onGetData.bind(this);
+  }
+
   async onGetData() {
     try {
       const res = await fetch('/api');
@@ -35,25 +40,31 @@ class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-          Home Page
           <img src={logo} className="App-logo" alt="logo" />
+          <p>
+            Edit
+            <code>src/App.js</code>
+            and save to reload.
+          </p>
+          <a
+            className="App-link"
+            href="https://reactjs.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Learn React
+          </a>
           <button type="button" onClick={this.onGetData}>
             Click Me
           </button>
           <button type="button" onClick={this.onCreateUser}>
             Create User
           </button>
-          <a href="http://localhost:5000/auth/login">
-            Log me in friend!
-          </a>
-          <a href="http://localhost:5000/auth/logout">
-            Log me out plz!
-          </a>
-          <p>
+          <div>
             Your
             <FontAwesomeIcon icon={faCoffee} />
             is hot and ready!
-          </p>
+          </div>
         </header>
       </div>
     );
