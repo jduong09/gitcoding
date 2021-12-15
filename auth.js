@@ -10,11 +10,14 @@ require('dotenv').config();
 
 /*
 * My understanding of passport API:
+* Frontend: User sees log in button. They click log in button.
+* Frontend: Browser sends a request to http://localhost:5000/auth/login from the <a> tag.
+* Backend: Request hits express route /auth/login, where passport api logins user with the auto0 strategy.
 * 
 */
 
 router.get(
-  '/login',
+  '/login', 
   passport.authenticate('auth0', {
     scope: "openid"
   }),
@@ -26,6 +29,13 @@ router.get(
 
 router.get('/callback', (req, res, next) => {
   console.log(req.session);
+  console.log(req.query);
+  console.log('Session Stored State: ', req.session.state);
+
+  if (req.session.state === req.query.state) {
+    console.log("yay");
+  }
+
   // req.query contains the code and state. What do we want to do with this object?
   passport.authenticate('auth0', (err, user) => {
     if (err) {
@@ -58,9 +68,11 @@ router.get('/callback', (req, res, next) => {
 router.get('/logout', (req, res) => {
   // remove the req.user property and clear the login sesssion (if any).
   req.logOut();
+  res.redirect('http://localhost:3000');
   console.log(req.session);
 
   // The rest of this is useless? Shouldn't user logout and be redirected to the landing page?
+  /*
   let returnTo = `${req.protocol}://${req.hostname}`;
   const port = req.connection.localPort;
 
@@ -78,6 +90,7 @@ router.get('/logout', (req, res) => {
   logoutURL.search = searchString;
 
   res.redirect(logoutURL);
+  */
 });
 
 /**
