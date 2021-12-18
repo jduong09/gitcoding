@@ -11,7 +11,6 @@ dotenv.config();
 
 const app = express();
 const port = 5000;
-const oneDay = 1000 * 60 * 60 * 24;
 
 app.listen(port, () => {
   console.log(`App running on port ${port}`);
@@ -34,7 +33,6 @@ const session = {
   secret: process.env.SESSION_SECRET,
   cookie: {
     sameSite: false,
-    maxAge: oneDay,
   },
   resave: false,
   saveUninitialized: false
@@ -54,7 +52,7 @@ const strategy = new Auth0Strategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
     callbackURL: process.env.CALLBACK_URL,
-    state: authState,
+    state: true,
   },
   // verify callback, use 'passReqToCallback' in order to pass state into verify callback function? 
   (accessToken, refreshToken, extraParams, profile, done) => {
@@ -75,10 +73,12 @@ app.use(passport.session());
 // after passport.session, we would have the routes.
 // Login, logout and callback sit on the /auth path
 
+/*
 app.use((req, res, next) => {
   req.session.state = authState;
   next();
 });
+*/
 
 app.use('/auth', authRouter);
 
