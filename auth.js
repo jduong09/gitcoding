@@ -10,22 +10,24 @@ require('dotenv').config();
 
 /*
 * My understanding of passport API:
+* Frontend: User sees log in button. They click log in button.
+* Frontend: Browser sends a request to http://localhost:5000/auth/login from the <a> tag.
+* Backend: Request hits express route /auth/login, where passport api logins user with the auto0 strategy.
 * 
 */
 
 router.get(
-  '/login',
+  '/login', 
   passport.authenticate('auth0', {
-    scope: "openid"
+    scope: "openid",
+    prompt: 'select_account',
   }),
   (req, res) => {
-    res.send({ hello: 'hi' });
     res.end();
   }
 );
 
 router.get('/callback', (req, res, next) => {
-  console.log(req.session);
   // req.query contains the code and state. What do we want to do with this object?
   passport.authenticate('auth0', (err, user) => {
     if (err) {
@@ -46,11 +48,11 @@ router.get('/callback', (req, res, next) => {
       if (error) {
         return next(error);
       }
-
+      
       const { returnTo } = req.session;
-      console.log(req.user);
       delete req.session.returnTo;
-      return res.redirect(returnTo || 'http://localhost:3000');
+      res.redirect(returnTo || 'http://localhost:3000');
+      res.end();
     });
   })(req, res, next);
 });
@@ -58,17 +60,12 @@ router.get('/callback', (req, res, next) => {
 router.get('/logout', (req, res) => {
   // remove the req.user property and clear the login sesssion (if any).
   req.logOut();
-  console.log(req.session);
 
   // The rest of this is useless? Shouldn't user logout and be redirected to the landing page?
-  let returnTo = `${req.protocol}://${req.hostname}`;
-  const port = req.connection.localPort;
 
-  if (port !== undefined && port !== 80 && port !== 433) {
-    returnTo = process.env.NODE_ENV === 'production' ? `${returnTo}/` : `${returnTo}:${port}/`;
-  }
+  const returnTo = process.env.BASE_URL;
 
-  const logoutURL = new URL(`${process.env.BASE_URL}/v2/logout`);
+  const logoutURL = new URL(`https://${process.env.ISSUER}/v2/logout`);
 
   const searchString = new URLSearchParams({
     client_id: process.env.CLIENT_ID,
@@ -78,6 +75,7 @@ router.get('/logout', (req, res) => {
   logoutURL.search = searchString;
 
   res.redirect(logoutURL);
+  res.end();
 });
 
 /**
