@@ -3,12 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.16",
     "@okta/okta-signin-widget": "^5.14.0",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "base64url": "^3.0.1",
     "body-parser": "^1.19.0",
+    "concurrently": "^6.5.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
@@ -27,6 +30,7 @@
     "serve": "node server.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "dev": "concurrently \"npm run serve\" \"npm run start\"",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

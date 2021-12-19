@@ -17,9 +17,9 @@ require('dotenv').config();
 */
 
 router.get(
-  '/login', 
+  '/login',
   passport.authenticate('auth0', {
-    scope: "openid",
+    scope: 'openid',
     prompt: 'select_account',
   }),
   (req, res) => {
@@ -33,7 +33,7 @@ router.get('/callback', (req, res, next) => {
     if (err) {
       return next(err);
     }
-
+    
     if (!user) {
       return res.redirect('/login');
     }

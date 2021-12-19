@@ -1,5 +1,8 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCoffee } from '@fortawesome/free-solid-svg-icons';
+import logo from './logo.svg';
 import './App.css';
 
 class App extends React.Component {
@@ -45,6 +48,11 @@ class App extends React.Component {
           <a href="http://localhost:5000/auth/logout">
             Log me out plz!
           </a>
+          <p>
+            Your
+            <FontAwesomeIcon icon={faCoffee} />
+            is hot and ready!
+          </p>
         </header>
         <Routes>
           <Route path='/users'>
