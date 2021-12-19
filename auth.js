@@ -51,7 +51,7 @@ router.get('/callback', (req, res, next) => {
       
       const { returnTo } = req.session;
       delete req.session.returnTo;
-      res.redirect(returnTo || 'http://localhost:3000');
+      res.redirect(returnTo || 'http://localhost:3000/users/1/home');
       res.end();
     });
   })(req, res, next);

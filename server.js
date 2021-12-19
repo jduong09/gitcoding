@@ -90,6 +90,24 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
+/**
+ * Authentication check middleware
+*/
+
+const checkAuthentication = (req, res, next) => {
+  console.log('hi checking authentication!');
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.redirect('/auth/login');
+  }
+};
+
+app.use('/users', checkAuthentication, (req, res, next) => {
+  console.log('hi im on the users path');
+  next();
+});
+
 /** 
 * Database Queries
 */

@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './logo.svg';
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
 
 class App extends React.Component {
@@ -33,8 +33,6 @@ class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-          Home Page
-          <img src={logo} className="App-logo" alt="logo" />
           <button type="button" onClick={this.onGetData}>
             Click Me
           </button>
@@ -48,6 +46,14 @@ class App extends React.Component {
             Log me out plz!
           </a>
         </header>
+        <Routes>
+          <Route path='/users'>
+            Hello this is the users route.
+          </Route>
+          <Route exact path='/'>
+            Hello you are home.
+          </Route>
+        </Routes>
       </div>
     );
   }
