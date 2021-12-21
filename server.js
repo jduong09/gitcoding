@@ -55,9 +55,7 @@ const strategy = new Auth0Strategy({
     state: true,
   },
   // verify callback, use 'passReqToCallback' in order to pass state into verify callback function? 
-  (accessToken, refreshToken, extraParams, profile, done) => {
-    return done(null, profile);
-  }
+  (accessToken, refreshToken, extraParams, profile, done) => done(null, profile)
 );
 
 /*

@@ -28,7 +28,6 @@ router.get(
 );
 
 router.get('/callback', (req, res, next) => {
-  // req.query contains the code and state. What do we want to do with this object?
   passport.authenticate('auth0', (err, user) => {
     if (err) {
       return next(err);
@@ -58,10 +57,10 @@ router.get('/callback', (req, res, next) => {
 });
 
 router.get('/logout', (req, res) => {
-  // remove the req.user property and clear the login sesssion (if any).
+  // req.logOut() removes the req.user property and clear the login sesssion (if any).
   req.logOut();
-
-  // The rest of this is useless? Shouldn't user logout and be redirected to the landing page?
+  
+  res.clearCookie('connect.sid');
 
   const returnTo = process.env.BASE_URL;
 
@@ -77,10 +76,6 @@ router.get('/logout', (req, res) => {
   res.redirect(logoutURL);
   res.end();
 });
-
-/**
- * Module Exports
-*/
 
 module.exports = router;
 
