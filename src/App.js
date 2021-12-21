@@ -2,8 +2,9 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
-import logo from './logo.svg';
 import './App.css';
+import User from './components/user';
+import LandingPage from './components/landingPage';
 
 class App extends React.Component {
   async onGetData() {
@@ -55,12 +56,8 @@ class App extends React.Component {
           </p>
         </header>
         <Routes>
-          <Route path='/users'>
-            Hello this is the users route.
-          </Route>
-          <Route exact path='/'>
-            Hello you are home.
-          </Route>
+          <Route exact path='/' element={<LandingPage />} />
+          <Route path='/users/:userId' element={<User />} />
         </Routes>
       </div>
     );

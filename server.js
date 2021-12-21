@@ -97,14 +97,17 @@ passport.deserializeUser((user, done) => {
 const checkAuthentication = (req, res, next) => {
   console.log('hi checking authentication!');
   if (req.isAuthenticated()) {
+    console.log('you are good to go sir.')
+    res.send({ isAuthenticated: true });
     next();
   } else {
-    res.redirect('/auth/login');
+    console.log('sir. this is VIP.');
+    res.send({ isAuthenticated: false });
+    res.end();
   }
 };
 
-app.use('/users', checkAuthentication, (req, res, next) => {
-  console.log('hi im on the users path');
+app.use('/users/:userId', checkAuthentication, (req, res, next) => {
   next();
 });
 
