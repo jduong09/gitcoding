@@ -55,9 +55,7 @@ const strategy = new Auth0Strategy({
     state: true,
   },
   // verify callback, use 'passReqToCallback' in order to pass state into verify callback function? 
-  (accessToken, refreshToken, extraParams, profile, done) => {
-    return done(null, profile);
-  }
+  (accessToken, refreshToken, extraParams, profile, done) => done(null, profile)
 );
 
 /*
@@ -88,6 +86,26 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((user, done) => {
   done(null, user);
+});
+
+/**
+ * Authentication check middleware
+*/
+const checkAuthentication = (req, res, next) => {
+  console.log('hi checking authentication!');
+  if (req.isAuthenticated()) {
+    console.log('you are good to go sir.')
+    res.send({ isAuthenticated: true });
+    next();
+  } else {
+    console.log('sir. this is VIP.');
+    res.send({ isAuthenticated: false });
+    res.end();
+  }
+};
+
+app.use('/users/:userId', checkAuthentication, (req, res, next) => {
+  next();
 });
 
 /** 
