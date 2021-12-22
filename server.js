@@ -6,6 +6,7 @@ const Auth0Strategy = require('passport-auth0');
 const dotenv = require('dotenv');
 const db = require('./db');
 const authRouter = require('./auth');
+const apiRouter = require('./api');
 
 dotenv.config();
 
@@ -79,6 +80,7 @@ app.use((req, res, next) => {
 */
 
 app.use('/auth', authRouter);
+app.use('/api', apiRouter);
 
 passport.serializeUser((user, done) => {
   done(null, user);
@@ -116,33 +118,4 @@ app.use('/users/:userId', checkAuthentication, (req, res, next) => {
 app.get('/', async (req, res) => {
   await db.createUsers();
   res.send('Server is setup :)');
-});
-
-app.get('/api', (req, res) => {
-  res.status(200).json({ data: 'Stuff goes here' });
-});
-
-// Query: Get all users in database.
-app.get('/users', async (req, res) => {
-  console.log('FETCHING USERS');
-  const { data, error } = await db.getAllUsers();
-  console.log('RETURNED DATA: ', data, error);
-  if (error) {
-    res.status(400).json({ error });
-  } else {
-    res.status(200).json({ data });
-  }
-});
-
-// Query: Add a user to database.
-app.post('/users', async (req, res) => {
-  const { name } = req.body;
-  console.log('ADDING NEW USER: ', name);
-  const { data, error } = await db.insertUser(name);
-  console.log('RETURNED DATA: ', data, error);
-  if (error) {
-    res.status(400).json({ error });
-  } else {
-    res.status(200).json({ data });
-  }
 });
