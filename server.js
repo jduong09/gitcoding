@@ -91,7 +91,6 @@ passport.deserializeUser((user, done) => {
 /**
  * Authentication check middleware
 */
-
 const checkAuthentication = (req, res, next) => {
   console.log('hi checking authentication!');
   if (req.isAuthenticated()) {
