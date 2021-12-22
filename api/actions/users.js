@@ -6,7 +6,6 @@ const getUsers = async () => {
 };
 
 const createUser = async (name) => {
-  console.log('\n\nATTEMPTING TO CREATE USER: ', name);
   const { rows: data } = await db.execute('sql/users/put.sql', {name});
   return data;
 };
