@@ -1,5 +1,6 @@
 const { Pool } = require('pg');
 const dotenv = require('dotenv');
+const fs = require('fs');
 
 dotenv.config();
 
@@ -21,13 +22,11 @@ pool.on('connect', () => {
  * @param {object} res
  * @returns {object} object
  */
-const query = async (text, params) => {
-  return new Promise((resolve, reject) => {
+const query = async (text, params) => new Promise((resolve, reject) => {
     pool.query(text, params)
       .then((res) => { resolve(res); })
       .catch((err) => { reject(err); });
   });
-};
 
 /* *************************************************************
  * The following code is just for testing purposes and should
@@ -37,11 +36,12 @@ const query = async (text, params) => {
 
 /**
  * @description Create users table
+ * TODO: Eventually get rid of this code when we store migrations programatically
  * @param {object} req
  * @param {object} res
  * @returns {object} object
  */
-const createUsers = async (req, res) => {
+const createUsers = async () => {
   console.log('CREATING USERS TABLE');
   const text = `
     CREATE TABLE IF NOT EXISTS users (
@@ -52,51 +52,42 @@ const createUsers = async (req, res) => {
   `;
 
   try {
-    const { rows } = await query(text);
+    await query(text);
   } catch(error) {
     console.log('ERROR CREATING USER TABLE: ', error);
   }
 };
 
 /**
- * Create A Reflection
- * @param {object} req 
- * @param {object} res
- * @returns {object} user row
+ * @description Run a SQL query given a filepath
+ * @param {string} path
+ * @param {object} [params]
+ * @param {object} [options]
+ * @param {number} [options.timeout]
+ * @param {string} [options.rowMode]
+ * @param {object} [options.client]
+ * @param {boolean} [options.reader]
+ * @param {string[]} [options.consistencyKeys] - Keys for read-after-write consistency
  */
-const insertUser = async (name) => {
-  const text = `
-    INSERT INTO users(name)
-    VALUES($1)
-    RETURNING *;
-  `;
-  const values = [name];
-
-  try {
-    const { rows } = await query(text, values);
-    return { data: rows[0] };
-  } catch(error) {
-    return { error };
-  }
-};
-
-/**
- * Get all users
- * @returns {object} users rows
- */
-const getAllUsers = async () => {
-  const findAllQuery = `SELECT * FROM users;`;
-  try {
-    const { rows, rowCount } = await query(findAllQuery);
-    return { data: {rows, rowCount} };
-  } catch(error) {
-    return { error };
-  }
-};
+async function execute(path, params = {}) {
+  const queryVariables = [];
+  const queryParam = (qv) => {
+    const variable = qv.slice(2, -1);
+    const i = queryVariables.indexOf(variable);
+    if(i >= 0) {
+      return `$${i + 1}`;
+    }
+    queryVariables.push(variable);
+    return `$${queryVariables.length}`;
+  };
+  let sql = fs.readFileSync(path).toString();
+  sql = sql.replace(/\$\{[^{}]+\}/g, queryParam);
+  const values = queryVariables ? queryVariables.map(p => params[p]) : [];
+  return query(sql, values);
+}
 
 module.exports = {
   query,
   createUsers,
-  insertUser,
-  getAllUsers,
+  execute,
 };
