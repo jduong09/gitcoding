@@ -59,7 +59,6 @@ router.get('/callback', (req, res, next) => {
 router.get('/logout', (req, res) => {
   // req.logOut() removes the req.user property and clear the login sesssion (if any).
   req.logOut();
-  
   res.clearCookie('connect.sid');
 
   const returnTo = process.env.BASE_URL;
