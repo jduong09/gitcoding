@@ -1,8 +1,8 @@
 /* eslint-disable react/no-unused-class-component-methods */
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import './App.css';
-import User from './components/user';
+import './css/App.css';
+import User from './components/user/user';
 import LandingPage from './components/landingPage';
 
 class App extends React.Component {
@@ -19,9 +19,9 @@ class App extends React.Component {
   async onGetUserData() {
     try {
       const res = await fetch('/api/users');
-      if(res.ok) {
+      if (res.ok) {
         const data = await res.json();
-        if(data) {
+        if (data) {
           this.setState({ users: data });
         }
       } else {

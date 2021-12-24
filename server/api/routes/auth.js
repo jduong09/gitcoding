@@ -1,19 +1,13 @@
 const express = require('express');
 const passport = require('passport');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const router = express.Router();
-require('dotenv').config();
 
 /** 
  * Routes Definitions
-*/
-
-/*
-* My understanding of passport API:
-* Frontend: User sees log in button. They click log in button.
-* Frontend: Browser sends a request to http://localhost:5000/auth/login from the <a> tag.
-* Backend: Request hits express route /auth/login, where passport api logins user with the auto0 strategy.
-* 
 */
 
 router.get(
@@ -37,12 +31,6 @@ router.get('/callback', (req, res, next) => {
       return res.redirect('/login');
     }
 
-    // When the login operation completes, user will be assigned to req.user.
-    /*
-    Note: passport.authenticate() middleware invokes req.login() automatically. 
-    This function is primarily used when users sign up, during which req.login() 
-    can be invoked to automatically log in the newly registered user.
-    */
     req.logIn(user, (error) => {
       if (error) {
         return next(error);
@@ -57,7 +45,6 @@ router.get('/callback', (req, res, next) => {
 });
 
 router.get('/logout', (req, res) => {
-  // req.logOut() removes the req.user property and clear the login sesssion (if any).
   req.logOut();
   res.clearCookie('connect.sid');
 
