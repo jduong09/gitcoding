@@ -1,9 +1,9 @@
 /* eslint-disable react/no-unused-class-component-methods */
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import './css/App.css';
-import User from './components/user/user';
-import LandingPage from './components/landingPage';
+import '../css/App.css';
+import User from './user/user';
+import LandingPage from './landingPage';
 
 class App extends React.Component {
   // TODO: Remove all of user GET/CREATE related code when done testing/implementing
