@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as ReactRouter } from 'react-router-dom';
-import './frontend/css/index.css';
-import App from './frontend/App';
+import '../css/index.css';
+import App from '../App';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(

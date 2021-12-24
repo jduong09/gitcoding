@@ -3,7 +3,7 @@ const { getUsers, createUser } = require('../actions/users');
 
 const router = express.Router();
 
-router.route('/users')
+router.route('/')
   .get(async (req, res) => {
     try {
       const data = await getUsers();

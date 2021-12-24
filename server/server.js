@@ -5,7 +5,7 @@ const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
 const dotenv = require('dotenv');
 const db = require('./db');
-const apiRouter = require('./api/index');
+const apiRouter = require('./api');
 
 dotenv.config();
 
