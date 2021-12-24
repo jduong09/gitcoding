@@ -5,7 +5,6 @@ const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
 const dotenv = require('dotenv');
 const db = require('./db');
-const authRouter = require('./auth');
 const apiRouter = require('./api');
 
 dotenv.config();
@@ -28,8 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 /*
  * Session Configuration
 */
-// ExpressSession takes a config object, session, that defines what options to enable in a session.
-// shouldn't every secret be different for each login? 
+
 const session = {
   secret: process.env.SESSION_SECRET,
   cookie: {
@@ -69,18 +67,8 @@ passport.use(strategy);
 app.use(expressSession(session));
 app.use(passport.initialize());
 app.use(passport.session());
-// after passport.session, we would have the routes.
-// Login, logout and callback sit on the /auth path
 
-/*
-app.use((req, res, next) => {
-  req.session.state = authState;
-  next();
-});
-*/
-
-app.use('/auth', authRouter);
-app.use('/api', apiRouter);
+app.use(apiRouter);
 
 passport.serializeUser((user, done) => {
   done(null, user);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import Dashboard from './user/dashboard';
+import Dashboard from './dashboard';
 
 class User extends React.Component {
   constructor(props) {
