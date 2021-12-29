@@ -1,6 +1,7 @@
 const { Pool } = require('pg');
 const dotenv = require('dotenv');
 const fs = require('fs');
+const migrationUtils = require('../api/actions/migrations');
 
 dotenv.config();
 
@@ -58,6 +59,17 @@ const createUsers = async () => {
   }
 };
 
+/*
+ * Function is not working.
+async function getClient() {
+  await pool.connect((err, client, release) => {
+    if (err) {
+      console.error('Error acquiring client: ', err.stack);
+    }
+  });
+};
+*/
+
 /**
  * @description Run a SQL query given a filepath
  * @param {string} path
@@ -69,6 +81,7 @@ const createUsers = async () => {
  * @param {boolean} [options.reader]
  * @param {string[]} [options.consistencyKeys] - Keys for read-after-write consistency
  */
+
 async function execute(path, params = {}) {
   const queryVariables = [];
   const queryParam = (qv) => {
@@ -84,10 +97,54 @@ async function execute(path, params = {}) {
   sql = sql.replace(/\$\{[^{}]+\}/g, queryParam);
   const values = queryVariables ? queryVariables.map(p => params[p]) : [];
   return query(sql, values);
-}
+};
+
+const migrate = async () => {
+  let existingMigrations = [];
+  try {
+    const result = await pool.query('SELECT * FROM migrations');
+    existingMigrations = result.rows.map((r) => r.file);
+  } catch {
+    console.log('First migration');
+  }
+
+  // Get outstanding migrations
+  const outstandingMigrations = await migrationUtils.getOutStandingMigrations(existingMigrations);
+  const client = await pool.connect();
+
+  try {
+    // Start transaction
+    console.log('hey');
+    await client.query('BEGIN');
+    // eslint-disable-next-line no-restricted-syntax
+    for (const migration of outstandingMigrations) {
+      // eslint-disable-next-line no-await-in-loop
+      console.log('Migration String: ', migration.query.toString());
+      // eslint-disable-next-line no-await-in-loop
+      await client.query(migration.query.toString());
+      console.log('Ran migration: ', migration.file);
+      // eslint-disable-next-line no-await-in-loop
+      await client.query('INSERT INTO migrations (file_name) VALUES ($1)', [
+       migration.file,
+      ]);
+    }
+    await client.query('COMMIT');
+  } catch (err) {
+    await client.query('ROLLBACK');
+  } finally {
+    client.end((err) => {
+      console.log('Client has disconnected');
+      if (err) {
+        console.log('ERR: ', err.stack);
+      }
+    });
+  }
+};
 
 module.exports = {
   query,
   createUsers,
   execute,
 };
+
+migrate();
