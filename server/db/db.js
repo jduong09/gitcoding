@@ -103,7 +103,9 @@ const migrate = async () => {
   let existingMigrations = [];
   try {
     const result = await pool.query('SELECT * FROM migrations');
-    existingMigrations = result.rows.map((r) => r.file);
+    console.log('Result', result);
+    existingMigrations = result.rows.map((r) => r.file_name);
+    console.log('Existing Migrations: ', existingMigrations);
   } catch {
     console.log('First migration');
   }
@@ -114,7 +116,6 @@ const migrate = async () => {
 
   try {
     // Start transaction
-    console.log('hey');
     await client.query('BEGIN');
     // eslint-disable-next-line no-restricted-syntax
     for (const migration of outstandingMigrations) {

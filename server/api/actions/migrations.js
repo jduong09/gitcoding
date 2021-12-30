@@ -12,8 +12,7 @@ const getOutStandingMigrations = async (migrations = []) => {
   const files = await util.promisify(fs.readdir)('server/sql/migrations');
   const sql = await Promise.all(
     files
-      .filter((file) => file.split('.')[1] === 'sql')
-      .filter((file) => !migrations.includes(file))
+      .filter((file) => file.split('.')[1] === 'sql' && (!migrations.includes(file)))
       .map(async (file) => ({
         file,
         query: await util.promisify(fs.readFile)(`server/sql/migrations/${file}`, {
