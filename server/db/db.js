@@ -103,9 +103,7 @@ const migrate = async () => {
   let existingMigrations = [];
   try {
     const result = await pool.query('SELECT * FROM migrations');
-    console.log('Result', result);
     existingMigrations = result.rows.map((r) => r.file_name);
-    console.log('Existing Migrations: ', existingMigrations);
   } catch {
     console.log('First migration');
   }
