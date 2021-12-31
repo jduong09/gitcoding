@@ -19,7 +19,7 @@
     "pg": "^8.7.1"
   },
   "scripts": {
-    "serve": "node server/server.js",
+    "start": "node server/server.js",
     "dev": "concurrently \"npm run serve\" \"cd client && npm run start\"",
     "build": "cd client && npm i && npm run build",
     "cypress:open": "cypress open"
