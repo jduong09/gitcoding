@@ -43,7 +43,7 @@ client/node_modules/
 jspm_packages/
 cypress/videos
 cypress/screenshots
-cypress/integrations/examples
+cypress/integration/examples
 
 # TypeScript v1 declaration files
 typings/
