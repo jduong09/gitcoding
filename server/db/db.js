@@ -1,7 +1,8 @@
+/* eslint-disable no-await-in-loop */
 const { Pool } = require('pg');
 const dotenv = require('dotenv');
 const fs = require('fs');
-const migrationUtils = require('../api/actions/migrations');
+const { getOutStandingMigrations } = require('../api/actions/migrations');
 
 dotenv.config();
 
@@ -28,47 +29,6 @@ const query = async (text, params) => new Promise((resolve, reject) => {
       .then((res) => { resolve(res); })
       .catch((err) => { reject(err); });
   });
-
-/* *************************************************************
- * The following code is just for testing purposes and should
- * be refactored to suit our needs.
- ************************************************************* */
-
-
-/**
- * @description Create users table
- * TODO: Eventually get rid of this code when we store migrations programatically
- * @param {object} req
- * @param {object} res
- * @returns {object} object
- */
-const createUsers = async () => {
-  console.log('CREATING USERS TABLE');
-  const text = `
-    CREATE TABLE IF NOT EXISTS users (
-      id BIGSERIAL NOT NULL PRIMARY KEY,
-      name TEXT NOT NULL,
-      created TIMESTAMPTZ DEFAULT NOW() NOT NULL
-    );
-  `;
-
-  try {
-    await query(text);
-  } catch(error) {
-    console.log('ERROR CREATING USER TABLE: ', error);
-  }
-};
-
-/*
- * Function is not working.
-async function getClient() {
-  await pool.connect((err, client, release) => {
-    if (err) {
-      console.error('Error acquiring client: ', err.stack);
-    }
-  });
-};
-*/
 
 /**
  * @description Run a SQL query given a filepath
@@ -102,14 +62,14 @@ async function execute(path, params = {}) {
 const migrate = async () => {
   let existingMigrations = [];
   try {
-    const result = await pool.query('SELECT * FROM migrations');
+    const result = await execute('server/sql/migrationQueries/get_all.sql');
     existingMigrations = result.rows.map((r) => r.file_name);
   } catch {
     console.log('First migration');
   }
 
   // Get outstanding migrations
-  const outstandingMigrations = await migrationUtils.getOutStandingMigrations(existingMigrations);
+  const outstandingMigrations = await getOutStandingMigrations(existingMigrations);
   const client = await pool.connect();
 
   try {
@@ -117,15 +77,8 @@ const migrate = async () => {
     await client.query('BEGIN');
     // eslint-disable-next-line no-restricted-syntax
     for (const migration of outstandingMigrations) {
-      // eslint-disable-next-line no-await-in-loop
-      console.log('Migration String: ', migration.query.toString());
-      // eslint-disable-next-line no-await-in-loop
-      await client.query(migration.query.toString());
-      console.log('Ran migration: ', migration.file);
-      // eslint-disable-next-line no-await-in-loop
-      await client.query('INSERT INTO migrations (file_name) VALUES ($1)', [
-       migration.file,
-      ]);
+      await execute(`server/sql/migrations/${migration.file}`);
+      await execute('server/sql/migrationQueries/put.sql', { file_name: migration.file });
     }
     await client.query('COMMIT');
   } catch (err) {
@@ -142,7 +95,6 @@ const migrate = async () => {
 
 module.exports = {
   query,
-  createUsers,
   execute,
 };
 
