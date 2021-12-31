@@ -21,6 +21,7 @@
   "scripts": {
     "serve": "node server/server.js",
     "dev": "concurrently \"npm run serve\" \"cd client && npm run start\"",
+    "build": "cd client && npm run build",
     "cypress:open": "cypress open"
   },
   "devDependencies": {
