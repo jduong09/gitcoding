@@ -8,8 +8,7 @@
         "plugin:jsx-a11y/recommended",
         "airbnb",
         "airbnb/hooks",
-        "prettier",
-        "plugin:cypress/recommended"
+        "prettier"
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -20,20 +19,13 @@
     },
     "plugins": [
         "jsx-a11y",
-        "prettier",
-        "cypress"
+        "prettier"
     ],
     "rules": {
         "react/function-component-definition": "off",
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
         "react/forbid-prop-types": 0,
         "react/require-default-props": "off",
-        "react/prop-types": "off",
-        "cypress/no-assigning-return-values": "error",
-        "cypress/no-unnecessary-waiting": "error",
-        "cypress/assertion-before-screenshot": "warn",
-        "cypress/no-force": "warn",
-        "cypress/no-async-tests": "error",
-        "cypress/no-pause": "error"
+        "react/prop-types": "off"
     }
 }

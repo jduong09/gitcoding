@@ -41,8 +41,6 @@ build/Release
 node_modules/
 client/node_modules/
 jspm_packages/
-cypress/videos
-cypress/screenshots
 
 # TypeScript v1 declaration files
 typings/

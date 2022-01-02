@@ -29,7 +29,7 @@ class App extends React.Component {
       }
     } catch (error) {
       // Fail silently
-      // console.log('ERROR: ', error);
+      console.log('ERROR: ', error);
     }
   }
 
@@ -47,7 +47,7 @@ class App extends React.Component {
         setTimeout(() => this.setState({ newUserAdded: false }), 2000);
       }
     } catch (error) {
-      // console.log('ERROR: ', error);
+      console.log('ERROR: ', error);
     }
   }
 
