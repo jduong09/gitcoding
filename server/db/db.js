@@ -59,6 +59,10 @@ async function execute(path, params = {}) {
   return query(sql, values);
 };
 
+/**
+ * @description Select all migrations, filter out executed migrations, and execute leftover migrations.
+ */
+
 const migrate = async () => {
   let existingMigrations = [];
   try {
