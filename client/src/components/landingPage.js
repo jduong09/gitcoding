@@ -6,7 +6,7 @@ const LandingPage = () => (
   <div>
     <header>
       <h1>LANDING PAGE.</h1>
-      <a href="http://localhost:5000/auth/login">
+      <a href="/auth/login">
         Sign In 
         <FontAwesomeIcon icon={faSignInAlt} />
       </a>

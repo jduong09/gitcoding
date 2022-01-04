@@ -6,7 +6,7 @@ const Dashboard = () => (
   <div>
     <header>
       <h1>Hello this is the users dashboard page.</h1>
-      <a href="http://localhost:5000/auth/logout">
+      <a href="/auth/logout">
         Sign Out!
         <FontAwesomeIcon icon={faSignOutAlt} />
       </a>
