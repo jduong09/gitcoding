@@ -10,11 +10,8 @@ const apiRouter = require('./api');
 dotenv.config();
 
 const app = express();
-const port = 5000;
 
-app.listen(port, () => {
-  console.log(`App running on port ${port}`);
-});
+app.listen(process.env.PORT || 5000);
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
