@@ -61,7 +61,7 @@ async function execute(path, params = {}) {
 
 /**
  * @description Select all migrations, filter out executed migrations, and executes leftover migrations.
- * @description Runs a transaction, which will run all leftover migrations, or fail completely.
+ * Runs a transaction, which will run all leftover migrations, or fail completely.
  */
 
 const migrate = async () => {
