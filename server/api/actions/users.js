@@ -1,4 +1,4 @@
-const db = require('../../db');
+const db = require('../../db/db');
 
 const getUsers = async () => {
   const { rows: data } = await db.execute('server/sql/users/get_all.sql');

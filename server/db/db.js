@@ -1,6 +1,8 @@
+/* eslint-disable no-await-in-loop */
 const { Pool } = require('pg');
 const dotenv = require('dotenv');
 const fs = require('fs');
+const { getOutStandingMigrations } = require('../api/actions/migrations');
 
 dotenv.config();
 
@@ -28,36 +30,6 @@ const query = async (text, params) => new Promise((resolve, reject) => {
       .catch((err) => { reject(err); });
   });
 
-/* *************************************************************
- * The following code is just for testing purposes and should
- * be refactored to suit our needs.
- ************************************************************* */
-
-
-/**
- * @description Create users table
- * TODO: Eventually get rid of this code when we store migrations programatically
- * @param {object} req
- * @param {object} res
- * @returns {object} object
- */
-const createUsers = async () => {
-  console.log('CREATING USERS TABLE');
-  const text = `
-    CREATE TABLE IF NOT EXISTS users (
-      id BIGSERIAL NOT NULL PRIMARY KEY,
-      name TEXT NOT NULL,
-      created TIMESTAMPTZ DEFAULT NOW() NOT NULL
-    );
-  `;
-
-  try {
-    await query(text);
-  } catch(error) {
-    console.log('ERROR CREATING USER TABLE: ', error);
-  }
-};
-
 /**
  * @description Run a SQL query given a filepath
  * @param {string} path
@@ -69,6 +41,7 @@ const createUsers = async () => {
  * @param {boolean} [options.reader]
  * @param {string[]} [options.consistencyKeys] - Keys for read-after-write consistency
  */
+
 async function execute(path, params = {}) {
   const queryVariables = [];
   const queryParam = (qv) => {
@@ -84,10 +57,50 @@ async function execute(path, params = {}) {
   sql = sql.replace(/\$\{[^{}]+\}/g, queryParam);
   const values = queryVariables ? queryVariables.map(p => params[p]) : [];
   return query(sql, values);
-}
+};
+
+/**
+ * @description Select all migrations, filter out executed migrations, and executes leftover migrations.
+ * Runs a transaction, which will run all leftover migrations, or fail completely.
+ */
+
+const migrate = async () => {
+  let existingMigrations = [];
+  try {
+    const result = await execute('server/sql/migrationQueries/get_all.sql');
+    existingMigrations = result.rows.map((r) => r.file_name);
+  } catch {
+    console.log('First migration');
+  }
+
+  // Get outstanding migrations
+  const outstandingMigrations = await getOutStandingMigrations(existingMigrations);
+  const client = await pool.connect();
+
+  try {
+    // Start transaction
+    await client.query('BEGIN');
+    // eslint-disable-next-line no-restricted-syntax
+    for (const migration of outstandingMigrations) {
+      await execute(`server/sql/migrations/${migration.file}`);
+      await execute('server/sql/migrationQueries/put.sql', { file_name: migration.file });
+    }
+    await client.query('COMMIT');
+  } catch (err) {
+    await client.query('ROLLBACK');
+  } finally {
+    client.end((err) => {
+      console.log('Client has disconnected');
+      if (err) {
+        console.log('ERR: ', err.stack);
+      }
+    });
+  }
+};
 
 module.exports = {
   query,
-  createUsers,
   execute,
 };
+
+migrate();
