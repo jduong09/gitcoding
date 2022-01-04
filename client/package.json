@@ -21,10 +21,10 @@
     "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.4.1"
   },
-  "proxy": "http://localhost:5000",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "heroku-postbuild": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -47,6 +47,7 @@
     ]
   },
   "engines": {
-    "node": "16.13.0"
+    "node": "16.13.0",
+    "npm": "8.1.0"
   }
 }
