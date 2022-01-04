@@ -82,13 +82,10 @@ passport.deserializeUser((user, done) => {
  * Authentication check middleware
 */
 const checkAuthentication = (req, res, next) => {
-  console.log('hi checking authentication!');
   if (req.isAuthenticated()) {
-    console.log('you are good to go sir.')
     res.send({ isAuthenticated: true });
     next();
   } else {
-    console.log('sir. this is VIP.');
     res.send({ isAuthenticated: false });
     res.end();
   }
