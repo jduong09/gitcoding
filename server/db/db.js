@@ -9,13 +9,11 @@ dotenv.config();
 const poolConfigs = { connectionString: process.env.DATABASE_URL};
 if (process.env.NODE_ENV === 'production') {
   poolConfigs.ssl = { rejectUnauthorized: false };
+  poolConfigs.user = process.env.DATABASE_USER;
+  poolConfigs.password = process.env.DATABASE_PASSWORD;
 }
-console.log('POol Configs: ', poolConfigs);
-const pool = new Pool(poolConfigs);
 
-pool.on('connect', () => {
-  console.log('Connected to the db!');
-});
+const pool = new Pool(poolConfigs);
 
 // TODO: We may want to only use this when there is an issue setting up the DB
 // pool.on('remove', () => {
