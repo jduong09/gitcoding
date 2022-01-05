@@ -14,6 +14,7 @@ class App extends React.Component {
     this.onGetUserData = this.onGetUserData.bind(this);
     this.onCreateUser = this.onCreateUser.bind(this);
     this.onUpdateUserNameInput = this.onUpdateUserNameInput.bind(this);
+    this.sendLoginRequest = this.sendLoginRequest.bind(this);
   }
 
   async onGetUserData() {
@@ -56,6 +57,15 @@ class App extends React.Component {
     this.setState({ name, newUserAdded: false });
   }
 
+  sendLoginRequest(e) {
+    e.preventDefault();
+    try {
+      fetch('/auth/login');
+    } catch (error) {
+      console.log(error, this);
+    }
+  };
+
   render() {
     const { users, name, newUserAdded } = this.state;
     return (
@@ -75,6 +85,9 @@ class App extends React.Component {
           <Route exact path='/' element={<LandingPage />} />
           <Route path='/users/:userId' element={<User />} />
         </Routes>
+        <button type="button" onClick={this.sendLoginRequest}>
+          Login now pls.
+        </button>
       </div>
     );
   }
