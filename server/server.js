@@ -62,7 +62,7 @@ const strategy = new Auth0Strategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
     callbackURL: process.env.CALLBACK_URL,
-    state: false,
+    state: true,
   },
   // verify callback, use 'passReqToCallback' in order to pass state into verify callback function? 
   (accessToken, refreshToken, extraParams, profile, done) => done(null, profile)
@@ -92,6 +92,8 @@ app.use(apiRouter);
  * Authentication check middleware
 */
 const checkAuthentication = (req, res, next) => {
+  console.log(req.session);
+  console.log('Session id: ', req.session.id);
   if (req.isAuthenticated()) {
     res.send({ isAuthenticated: true });
     next();
