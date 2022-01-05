@@ -36,7 +36,9 @@ router.get('/callback', (req, res, next) => {
     if (err) {
       return next(err);
     }
-    
+
+    console.log('USER: ', user, err);
+
     if (!user) {
       return res.redirect('/login');
     }
