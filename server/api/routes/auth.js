@@ -33,6 +33,8 @@ router.get(
 
 router.get('/callback', (req, res, next) => {
   passport.authenticate('auth0', (err, user, info) => {
+    // Explicitly save the session before redirecting
+    req.session.save();
     if (err) {
       return next(err);
     }
