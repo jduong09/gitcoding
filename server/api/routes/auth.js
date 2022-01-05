@@ -48,7 +48,7 @@ router.get('/callback', (req, res, next) => {
       
       const { returnTo } = req.session;
       delete req.session.returnTo;
-      res.redirect(returnTo || 'https://water-your-subs.herokuapp.com/users/1');
+      res.redirect(returnTo || `${process.env.BASE_URL}/users/1`);
       res.end();
     });
   })(req, res, next);
