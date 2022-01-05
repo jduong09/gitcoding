@@ -62,7 +62,8 @@ class App extends React.Component {
     try {
       fetch('/auth/login');
     } catch (error) {
-      console.log(error, this);
+      // Fail silently
+      // console.log(error, this);
     }
   };
 
