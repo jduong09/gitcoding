@@ -7,6 +7,7 @@ const Auth0Strategy = require('passport-auth0');
 const path = require("path");
 const dotenv = require('dotenv');
 const apiRouter = require('./api');
+const pgPool = require('./db/db');
 
 
 dotenv.config();
@@ -38,12 +39,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const session = {
   store: new PGSession({
-    tableName: 'sessions',
-    conString: process.env.DATABASE_URL
+    pool: pgPool,
+    tableName: 'sessions'
   }),
   secret: process.env.SESSION_SECRET,
   cookie: {
-    sameSite: 'none',
+    sameSite: 'Lax',
   },
   resave: false,
   saveUninitialized: false,

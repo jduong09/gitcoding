@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === 'production') {
   };
 }
 
-const pool = new Pool(poolConfigs);
+const pgPool = new Pool(poolConfigs);
 
 // TODO: We may want to only use this when there is an issue setting up the DB
 // pool.on('remove', () => {
@@ -30,7 +30,7 @@ const pool = new Pool(poolConfigs);
  * @returns {object} object
  */
 const query = async (text, params) => new Promise((resolve, reject) => {
-    pool.query(text, params)
+    pgPool.query(text, params)
       .then((res) => { resolve(res); })
       .catch((err) => { reject(err); });
   });
@@ -81,7 +81,7 @@ const migrate = async () => {
   // Get outstanding migrations
   const outstandingMigrations = await getOutStandingMigrations(existingMigrations);
 
-  await pool.connect(async (error, client, release) => {
+  await pgPool.connect(async (error, client, release) => {
     if (error) {
       return console.log('Error connected to db: ', error);
     };
@@ -111,6 +111,7 @@ const migrate = async () => {
 module.exports = {
   query,
   execute,
+  pgPool
 };
 
 migrate();
