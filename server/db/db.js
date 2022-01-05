@@ -77,9 +77,10 @@ const migrate = async () => {
 
   // Get outstanding migrations
   const outstandingMigrations = await getOutStandingMigrations(existingMigrations);
-  const client = await pool.connect((error) => {
+
+  const client = await pool.connect((error, client, release) => {
     if (error) {
-      console.log('Error connecting to client: ', error);
+      console.log('Error connected to db: ', error);
     };
   });
 
@@ -95,7 +96,7 @@ const migrate = async () => {
   } catch (err) {
     await client.query('ROLLBACK');
   } finally {
-    client.end((err) => {
+    client.release((err) => {
       console.log('Client has disconnected');
       if (err) {
         console.log('ERR: ', err.stack);
