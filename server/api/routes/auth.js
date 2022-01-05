@@ -48,7 +48,7 @@ router.get('/callback', (req, res, next) => {
       
       const { returnTo } = req.session;
       delete req.session.returnTo;
-      res.redirect(returnTo || 'http://localhost:3000/users/1');
+      res.redirect(returnTo || 'https://water-your-subs.herokuapp.com/users/1');
       res.end();
     });
   })(req, res, next);
