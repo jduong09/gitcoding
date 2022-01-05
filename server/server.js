@@ -3,14 +3,16 @@ const bodyParser = require('body-parser');
 const expressSession = require('express-session');
 const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
+const path = require("path");
 const dotenv = require('dotenv');
 const db = require('./db/db');
 const apiRouter = require('./api');
 
+
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`App is listening on port ${PORT}`);
@@ -23,6 +25,10 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/src", "index.html"));
+})
 
 /*
  * Session Configuration
