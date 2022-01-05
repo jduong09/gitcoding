@@ -10,6 +10,7 @@ const poolConfigs = { connectionString: process.env.DATABASE_URL};
 if (process.env.NODE_ENV === 'production') {
   poolConfigs.ssl = { rejectUnauthorized: false };
 }
+console.log('POol Configs: ', poolConfigs);
 const pool = new Pool(poolConfigs);
 
 pool.on('connect', () => {
