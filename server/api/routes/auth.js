@@ -32,12 +32,13 @@ router.get(
 );
 
 router.get('/callback', (req, res, next) => {
-  passport.authenticate('auth0', (err, user) => {
+  passport.authenticate('auth0', (err, user, info) => {
     if (err) {
       return next(err);
     }
 
     console.log('USER: ', user, err);
+    console.log('INFO: ', info);
 
     if (!user) {
       return res.redirect('/login');
