@@ -56,6 +56,11 @@ class App extends React.Component {
     this.setState({ name, newUserAdded: false });
   }
 
+  sendLoginRequest(e) {
+    e.preventDefault();
+    fetch('/auth/login');
+  };
+
   render() {
     const { users, name, newUserAdded } = this.state;
     return (
@@ -75,6 +80,9 @@ class App extends React.Component {
           <Route exact path='/' element={<LandingPage />} />
           <Route path='/users/:userId' element={<User />} />
         </Routes>
+        <button onClick={sendLoginRequest}>
+          Login now pls.
+        </button>
       </div>
     );
   }
