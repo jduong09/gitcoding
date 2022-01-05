@@ -38,9 +38,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const session = {
   store: new PGSession({
-    conObject: {
-      connectionString: process.env.DATABASE_URL
-    }
+    tableName: 'sessions',
+    conString: process.env.DATABASE_URL
   }),
   secret: process.env.SESSION_SECRET,
   cookie: {
