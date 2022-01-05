@@ -59,7 +59,11 @@ class App extends React.Component {
 
   sendLoginRequest(e) {
     e.preventDefault();
-    fetch('/auth/login');
+    try {
+      fetch('/auth/login');
+    } catch (error) {
+      console.log(error, this);
+    }
   };
 
   render() {
@@ -81,7 +85,7 @@ class App extends React.Component {
           <Route exact path='/' element={<LandingPage />} />
           <Route path='/users/:userId' element={<User />} />
         </Routes>
-        <button onClick={this.sendLoginRequest}>
+        <button type="button" onClick={this.sendLoginRequest}>
           Login now pls.
         </button>
       </div>
