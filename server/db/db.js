@@ -6,12 +6,11 @@ const { getOutStandingMigrations } = require('../api/actions/migrations');
 
 dotenv.config();
 
-const pool = new Pool({ 
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
+const poolConfigs = { connectionString: process.env.DATABASE_URL};
+if (process.env.NODE_ENV === 'production') {
+  poolConfigs.ssl = { rejectUnauthorized: false };
+}
+const pool = new Pool(poolConfigs);
 
 pool.on('connect', () => {
   console.log('Connected to the db!');
