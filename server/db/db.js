@@ -78,31 +78,31 @@ const migrate = async () => {
   // Get outstanding migrations
   const outstandingMigrations = await getOutStandingMigrations(existingMigrations);
 
-  const client = await pool.connect((error, client, release) => {
+  await pool.connect(async (error, client, release) => {
     if (error) {
-      console.log('Error connected to db: ', error);
+      return console.log('Error connected to db: ', error);
     };
-  });
 
-  try {
-    // Start transaction
-    await client.query('BEGIN');
-    // eslint-disable-next-line no-restricted-syntax
-    for (const migration of outstandingMigrations) {
-      await execute(`server/sql/migrations/${migration.file}`);
-      await execute('server/sql/migrationQueries/put.sql', { file_name: migration.file });
-    }
-    await client.query('COMMIT');
-  } catch (err) {
-    await client.query('ROLLBACK');
-  } finally {
-    client.release((err) => {
-      console.log('Client has disconnected');
-      if (err) {
-        console.log('ERR: ', err.stack);
+    try {
+      // Start transaction
+      await client.query('BEGIN');
+      // eslint-disable-next-line no-restricted-syntax
+      for (const migration of outstandingMigrations) {
+        await execute(`server/sql/migrations/${migration.file}`);
+        await execute('server/sql/migrationQueries/put.sql', { file_name: migration.file });
       }
-    });
-  }
+      await client.query('COMMIT');
+    } catch (err) {
+      await client.query('ROLLBACK');
+    } finally {
+      release((err) => {
+        console.log('Client has disconnected');
+        if (err) {
+          console.log('ERR: ', err.stack);
+        }
+      });
+    }
+  });
 };
 
 module.exports = {

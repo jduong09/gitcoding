@@ -83,7 +83,7 @@ passport.use(strategy);
 passport.serializeUser((user, done) => done(null, user));
 
 passport.deserializeUser((user, done) => {
-  console.log('User: ', user);
+  console.log('Deserialized User: ', user);
   return done(null, user);
 });
 
@@ -96,7 +96,7 @@ app.use(apiRouter);
  * Authentication check middleware
 */
 const checkAuthentication = (req, res, next) => {
-  console.log(req.session);
+  console.log('Check session in checkAuth function: ', req.session);
   console.log('Session id: ', req.session.id);
   if (req.isAuthenticated()) {
     res.send({ isAuthenticated: true });

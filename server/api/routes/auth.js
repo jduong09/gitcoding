@@ -41,7 +41,7 @@ router.get('/callback', (req, res, next) => {
       return next(err);
     }
 
-    console.log('USER: ', user, err);
+    console.log('USER in callback function: ', user, err);
     console.log('INFO: ', info);
 
     if (!user) {
@@ -66,7 +66,7 @@ router.get('/callback', (req, res, next) => {
 router.get('/logout', (req, res) => {
   req.logOut();
   res.clearCookie('connect.sid');
-
+  console.log('Session in logout route: ', req.session);
   const returnTo = process.env.BASE_URL;
 
   const logoutURL = new URL(`https://${process.env.ISSUER}/v2/logout`);
