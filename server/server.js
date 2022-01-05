@@ -72,12 +72,11 @@ const strategy = new Auth0Strategy({
 // middleware for passport and expressSession.
 passport.use(strategy);
 
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
+passport.serializeUser((user, done) => done(null, user));
 
 passport.deserializeUser((user, done) => {
-  done(null, user);
+  console.log('User: ', user);
+  return done(null, user);
 });
 
 app.use(expressSession(session));
