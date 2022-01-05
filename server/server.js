@@ -41,7 +41,7 @@ const session = {
     sameSite: false,
   },
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: true
 };
 
 if (process.env.NODE_ENV === 'production') {
