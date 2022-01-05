@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const expressSession = require('express-session');
+const PGSession = require('connect-pg-simple')(expressSession);
 const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
 const path = require("path");
@@ -36,13 +37,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 */
 
 const session = {
+  store: new PGSession({
+    conString: process.env.DATABASE_URL
+  }),
   secret: process.env.SESSION_SECRET,
   cookie: {
     sameSite: false,
   },
   resave: false,
   saveUninitialized: false,
-  state: false
 };
 
 if (process.env.NODE_ENV === 'production') {
