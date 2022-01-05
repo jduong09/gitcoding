@@ -48,7 +48,7 @@ router.get('/callback', (req, res, next) => {
       
       const { returnTo } = req.session;
       delete req.session.returnTo;
-      res.redirect(returnTo || 'http://localhost:3000/users/1');
+      res.redirect(returnTo || `${process.env.BASE_URL}/users/1`);
       res.end();
     });
   })(req, res, next);
@@ -58,7 +58,7 @@ router.get('/logout', (req, res) => {
   req.logOut();
   res.clearCookie('connect.sid');
 
-  const returnTo = process.env.BASE_URL || '/';
+  const returnTo = process.env.BASE_URL;
 
   const logoutURL = new URL(`https://${process.env.ISSUER}/v2/logout`);
 
