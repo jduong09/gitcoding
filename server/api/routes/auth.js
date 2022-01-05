@@ -48,7 +48,7 @@ router.get('/logout', (req, res) => {
   req.logOut();
   res.clearCookie('connect.sid');
 
-  const returnTo = process.env.BASE_URL;
+  const returnTo = process.env.BASE_URL || '/';
 
   const logoutURL = new URL(`https://${process.env.ISSUER}/v2/logout`);
 

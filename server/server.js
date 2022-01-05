@@ -53,7 +53,7 @@ const strategy = new Auth0Strategy({
     domain: process.env.ISSUER,
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: process.env.CALLBACK_URL,
+    callbackURL: process.env.CALLBACK_URL || '/auth/callback',
     state: true,
   },
   // verify callback, use 'passReqToCallback' in order to pass state into verify callback function? 
