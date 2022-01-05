@@ -14,6 +14,7 @@ class App extends React.Component {
     this.onGetUserData = this.onGetUserData.bind(this);
     this.onCreateUser = this.onCreateUser.bind(this);
     this.onUpdateUserNameInput = this.onUpdateUserNameInput.bind(this);
+    this.sendLoginRequest = this.sendLoginRequest.bind(this);
   }
 
   async onGetUserData() {
