@@ -5,7 +5,6 @@ const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
 const path = require("path");
 const dotenv = require('dotenv');
-const db = require('./db/db');
 const apiRouter = require('./api');
 
 
@@ -40,7 +39,7 @@ const session = {
   saveUninitialized: false
 };
 
-if (app.get('env') === 'production') {
+if (process.env.NODE_ENV === 'production') {
   // Serve secure cookies, requires HTTPS
   session.cookie.secure = true;
 }
@@ -96,15 +95,6 @@ const checkAuthentication = (req, res, next) => {
 
 app.use('/users/:userId', checkAuthentication, (req, res, next) => {
   next();
-});
-
-/** 
-* Database Queries
-*/
-
-// Query: Create users table. Send that the database is setup!
-app.get('/', async (req, res) => {
-  res.send('Server is setup :)');
 });
 
 if (process.env.NODE_ENV === 'production') {
