@@ -27,7 +27,7 @@ router.get(
     prompt: 'select_account',
   }),
   (req, res) => {
-    res.end();
+    res.redirect('/');
   }
 );
 

@@ -71,19 +71,20 @@ const strategy = new Auth0Strategy({
 // auth router attaches /login, /logout, and /callback routes to the baseURL
 // middleware for passport and expressSession.
 passport.use(strategy);
-app.use(expressSession(session));
-app.use(passport.initialize());
-app.use(passport.session());
-
 app.use(apiRouter);
 
 passport.serializeUser((user, done) => {
+
   done(null, user);
 });
 
 passport.deserializeUser((user, done) => {
   done(null, user);
 });
+
+app.use(expressSession(session));
+app.use(passport.initialize());
+app.use(passport.session());
 
 /**
  * Authentication check middleware
