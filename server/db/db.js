@@ -8,9 +8,11 @@ dotenv.config();
 
 const poolConfigs = { connectionString: process.env.DATABASE_URL };
 
+/*
 if (process.env.NODE_ENV === 'production') {
   poolConfigs.ssl = { rejectUnauthorized: false };
 }
+*/
 
 const pool = new Pool(poolConfigs);
 
