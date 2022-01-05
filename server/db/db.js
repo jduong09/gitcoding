@@ -6,19 +6,11 @@ const { getOutStandingMigrations } = require('../api/actions/migrations');
 
 dotenv.config();
 
-const poolConfigs = { 
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
-};
-/*
+const poolConfigs = { connectionString: process.env.DATABASE_URL };
+
 if (process.env.NODE_ENV === 'production') {
   poolConfigs.ssl = { rejectUnauthorized: false };
-  poolConfigs.user = process.env.DATABASE_USER;
-  poolConfigs.password = process.env.DATABASE_PASSWORD
 }
-*/
 
 const pool = new Pool(poolConfigs);
 
@@ -85,7 +77,11 @@ const migrate = async () => {
 
   // Get outstanding migrations
   const outstandingMigrations = await getOutStandingMigrations(existingMigrations);
-  const client = await pool.connect();
+  const client = await pool.connect((error) => {
+    if (error) {
+      console.log('Error connecting to client: ', error);
+    };
+  });
 
   try {
     // Start transaction
