@@ -43,7 +43,7 @@ const session = {
   }),
   secret: process.env.SESSION_SECRET,
   cookie: {
-    sameSite: false,
+    sameSite: 'none',
   },
   resave: false,
   saveUninitialized: false,
