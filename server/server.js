@@ -104,7 +104,6 @@ app.use('/users/:userId', checkAuthentication, (req, res, next) => {
 
 // Query: Create users table. Send that the database is setup!
 app.get('/', async (req, res) => {
-  await db.createUsers();
   res.send('Server is setup :)');
 });
 
