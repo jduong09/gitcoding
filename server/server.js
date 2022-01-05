@@ -14,14 +14,6 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(process.cwd(), "client", "public")));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(process.cwd(), "client", "public", "index.html"));
-  });
-}
-
 app.listen(PORT, () => {
   console.log(`App is listening on port ${PORT}`);
 });
@@ -115,3 +107,11 @@ app.get('/', async (req, res) => {
   await db.createUsers();
   res.send('Server is setup :)');
 });
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(process.cwd(), 'client', 'build')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'client', 'build', 'index.html'));
+  });
+}
