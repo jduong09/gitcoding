@@ -27,14 +27,20 @@ router.get(
     prompt: 'select_account',
   }),
   (req, res) => {
+    console.log('hello we are authenticating.');
+    console.log('Req Session: ', req.session);
     res.redirect('/');
   }
 );
 
 router.get('/callback', (req, res, next) => {
+  console.log('Req Session: ', req.session);
+  req.session.save();
+  console.log('hello this is before the authenticate callback function.')
   passport.authenticate('auth0', (err, user, info) => {
     // Explicitly save the session before redirecting
-    req.session.save();
+    console.log('hello this is the callback');
+    console.log('Req Session in authenticate callback function: ', req.session);
     if (err) {
       return next(err);
     }
