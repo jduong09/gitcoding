@@ -14,6 +14,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(express.static(path.join(__dirname, "client", "build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
+
 app.listen(PORT, () => {
   console.log(`App is listening on port ${PORT}`);
 });
@@ -26,9 +32,6 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/public", "index.html"));
-})
 
 /*
  * Session Configuration
