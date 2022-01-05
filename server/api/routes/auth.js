@@ -25,10 +25,9 @@ router.get(
   passport.authenticate('auth0', {
     scope: 'openid',
     prompt: 'select_account',
-  }),
-  (req, res) => {
-    res.redirect('/');
-  }
+    successRedirect: '/',
+    failureRedirect: '/login'
+  })
 );
 
 router.get('/callback', (req, res, next) => {
