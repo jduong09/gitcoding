@@ -48,10 +48,12 @@ router.get('/callback', (req, res, next) => {
       if (error) {
         return next(error);
       }
-      
-      const { returnTo } = req.session;
+
+      // TESTING THIS:
+      // const { returnTo } = req.session;
       delete req.session.returnTo;
-      res.redirect(returnTo || `${process.env.BASE_URL}/users/1`);
+      // res.redirect(returnTo || `${process.env.BASE_URL}/users/1`);
+      res.redirect(`${process.env.BASE_URL}/users/1`);
       res.end();
     });
   })(req, res, next);
