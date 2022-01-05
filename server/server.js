@@ -50,10 +50,12 @@ const session = {
   saveUninitialized: false,
 };
 
+/*
 if (process.env.NODE_ENV === 'production') {
   // Serve secure cookies, requires HTTPS
   session.cookie.secure = true;
 }
+*/
 
 /*
  * Passport Configuration
@@ -122,3 +124,4 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(process.cwd(), 'client', 'build', 'index.html'));
   });
 }
+ 
