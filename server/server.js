@@ -45,6 +45,7 @@ const session = {
   secret: process.env.SESSION_SECRET,
   cookie: {
     sameSite: 'Lax',
+    httpOnly: false,
   },
   resave: false,
   saveUninitialized: false,
