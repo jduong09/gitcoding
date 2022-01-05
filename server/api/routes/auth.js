@@ -33,7 +33,7 @@ router.get(
 
 router.get('/callback', (req, res, next) => {
   console.log('Session id in callback: ', req.session.id);
-  console.log('Req Session: ', req.session);
+  console.log('Req Session: ', req.query.state);
   req.session.save();
   console.log('hello this is before the authenticate callback function.')
   passport.authenticate('auth0', (err, user, info) => {
