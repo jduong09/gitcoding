@@ -48,6 +48,7 @@ router.get('/callback', (req, res, next) => {
         return next(error);
       }
 
+      console.log('hit the passport logIn method.');
       // TESTING THIS:
       // const { returnTo } = req.session;
       delete req.session.returnTo;
