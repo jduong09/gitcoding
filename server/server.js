@@ -100,11 +100,11 @@ app.use(apiRouter);
 const checkAuthentication = (req, res, next) => {
   console.log('Check session in checkAuth function: ', req.session);
   if (req.isAuthenticated()) {
-    res.send({ isAuthenticated: true });
+    res.json({ isAuthenticated: true });
     res.end();
     console.log('You\'re good to go sir');
   } else {
-    res.send({ isAuthenticated: false });
+    res.json({ isAuthenticated: false });
     console.log('Step back, sir.');
     res.end();
   }

@@ -7,19 +7,21 @@ class User extends React.Component {
     super(props);
 
     this.state = {
-      isAuth: true,
+      isAuth: null,
     }
   }
 
-  componentDidMount() {
-    fetch(window.location.pathname)
+  async componentDidMount() {
+    const response = await fetch(window.location.pathname)
     .then(data => data.json())
-    .then(message => this.setState({ isAuth: message.isAuthenticated }));
+    .then(message => message.isAuthenticated);
+
+    this.setState({ isAuth: response });
   }
 
   render() {
     const { isAuth } = this.state;
-    return (isAuth === true ) ? <Dashboard /> : <Navigate to='/' />;
+    return (isAuth === false ) ? <Navigate to='/' /> : <Dashboard />;
   };
 }
 
