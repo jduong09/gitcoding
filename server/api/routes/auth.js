@@ -26,15 +26,11 @@ router.get(
     scope: 'openid',
     prompt: 'select_account',
     successRedirect: '/',
-    failureRedirect: '/login'
   })
 );
 
 router.get('/callback', (req, res, next) => {
-  console.log('Session id in callback: ', req.session.id);
-  console.log('Req Session: ', req.query.state);
-  req.session.save();
-  console.log('hello this is before the authenticate callback function.')
+  console.log('Req Session before authenticate callback function: ', req.query.state);
   passport.authenticate('auth0', (err, user, info) => {
     if (err) {
       return next(err);

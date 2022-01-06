@@ -19,6 +19,7 @@ app.listen(PORT, () => {
   console.log(`App is listening on port ${PORT}`);
 });
 
+/*
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
@@ -28,6 +29,7 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
+*/
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -69,10 +71,8 @@ const strategy = new Auth0Strategy({
     passReqToCallback: true
   },
   // verify callback, use 'passReqToCallback' in order to pass state into verify callback function? 
-  (req, accessToken, refreshToken, extraParams, profile, done) => {
-    console.log(req.query.state);
-    return done(null, profile);
-  });
+  (req, accessToken, refreshToken, extraParams, profile, done) => done(null, profile)
+);
 
 /*
  * App Configuration
@@ -99,7 +99,6 @@ app.use(apiRouter);
 */
 const checkAuthentication = (req, res, next) => {
   console.log('Check session in checkAuth function: ', req.session);
-  console.log('Session id: ', req.session.id);
   if (req.isAuthenticated()) {
     res.send({ isAuthenticated: true });
     next();
