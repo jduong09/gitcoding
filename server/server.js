@@ -104,7 +104,7 @@ const checkAuthentication = (req, res, next) => {
     next();
   } else {
     res.send({ isAuthenticated: false });
-    res.end();
+    next();
   }
 };
 
