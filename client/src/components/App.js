@@ -60,8 +60,8 @@ class App extends React.Component {
   sendLoginRequest(e) {
     e.preventDefault();
     try {
-      const url = process.env.NODE_ENV === 'production' ? '/auth/login' : 'http://localhost:5000/auth/login';
-      fetch(url);
+      // const url = process.env.NODE_ENV === 'production' ? '/auth/login' : 'http://localhost:5000/auth/login';
+      fetch('/auth/login');
     } catch (error) {
       // Fail silently
       console.log(error, this);
