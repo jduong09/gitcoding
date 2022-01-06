@@ -56,8 +56,8 @@ router.get('/callback', (req, res, next) => {
       delete req.session.returnTo;
       // res.redirect(returnTo || `${process.env.BASE_URL}/users/1`);
       res.redirect(`${process.env.BASE_URL}/users/1`);
+      res.end();
     });
-    res.end();
   })(req, res, next);
 });
 
