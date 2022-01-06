@@ -1,7 +1,8 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+// import { Navigate } from 'react-router-dom';
 import Dashboard from './dashboard';
 
+/*
 class User extends React.Component {
   constructor(props) {
     super(props);
@@ -12,7 +13,7 @@ class User extends React.Component {
   }
 
   async componentDidMount() {
-    const response = await fetch(window.location.pathname)
+    const response = await fetch('/auth/verify')
     .then(data => data.json())
     .then(message => message.isAuthenticated);
 
@@ -20,9 +21,13 @@ class User extends React.Component {
   }
 
   render() {
-    const { isAuth } = this.state;
-    return (isAuth === false ) ? <Navigate to='/' /> : <Dashboard />;
+    // const { isAuth } = this.state;
+    // return (isAuth === false ) ? <Navigate to='/' /> : <Dashboard />;
+    return <Dashboard />
   };
 }
+*/
+
+const User = () => <Dashboard />
 
 export default User;

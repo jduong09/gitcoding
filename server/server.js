@@ -97,15 +97,13 @@ app.use(apiRouter);
 /**
  * Authentication check middleware
 */
-const checkAuthentication = (req, res, next) => {
-  console.log('Check session in checkAuth function: ', req.session);
+const checkAuthentication = async (req, res, next) => {
   if (req.isAuthenticated()) {
-    res.json({ isAuthenticated: true });
-    res.end();
     console.log('You\'re good to go sir');
+    next();
   } else {
-    res.json({ isAuthenticated: false });
     console.log('Step back, sir.');
+    res.redirect('/');
     res.end();
   }
 };
