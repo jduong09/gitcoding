@@ -53,6 +53,8 @@ const session = {
 };
 
 if (process.env.NODE_ENV === 'production') {
+  // trust first proxy, workaround for heroku deployment to set secure cookie.
+  app.set('trust proxy', 1);
   // Serve secure cookies, requires HTTPS
   session.cookie.secure = true;
 }
