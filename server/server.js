@@ -100,15 +100,16 @@ app.use(apiRouter);
 const checkAuthentication = async (req, res, next) => {
   if (req.isAuthenticated()) {
     console.log('You\'re good to go sir');
+    await res.send({ isAuthenticated: true });
     next();
   } else {
     console.log('Step back, sir.');
-    res.redirect('/');
+    await res.send({ isAuthenticated: false });
     res.end();
   }
 };
 
-app.use('/users/:userId', checkAuthentication, (req, res, next) => {
+app.use('/auth/verify', checkAuthentication, (req, res, next) => {
   next();
 });
 
