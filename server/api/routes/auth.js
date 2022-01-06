@@ -6,6 +6,7 @@ dotenv.config();
 
 const router = express.Router();
 
+/*
 router.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
@@ -15,6 +16,7 @@ router.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
+*/
 
 /** 
  * Routes Definitions
