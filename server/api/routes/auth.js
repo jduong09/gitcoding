@@ -25,12 +25,12 @@ router.get(
   passport.authenticate('auth0', {
     scope: 'openid',
     prompt: 'select_account',
-    successRedirect: '/',
+    successRedirect: '/callback',
   })
 );
 
 router.get('/callback', (req, res, next) => {
-  console.log('Req Session before authenticate callback function: ', req.query.state);
+  console.log('Req Session before authenticate callback function: ', req.session);
   passport.authenticate('auth0', (err, user, info) => {
     if (err) {
       return next(err);
@@ -54,8 +54,8 @@ router.get('/callback', (req, res, next) => {
       delete req.session.returnTo;
       // res.redirect(returnTo || `${process.env.BASE_URL}/users/1`);
       res.redirect(`${process.env.BASE_URL}/users/1`);
-      res.end();
     });
+    res.end();
   })(req, res, next);
 });
 
