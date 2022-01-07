@@ -7,16 +7,10 @@ class User extends React.Component {
     super(props);
 
     this.state = {
-      isAuth: false,
+      isAuth: true,
     }
   }
-
-  componentDidMount() {
-    fetch(window.location.pathname)
-    .then(data => data.json())
-    .then(message => this.setState({ isAuth: message.isAuthenticated }));
-  }
-
+  
   render() {
     const { isAuth } = this.state;
     return (isAuth === true ) ? <Dashboard /> : <Navigate to='/' />;
