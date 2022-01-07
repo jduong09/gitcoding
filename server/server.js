@@ -1,24 +1,24 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const expressSession = require('express-session');
+const PGSession = require('connect-pg-simple')(expressSession);
 const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
+const path = require("path");
 const dotenv = require('dotenv');
-const db = require('./db/db');
 const apiRouter = require('./api');
+const db = require('./db/db');
+
 
 dotenv.config();
 
 const app = express();
-const port = 5000;
+const PORT = process.env.PORT || 5000;
 
-app.listen(port, () => {
-  console.log(`App running on port ${port}`);
-});
+db.migrate();
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  next();
+app.listen(PORT, () => {
+  console.log(`App is listening on port ${PORT}`);
 });
 
 app.use(bodyParser.json());
@@ -29,15 +29,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 */
 
 const session = {
+  store: new PGSession({
+    pool: db.pgPool,
+    tableName: 'sessions'
+  }),
   secret: process.env.SESSION_SECRET,
   cookie: {
-    sameSite: false,
+    sameSite: 'Lax',
+    httpOnly: false,
   },
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
 };
 
-if (app.get('env') === 'production') {
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
   // Serve secure cookies, requires HTTPS
   session.cookie.secure = true;
 }
@@ -51,10 +57,10 @@ const strategy = new Auth0Strategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
     callbackURL: process.env.CALLBACK_URL,
-    state: true,
+    passReqToCallback: true
   },
   // verify callback, use 'passReqToCallback' in order to pass state into verify callback function? 
-  (accessToken, refreshToken, extraParams, profile, done) => done(null, profile)
+  (req, accessToken, refreshToken, extraParams, profile, done) => done(null, profile)
 );
 
 /*
@@ -64,32 +70,24 @@ const strategy = new Auth0Strategy({
 // auth router attaches /login, /logout, and /callback routes to the baseURL
 // middleware for passport and expressSession.
 passport.use(strategy);
+
+passport.serializeUser((user, done) => done(null, user));
+
+passport.deserializeUser((user, done) => done(null, user));
+
 app.use(expressSession(session));
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.use(apiRouter);
-
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
-
-passport.deserializeUser((user, done) => {
-  done(null, user);
-});
 
 /**
  * Authentication check middleware
 */
 const checkAuthentication = (req, res, next) => {
-  console.log('hi checking authentication!');
   if (req.isAuthenticated()) {
-    console.log('you are good to go sir.')
-    res.send({ isAuthenticated: true });
     next();
   } else {
-    console.log('sir. this is VIP.');
-    res.send({ isAuthenticated: false });
+    res.redirect('/');
     res.end();
   }
 };
@@ -99,11 +97,14 @@ app.use('/users/:userId', checkAuthentication, (req, res, next) => {
 });
 
 /** 
-* Database Queries
+ * @description Serve static files from express backend.
 */
 
-// Query: Create users table. Send that the database is setup!
-app.get('/', async (req, res) => {
-  await db.createUsers();
-  res.send('Server is setup :)');
-});
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(process.cwd(), 'client', 'build')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'client', 'build', 'index.html'));
+  });
+}
+ 

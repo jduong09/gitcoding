@@ -6,11 +6,16 @@ const { getOutStandingMigrations } = require('../api/actions/migrations');
 
 dotenv.config();
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const poolConfigs = { connectionString: process.env.DATABASE_URL };
 
-pool.on('connect', () => {
-  console.log('Connected to the db!');
-});
+if (process.env.NODE_ENV === 'production') {
+  poolConfigs.ssl = { 
+    rejectUnauthorized: false,
+    sslmode: 'require'
+  };
+}
+
+const pgPool = new Pool(poolConfigs);
 
 // TODO: We may want to only use this when there is an issue setting up the DB
 // pool.on('remove', () => {
@@ -25,7 +30,7 @@ pool.on('connect', () => {
  * @returns {object} object
  */
 const query = async (text, params) => new Promise((resolve, reject) => {
-    pool.query(text, params)
+    pgPool.query(text, params)
       .then((res) => { resolve(res); })
       .catch((err) => { reject(err); });
   });
@@ -75,32 +80,37 @@ const migrate = async () => {
 
   // Get outstanding migrations
   const outstandingMigrations = await getOutStandingMigrations(existingMigrations);
-  const client = await pool.connect();
 
-  try {
-    // Start transaction
-    await client.query('BEGIN');
-    // eslint-disable-next-line no-restricted-syntax
-    for (const migration of outstandingMigrations) {
-      await execute(`server/sql/migrations/${migration.file}`);
-      await execute('server/sql/migrationQueries/put.sql', { file_name: migration.file });
-    }
-    await client.query('COMMIT');
-  } catch (err) {
-    await client.query('ROLLBACK');
-  } finally {
-    client.end((err) => {
-      console.log('Client has disconnected');
-      if (err) {
-        console.log('ERR: ', err.stack);
+  await pgPool.connect(async (error, client, release) => {
+    if (error) {
+      return console.log('Error connected to db: ', error);
+    };
+
+    try {
+      // Start transaction
+      await client.query('BEGIN');
+      // eslint-disable-next-line no-restricted-syntax
+      for (const migration of outstandingMigrations) {
+        await execute(`server/sql/migrations/${migration.file}`);
+        await execute('server/sql/migrationQueries/put.sql', { file_name: migration.file });
       }
-    });
-  }
+      await client.query('COMMIT');
+    } catch (err) {
+      await client.query('ROLLBACK');
+    } finally {
+      release((err) => {
+        console.log('Client has disconnected');
+        if (err) {
+          console.log('ERR: ', err.stack);
+        }
+      });
+    }
+  });
 };
 
 module.exports = {
   query,
   execute,
+  pgPool,
+  migrate
 };
-
-migrate();

@@ -6,6 +6,16 @@ dotenv.config();
 
 const router = express.Router();
 
+router.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'OPTIONS, GET, POST, PUT, PATCH, DELETE'
+  );
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
+
 /** 
  * Routes Definitions
 */
@@ -15,10 +25,8 @@ router.get(
   passport.authenticate('auth0', {
     scope: 'openid',
     prompt: 'select_account',
-  }),
-  (req, res) => {
-    res.end();
-  }
+    successRedirect: '/callback',
+  })
 );
 
 router.get('/callback', (req, res, next) => {
@@ -26,7 +34,7 @@ router.get('/callback', (req, res, next) => {
     if (err) {
       return next(err);
     }
-    
+
     if (!user) {
       return res.redirect('/login');
     }
@@ -35,12 +43,12 @@ router.get('/callback', (req, res, next) => {
       if (error) {
         return next(error);
       }
-      
+
       const { returnTo } = req.session;
       delete req.session.returnTo;
-      res.redirect(returnTo || 'http://localhost:3000/users/1');
-      res.end();
+      res.redirect(returnTo || `${process.env.BASE_URL}/users/1`);
     });
+    res.end();
   })(req, res, next);
 });
 
