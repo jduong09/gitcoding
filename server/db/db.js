@@ -113,5 +113,3 @@ module.exports = {
   execute,
   pgPool
 };
-
-migrate();
