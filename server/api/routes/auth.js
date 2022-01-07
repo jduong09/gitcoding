@@ -30,14 +30,10 @@ router.get(
 );
 
 router.get('/callback', (req, res, next) => {
-  console.log('Req Session before authenticate callback function: ', req.session);
-  passport.authenticate('auth0', (err, user, info) => {
+  passport.authenticate('auth0', (err, user) => {
     if (err) {
       return next(err);
     }
-
-    console.log('USER in callback function: ', user, err);
-    console.log('INFO: ', info);
 
     if (!user) {
       return res.redirect('/login');
@@ -48,7 +44,6 @@ router.get('/callback', (req, res, next) => {
         return next(error);
       }
 
-      console.log('hit the passport logIn method.');
       // TESTING THIS:
       // const { returnTo } = req.session;
       delete req.session.returnTo;
@@ -62,7 +57,7 @@ router.get('/callback', (req, res, next) => {
 router.get('/logout', (req, res) => {
   req.logOut();
   res.clearCookie('connect.sid');
-  console.log('Session in logout route: ', req.session);
+
   const returnTo = process.env.BASE_URL;
 
   const logoutURL = new URL(`https://${process.env.ISSUER}/v2/logout`);

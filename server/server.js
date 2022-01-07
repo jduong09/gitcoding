@@ -52,12 +52,11 @@ const session = {
   saveUninitialized: false,
 };
 
-/*
 if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
   // Serve secure cookies, requires HTTPS
   session.cookie.secure = true;
 }
-*/
 
 /*
  * Passport Configuration
@@ -84,10 +83,7 @@ passport.use(strategy);
 
 passport.serializeUser((user, done) => done(null, user));
 
-passport.deserializeUser((user, done) => {
-  console.log('Deserialized User: ', user);
-  return done(null, user);
-});
+passport.deserializeUser((user, done) => done(null, user));
 
 app.use(expressSession(session));
 app.use(passport.initialize());
@@ -100,12 +96,10 @@ app.use(apiRouter);
 const checkAuthentication = (req, res, next) => {
   console.log('Check session in checkAuth function: ', req.session);
   if (req.isAuthenticated()) {
-    // res.send({ isAuthenticated: true });
-    console.log('You\'re good to go sir');
+    res.send({ isAuthenticated: true });
     next();
   } else {
-    // res.send({ isAuthenticated: false });
-    console.log('Step back, sir.');
+    res.send({ isAuthenticated: false });
     next();
   }
 };
