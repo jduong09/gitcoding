@@ -111,5 +111,6 @@ const migrate = async () => {
 module.exports = {
   query,
   execute,
-  pgPool
+  pgPool,
+  migrate
 };
