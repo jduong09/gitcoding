@@ -7,7 +7,7 @@ class User extends React.Component {
     super(props);
 
     this.state = {
-      isAuth: true,
+      isAuth: false,
     }
   }
 
