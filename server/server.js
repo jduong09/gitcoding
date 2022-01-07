@@ -104,12 +104,12 @@ const checkAuthentication = async (req, res, next) => {
     next();
   } else {
     console.log('Step back, sir.');
-    await res.send({ isAuthenticated: false });
+    res.redirect('/');
     res.end();
   }
 };
 
-app.use('/auth/verify', checkAuthentication, (req, res, next) => {
+app.use('/user/:userId', checkAuthentication, (req, res, next) => {
   next();
 });
 

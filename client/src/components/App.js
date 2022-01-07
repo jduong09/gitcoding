@@ -10,19 +10,11 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { users: [], name: '', newUserAdded: false, isAuth: null };
+    this.state = { users: [], name: '', newUserAdded: false };
     this.onGetUserData = this.onGetUserData.bind(this);
     this.onCreateUser = this.onCreateUser.bind(this);
     this.onUpdateUserNameInput = this.onUpdateUserNameInput.bind(this);
     this.sendLoginRequest = this.sendLoginRequest.bind(this);
-  }
-
-  async componentDidMount() {
-    const response = await fetch('/auth/verify')
-      .then(data => data.json())
-      .then(message => message.isAuthenticated);
-
-    this.setState({ isAuth: response });
   }
 
   async onGetUserData() {
@@ -77,7 +69,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { users, name, newUserAdded, isAuth } = this.state;
+    const { users, name, newUserAdded } = this.state;
     return (
       <div className="App">
         <button type="button" onClick={this.onGetUserData}>
@@ -93,7 +85,7 @@ class App extends React.Component {
         {newUserAdded ? <div>New user successfully added! Click <strong>Get users</strong> to see updated list.</div> : null}
         <Routes>
           <Route exact path='/' element={<LandingPage />} />
-          <Route exact path='/users/:userId' element={<User isAuth={isAuth} />} /> 
+          <Route exact path='/users/:userId' element={<User />} /> 
         </Routes>
         <button type="button" onClick={this.sendLoginRequest}>
           Login now pls.
