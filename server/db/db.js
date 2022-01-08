@@ -39,12 +39,6 @@ const query = async (text, params) => new Promise((resolve, reject) => {
  * @description Run a SQL query given a filepath
  * @param {string} path
  * @param {object} [params]
- * @param {object} [options]
- * @param {number} [options.timeout]
- * @param {string} [options.rowMode]
- * @param {object} [options.client]
- * @param {boolean} [options.reader]
- * @param {string[]} [options.consistencyKeys] - Keys for read-after-write consistency
  */
 
 async function execute(path, params = {}) {
