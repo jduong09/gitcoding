@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const dotenv = require('dotenv');
+const users = require('../actions/users');
 
 dotenv.config();
 
@@ -23,7 +24,7 @@ router.use((req, res, next) => {
 router.get(
   '/login',
   passport.authenticate('auth0', {
-    scope: 'openid',
+    scope: 'openid profile',
     prompt: 'select_account',
     successRedirect: '/callback',
   })
@@ -43,7 +44,28 @@ router.get('/callback', (req, res, next) => {
       if (error) {
         return next(error);
       }
-
+      
+      // store user_id?
+      const userInfo = {
+        name: user.displayName,
+        identifier: user.id
+      };
+      
+      // User.createUser(userInfo);
+      try {
+        users.findUser(user.id).then(data => {
+          if (data.length === 0) {
+            try {
+              users.createUser(userInfo);
+            } catch (e) {
+              console.log('Error Creating User: ', e);
+            }
+          }
+        });
+      } catch (e) {
+        console.log('Error finding user: ', e);
+      }
+  
       const { returnTo } = req.session;
       delete req.session.returnTo;
       res.redirect(returnTo || `${process.env.BASE_URL}/users/1`);
