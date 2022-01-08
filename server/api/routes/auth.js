@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const dotenv = require('dotenv');
-const User = require('../actions/users');
+const users = require('../actions/users');
 
 dotenv.config();
 
@@ -30,8 +30,6 @@ router.get(
   })
 );
 
-// When passport authenticates user.
-// Check users table for user. Connect by user email? 
 router.get('/callback', (req, res, next) => {
   passport.authenticate('auth0', (err, user) => {
     if (err) {
@@ -54,15 +52,20 @@ router.get('/callback', (req, res, next) => {
       };
       
       // User.createUser(userInfo);
-      User.findUser(user.id).then(data => {
-        if (data.length === 0) {
-          User.createUser(userInfo);
-          return 'User created!';
-        }
-        return 'User in db.';
-      });
-
-
+      try {
+        users.findUser(user.id).then(data => {
+          if (data.length === 0) {
+            try {
+              users.createUser(userInfo);
+            } catch (e) {
+              console.log('Error Creating User: ', e);
+            }
+          }
+        });
+      } catch (e) {
+        console.log('Error finding user: ', e);
+      }
+  
       const { returnTo } = req.session;
       delete req.session.returnTo;
       res.redirect(returnTo || `${process.env.BASE_URL}/users/1`);

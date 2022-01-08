@@ -11,7 +11,7 @@ const createUser = async ({name, identifier}) => {
 };
 
 const findUser = async (identifier) => {
-  const { rows: data } = await db.execute('server/sql/users/findUser.sql', {identifier});
+  const { rows: data } = await db.execute('server/sql/users/getByIdentifier.sql', {identifier});
   return data;
 }
 
