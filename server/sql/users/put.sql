@@ -1,3 +1,3 @@
-INSERT INTO users(name)
-VALUES(${name})
+INSERT INTO users(name, identifier)
+VALUES(${name}, ${identifier})
 RETURNING *;

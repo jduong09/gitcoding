@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const dotenv = require('dotenv');
+const User = require('../actions/users');
 
 dotenv.config();
 
@@ -23,12 +24,14 @@ router.use((req, res, next) => {
 router.get(
   '/login',
   passport.authenticate('auth0', {
-    scope: 'openid',
+    scope: 'openid profile',
     prompt: 'select_account',
     successRedirect: '/callback',
   })
 );
 
+// When passport authenticates user.
+// Check users table for user. Connect by user email? 
 router.get('/callback', (req, res, next) => {
   passport.authenticate('auth0', (err, user) => {
     if (err) {
@@ -43,6 +46,22 @@ router.get('/callback', (req, res, next) => {
       if (error) {
         return next(error);
       }
+      
+      // store user_id?
+      const userInfo = {
+        name: user.displayName,
+        identifier: user.id
+      };
+      
+      // User.createUser(userInfo);
+      User.findUser(user.id).then(data => {
+        if (data.length === 0) {
+          User.createUser(userInfo);
+          return 'User created!';
+        }
+        return 'User in db.';
+      });
+
 
       const { returnTo } = req.session;
       delete req.session.returnTo;
