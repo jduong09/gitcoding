@@ -21,13 +21,14 @@
     "express-openid-connect": "^2.5.1",
     "express-session": "^1.17.2",
     "fs": "*",
+    "nodemon": "^2.0.15",
     "passport": "^0.5.0",
     "passport-auth0": "^1.4.1",
     "pg": "^8.7.1",
     "prettier": "^2.4.1"
   },
   "scripts": {
-    "start": "node server/server.js",
+    "start": "nodemon server/server.js",
     "dev": "concurrently \"npm run start\" \"cd client && npm run start\"",
     "build": "cd client && npm i && npm run build",
     "heroku-test": "cd client && npm run start",
