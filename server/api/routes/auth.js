@@ -53,7 +53,7 @@ router.get('/callback', (req, res, next) => {
       
       // User.createUser(userInfo);
       try {
-        users.findUser(user.id).then(data => {
+        users.getUserByIdentifier(user.id).then(data => {
           if (data.length === 0) {
             try {
               users.createUser(userInfo);

@@ -34,7 +34,7 @@ router.get(async (req, res) => {
 
 // CREATE a subscription
 // Route: /users/:userId/subscriptions/new
-router.post(async (req, res) => {
+router.post('/new', async (req, res) => {
   // req.body will contain the information necessary to make a new subscription
   try {
     const data = await createSubscription(req.body);

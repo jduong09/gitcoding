@@ -7,65 +7,86 @@ class SubscriptionForm extends React.Component {
     this.state = {
       name: '',
       nickname: '',
-      due_date: '',
-      reminder_days: '',
+      dueDate: '',
+      reminderDays: '',
       amount: 0,
-      user_id: null
+      userId: 0,
     };
+
+    this.createSubscription = this.createSubscription.bind(this);
   };
 
-  handleChange(key, e) {
+  handleChange(e, key) {
     e.preventDefault();
-
     this.setState({ [key]: e.target.value });
   }
 
-  createSubscription() {
+  createSubscription(e) {
     e.preventDefault();
 
     const subscriptionInfo = this.state;
-
-    fetch('/new', {
-      method: 'POST',
-      body: subscriptionInfo,
-    });
+    try {
+      fetch(`${window.location.pathname}/subscriptions/new`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(subscriptionInfo),
+      });
+    } catch(error) {
+      console.log('Error creating subscription: ', error);
+    }
   }
 
   render() {
-    <form onSubmit={this.createSubscription}>
-      <label for="subscription-name">
-        Name:
-        <input type="text" placeholder="Name" name="subscription-name" onChange={this.handleChange('name')}  />
-      </label>
+    const { name, nickname, dueDate, reminderDays, amount, userId } = this.state;
 
-      <label for="subscription-nickname">
-        Nickname:
-        <input type="text" placeholder="Nickname" name="subscription-nickname" onChange={this.handleChange('nickname')}  /> 
-      </label>
+    return (
+      <section>
+        State Here:
+        Name: {name}
+        Nickname: {nickname}
+        Due Date: {dueDate}
+        Reminder Days: {reminderDays}
+        Amount: {amount}
+        User Id: {userId}
 
-      <label for="subscription-due-date">
-        Due Date: 
-        <input type="date" name="subscription-due-date" onChange={this.handleChange('due_date')} />
-      </label>
+        <form onSubmit={this.createSubscription}>
+        <label htmlFor="subscription-name">
+          Name:
+          <input type="text" placeholder="Name" name="subscription-name" value={name} onChange={(e) => this.handleChange(e, 'name')}  />
+        </label>
 
-      <label for="subscription-reminder-days">
-        Reminder Days: 
-        <input type="number" name="subscription-reminder-days" onChange={this.handleChange('reminder_days')} />
-      </label>
+        <label htmlFor="subscription-nickname">
+          Nickname:
+          <input type="text" placeholder="Nickname" name="subscription-nickname" value={nickname} onChange={(e) => this.handleChange(e, 'nickname')}  /> 
+        </label>
 
-      <label for="subscription-amount">
-        Amount: 
-        <input type="number" placeholder="Subscription Name" name="subscription-amount" onChange={this.handleChange('amonut')}  />
-      </label>
+        <label htmlFor="subscription-due-date">
+          Due Date: 
+          <input type="date" name="subscription-dueDate" value={dueDate} onChange={(e) => this.handleChange(e, 'dueDate')} />
+        </label>
 
-      {/* Eventually, only the signed in user will be allowed to create a subcription for themself. This is for testing purposes. */}
-      <label for="subscription-user-id">
-        User Id:
-        <input type="number" name="subscription-user-id" onChange={this.handleChange('user_id')}  /> 
-      </label>
+        <label htmlFor="subscription-reminder-days">
+          Reminder Days: 
+          <input type="number" name="subscription-reminderDays" value={reminderDays} onChange={(e) => this.handleChange(e, 'reminderDays')} />
+        </label>
 
-      <input type="submit" value="Create Subscription!" />
-    </form>
+        <label htmlFor="subscription-amount">
+          Amount: 
+          <input type="number" placeholder="Subscription Name" name="subscription-amount" value={amount} onChange={(e) => this.handleChange(e, 'amount')}  />
+        </label>
+
+        {/* Eventually, only the signed in user will be allowed to create a subcription for themself. This is for testing purposes. */}
+        <label htmlFor="subscription-userId">
+          User Id:
+          <input type="number" name="subscription-userId" value={userId} onChange={(e) => this.handleChange(e, 'userId')}  /> 
+        </label>
+
+        <input type="submit" value="Create Subscription!" />
+      </form>
+      </section>
+    )
   }
 
 };
