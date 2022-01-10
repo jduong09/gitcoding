@@ -1,0 +1,1 @@
+SELECT * FROM subscriptions WHERE user_id = ${userID};

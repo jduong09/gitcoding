@@ -8,6 +8,7 @@ const Dashboard = () => (
   <div>
     <header>
       <h1>Hello this is the users dashboard page.</h1>
+      {<SubscriptionForm />}
       <a href={href}>
         Sign Out!
         <FontAwesomeIcon icon={faSignOutAlt} />
