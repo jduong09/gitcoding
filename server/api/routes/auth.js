@@ -52,6 +52,7 @@ router.get('/callback', (req, res, next) => {
       };
       
       // User.createUser(userInfo);
+      // After retrieving user from db, redirect them to their user page.
       try {
         users.getUserByIdentifier(user.id).then(data => {
           if (data.length === 0) {
@@ -61,16 +62,18 @@ router.get('/callback', (req, res, next) => {
               console.log('Error Creating User: ', e);
             }
           }
+          // data should return one user from db.
+          // userUrlId is user_id column from user's db. ex: 'xxxxxxxx-xxxx-xxxx-xxxxxxxxxxxx'
+          const userUrlId = data[0].user_id.slice('-');
+          // URGENT: Need to look at purpose of deleting returnTo.
+          delete req.session.returnTo;
+          res.redirect(`${process.env.BASE_URL}/users/${userUrlId}`);
+          res.end();
         });
       } catch (e) {
         console.log('Error finding user: ', e);
       }
-  
-      const { returnTo } = req.session;
-      delete req.session.returnTo;
-      res.redirect(returnTo || `${process.env.BASE_URL}/users/1`);
     });
-    res.end();
   })(req, res, next);
 });
 
