@@ -1,5 +1,5 @@
 const express = require('express');
-const { createSubscription } = require('../actions/subscriptions');
+const { putSubscription } = require('../actions/subscriptions');
 
 // Create a new router object, where we will have CRUD routes for our subscriptions table 
 // under the route /users/:userId/subscriptions/
@@ -19,7 +19,7 @@ router.route('/:userId/subscriptions')
   .put(async (req, res) => {
     // req.body will contain the information necessary to make a new subscription
     try {
-      const data = await createSubscription(req.body);
+      const data = await putSubscription(req.body);
       res.status(200).json(data);
     } catch(error) {
       res.status(400).json(error);
