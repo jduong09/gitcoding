@@ -5,9 +5,8 @@ const { createSubscription } = require('../actions/subscriptions');
 // under the route /users/:userId/subscriptions/
 const router = express.Router();
 
-router.route('/')
-  // Read all user's subscriptions
-  // Route: /users/:userId/subscriptions
+router.route('/:userId/subscriptions')
+  // READ all user's subscriptions
   .get(async (req, res) => {
     try {
       const data = await getSubscriptionsByUser();
@@ -17,8 +16,7 @@ router.route('/')
     }
   })
   // CREATE a subscription
-  // Route: /users/:userId/subscriptions/new
-  .post(async (req, res) => {
+  .put(async (req, res) => {
     // req.body will contain the information necessary to make a new subscription
     try {
       const data = await createSubscription(req.body);
@@ -52,9 +50,10 @@ router.route('/')
 // READ a single user subscription
 // Route: /users/:userId/subscriptions/:subscriptionId
 router.get('/:subscriptionId', async (req, res) => {
+  const subscriptionId = req.query.subscriptionId;
   try {
     // execute db query getSubscriptions.
-    const data = await getSubscriptionById();
+    const data = await getSubscriptionById(subscriptionId);
     // When response has returned with data from the await
     // Issue a status 200, and place data in body as JSON 
     res.status(200).json(data);

@@ -1,9 +1,16 @@
 import React from 'react';
 
+/** TO DO
+ * Indicator if the form is correctly or incorrectly filled out.
+ * We don't need to require the userId as state. This should be filled in auto because route for creating is /user/:userUUID/subscriptions
+ * After creating a subscription, we need to reset all the input values to normal.
+*/
+
 class SubscriptionForm extends React.Component {
   constructor(props) {
     super(props);
 
+    // When a field is empty, and not required, it should save as NULL instead of an empty string.
     this.state = {
       name: '',
       nickname: '',
@@ -13,7 +20,7 @@ class SubscriptionForm extends React.Component {
       userId: 0,
     };
 
-    this.createSubscription = this.createSubscription.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   };
 
   handleChange(e, key) {
@@ -21,13 +28,13 @@ class SubscriptionForm extends React.Component {
     this.setState({ [key]: e.target.value });
   }
 
-  createSubscription(e) {
+  handleSubmit(e) {
     e.preventDefault();
 
     const subscriptionInfo = this.state;
     try {
-      fetch(`${window.location.pathname}/subscriptions/new`, {
-        method: 'POST',
+      fetch(`${window.location.pathname}/subscriptions`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -51,7 +58,7 @@ class SubscriptionForm extends React.Component {
         Amount: {amount}
         User Id: {userId}
 
-        <form onSubmit={this.createSubscription}>
+        <form onSubmit={this.handleSubmit}>
         <label htmlFor="subscription-name">
           Name:
           <input type="text" placeholder="Name" name="subscription-name" value={name} onChange={(e) => this.handleChange(e, 'name')}  />

@@ -1,7 +1,10 @@
 const express = require('express');
+const subscriptions = require('./subscriptions');
 const { getUsers, createUser } = require('../actions/users');
 
 const router = express.Router();
+
+router.use('/', subscriptions);
 
 router.route('/')
   .get(async (req, res) => {

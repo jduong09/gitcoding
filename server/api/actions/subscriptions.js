@@ -1,5 +1,4 @@
 const db = require('../../db/db');
-const dateUtils = require('../utils/dateAndTimeUtils');
 
 // Commented out code is for other CRUD functions.
 /*
@@ -18,13 +17,10 @@ const getSubscriptionBySubscriptionId = async (subId) => {
 
 const createSubscription = async (subscriptionInfo) => {
   // Convert client date to timestampz (timestamp with time zone)
-  const formattedDate = dateUtils.convertDateToTimestampz(subscriptionInfo.dueDate);
   const params = {
     name: subscriptionInfo.name,
     nickname: subscriptionInfo.nickname,
-    due_date_year: formattedDate.year,
-    due_date_month: formattedDate.month,
-    due_date_day: formattedDate.day,
+    due_date: subscriptionInfo.dueDate,
     reminder_days: parseInt(subscriptionInfo.reminderDays),
     amount: parseInt(subscriptionInfo.amount),
     user_id: parseInt(subscriptionInfo.userId),
