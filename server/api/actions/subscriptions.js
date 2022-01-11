@@ -15,7 +15,7 @@ const getSubscriptionBySubscriptionId = async (subId) => {
 };
 */
 
-const putSubscription = async (subscriptionInfo) => {
+const createSubscription = async (subscriptionInfo) => {
   // Convert client date to timestampz (timestamp with time zone)
   const params = {
     name: subscriptionInfo.name,
@@ -25,12 +25,11 @@ const putSubscription = async (subscriptionInfo) => {
     amount: subscriptionInfo.amount,
     user_id: parseInt(subscriptionInfo.userId),
   }
-  console.log(params);
-
+  
   const { rows: data } = await db.execute('server/sql/subscriptions/putSubscription.sql', params);
   return data;
 };
 
 module.exports = {
-  putSubscription
+  createSubscription
 };

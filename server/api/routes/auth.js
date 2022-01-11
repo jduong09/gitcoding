@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const dotenv = require('dotenv');
 const users = require('../actions/users');
-console.log('testing');
+
 dotenv.config();
 
 const router = express.Router();
@@ -40,34 +40,34 @@ router.get('/callback', (req, res, next) => {
       return res.redirect('/login');
     }
 
-    req.logIn(user, (error) => {
+    req.logIn(user, async (error) => {
       if (error) {
         return next(error);
       }
       
-      // store user_id?
       const userInfo = {
         name: user.displayName,
         identifier: user.id
       };
       
-      // User.createUser(userInfo);
       // After retrieving user from db, redirect them to their user page.
+      // Try to find a user with their user.id in the users db.
       try {
-        users.getUserByIdentifier(user.id).then(data => {
+        await users.getUserByIdentifier(user.id).then(async (data) => {
+          // If no data is returned
           if (data.length === 0) {
+          // Try to create a user.
             try {
-              users.createUser(userInfo);
+              await users.createUser(userInfo).then(user => data = user);
             } catch (e) {
               console.log('Error Creating User: ', e);
             }
           }
-          // data should return one user from db.
-          // userUrlId is user_id column from user's db. ex: 'xxxxxxxx-xxxx-xxxx-xxxxxxxxxxxx'
-          const userUrlId = data[0].user_id.slice('-');
+
+          const userUrlId = data[0].user_uiid
           // URGENT: Need to look at purpose of deleting returnTo.
           delete req.session.returnTo;
-          res.redirect(`${process.env.BASE_URL}/users/${userUrlId}`);
+          await res.redirect(`${process.env.BASE_URL}/users/${userUrlId}`);
           res.end();
         });
       } catch (e) {

@@ -32,7 +32,6 @@ class SubscriptionForm extends React.Component {
     e.preventDefault();
 
     const subscriptionInfo = this.state;
-    console.log('Before Form Submit: ', subscriptionInfo);
     try {
       fetch(`${window.location.pathname}/subscriptions`, {
         method: 'PUT',
