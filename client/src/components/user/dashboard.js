@@ -28,8 +28,8 @@ class Dashboard extends React.Component {
       <ul className="subscription-details">
         <li>Name: {subscription.name}</li>
         <li>NickName: {subscription.nickname}</li>
-        <li>Due Date: {subscription.due_date}</li>
-        <li>Reminder Days: {subscription.reminder_days}</li>
+        <li>DueDate: {subscription.due_date}</li>
+        <li>ReminderDays: {subscription.reminder_days}</li>
         <li>Amount: {subscription.amount}</li>
       </ul>
     </li>)
@@ -39,7 +39,7 @@ class Dashboard extends React.Component {
       <div>
         <header>
           <h1>Hello this is the users dashboard page.</h1>
-          <section className="subscriptionList">
+          <section className="subscription-list">
             <ul>{subscriptionsList}</ul>
           </section>
           <SubscriptionForm />
