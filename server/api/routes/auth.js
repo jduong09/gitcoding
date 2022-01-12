@@ -70,10 +70,10 @@ router.get('/callback', (req, res, next) => {
         }
       }
 
-      const { user_uiid } = data;
+      const { user_uuid } = data;
       // URGENT: Need to look at prupose of deleting returnTo
       delete req.session.returnTo;
-      await res.redirect(`${process.env.BASE_URL}/users/${user_uiid}`);
+      await res.redirect(`${process.env.BASE_URL}/users/${user_uuid}`);
       res.end();
     });
   })(req, res, next);
