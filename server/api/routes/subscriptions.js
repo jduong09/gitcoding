@@ -3,9 +3,9 @@ const { createSubscription } = require('../actions/subscriptions');
 
 // Create a new router object, where we will have CRUD routes for our subscriptions table 
 // under the route /users/:userId/subscriptions/
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
-router.route('/:userId/subscriptions')
+router.route('/')
   // READ all user's subscriptions
   .get(async (req, res) => {
     try {
@@ -17,6 +17,8 @@ router.route('/:userId/subscriptions')
   })
   // CREATE a subscription
   .put(async (req, res) => {
+    // TODO: Delete this. Just leaving it here so you see it.
+    console.log('REQ PARAMS: ', req.params);
     // req.body will contain the information necessary to make a new subscription
     try {
       const data = await createSubscription(req.body);

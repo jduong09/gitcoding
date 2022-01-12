@@ -4,7 +4,7 @@ const { getUsers, createUser } = require('../actions/users');
 
 const router = express.Router();
 
-router.use('/', subscriptions);
+router.use('/:userUuid/subscriptions', subscriptions);
 
 router.route('/')
   .get(async (req, res) => {
