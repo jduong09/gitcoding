@@ -16,7 +16,6 @@ const getSubscriptionBySubscriptionId = async (subId) => {
 */
 
 const createSubscription = async (subscriptionInfo) => {
-  // Convert client date to timestampz (timestamp with time zone)
   const params = {
     name: subscriptionInfo.name,
     nickname: subscriptionInfo.nickname,

@@ -52,27 +52,29 @@ router.get('/callback', (req, res, next) => {
       
       // After retrieving user from db, redirect them to their user page.
       // Try to find a user with their user.id in the users db.
+      let userExists;
+      let data;
+      
       try {
-        await users.getUserByIdentifier(user.id).then(async (data) => {
-          // If no data is returned
-          if (data.length === 0) {
-          // Try to create a user.
-            try {
-              await users.createUser(userInfo).then(user => data = user);
-            } catch (e) {
-              console.log('Error Creating User: ', e);
-            }
-          }
-
-          const userUrlId = data[0].user_uiid
-          // URGENT: Need to look at purpose of deleting returnTo.
-          delete req.session.returnTo;
-          await res.redirect(`${process.env.BASE_URL}/users/${userUrlId}`);
-          res.end();
-        });
-      } catch (e) {
+        userExists = await users.getUserByIdentifier(userInfo.identifier).then(user => data = user);
+      } catch(e) {
         console.log('Error finding user: ', e);
       }
+
+      if (!userExists) {
+        // Try to create a user.
+        try {
+          data = await users.createUser(userInfo);
+        } catch(e) {
+          console.log('Error creating user: ', e);
+        }
+      }
+
+      const { user_uiid } = data;
+      // URGENT: Need to look at prupose of deleting returnTo
+      delete req.session.returnTo;
+      await res.redirect(`${process.env.BASE_URL}/users/${user_uiid}`);
+      res.end();
     });
   })(req, res, next);
 });
