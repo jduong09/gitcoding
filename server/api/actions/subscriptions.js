@@ -1,12 +1,10 @@
 const db = require('../../db/db');
 
 // Commented out code is for other CRUD functions.
-/*
 const getSubscriptionsByUserId = async (userId) => {
-  const { rows: data } = await db.execute('../../sql/subscriptions/getSubscriptionsByUserId.sql', {userId});
+  const { rows: data } = await db.execute('server/sql/subscriptions/getSubscriptionsByUserId.sql', {userId});
   return data;
 };
-*/
 
 /*
 const getSubscriptionBySubscriptionId = async (subId) => {
@@ -30,5 +28,6 @@ const createSubscription = async (subscriptionInfo) => {
 };
 
 module.exports = {
+  getSubscriptionsByUserId,
   createSubscription
 };
