@@ -8,7 +8,10 @@ const { createSubscription, getSubscriptionsByUserId } = require('../actions/sub
  * read/update/delete routes for subscriptions
  * error messages for subscription routes
  * display all user's subscriptions
+ *    format timestampz for serving to client. (done)
+ *    format display on client side (css) 
  * create a new subscription
+ *    insert user_id from backend, not have it as input field on the client side
  * update an existing subscription 
  * delete a subscription
 */
@@ -21,6 +24,7 @@ router.route('/')
 
     try {
       const data = await getSubscriptionsByUserId(user_id);
+      console.log(data);
       res.status(200).json(data);
     } catch(error) {
       res.status(400).json(error);
