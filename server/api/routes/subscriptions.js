@@ -7,9 +7,12 @@ const { createSubscription, getSubscriptionsByUserId } = require('../actions/sub
  * Wednesday Daily Work
  * read/update/delete routes for subscriptions
  * error messages for subscription routes
- * display all user's subscriptions
+ * 
+ *  
+ * display all user's subscriptions (done)
+ *    Try/Catch statement for fetching all subscriptions. What happens if it fails?
  *    format timestampz for serving to client. (done)
- *    format display on client side (css) 
+ *    format display on client side (css) (done)
  * create a new subscription
  *    insert user_id from backend, not have it as input field on the client side
  * update an existing subscription 
@@ -33,6 +36,8 @@ router.route('/')
   .put(async (req, res) => {
     // req.body will contain the information necessary to make a new subscription
     // TODO: Need to autoassign the user id based on their uuid from the req.params
+    const { user_id } = req.session.userInfo;
+    req.body.userId = user_id;
     try {
       const data = await createSubscription(req.body);
       res.status(200).json(data);

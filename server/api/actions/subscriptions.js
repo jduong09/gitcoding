@@ -20,7 +20,7 @@ const createSubscription = async (subscriptionInfo) => {
     due_date: subscriptionInfo.dueDate,
     reminder_days: parseInt(subscriptionInfo.reminderDays),
     amount: subscriptionInfo.amount,
-    user_id: parseInt(subscriptionInfo.userId),
+    user_id: subscriptionInfo.userId,
   }
   
   const { rows: data } = await db.execute('server/sql/subscriptions/putSubscription.sql', params);
