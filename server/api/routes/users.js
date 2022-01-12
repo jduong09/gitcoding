@@ -15,6 +15,9 @@ router.route('/')
       res.status(400).json(error);
     }
   })
+  /*
+  * Needs to be changed because createUser takes a name and an identifier.
+  * Possibly remove route?
   .post(async (req, res) => {
     try {
       const { name } = req.body;
@@ -24,5 +27,6 @@ router.route('/')
       res.status(400).json(error);
     }
   });
+  */
 
 module.exports = router;
