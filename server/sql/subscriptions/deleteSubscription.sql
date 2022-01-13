@@ -1,3 +1,2 @@
-DELETE FROM subscriptions
-  WHERE subscription_uuid = ${subscription_uuid}
-  RETURNING TRUE;
+DELETE FROM subscriptions 
+  WHERE subscription_uuid = ${subscription_uuid};

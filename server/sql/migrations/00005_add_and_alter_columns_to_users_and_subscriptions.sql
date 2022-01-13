@@ -1,8 +1,5 @@
-ALTER TABLE users
-  ADD user_uuid UUID NOT NULL DEFAULT gen_random_uuid();
+ALTER TABLE users ADD COLUMN user_uuid UUID NOT NULL DEFAULT gen_random_uuid();
 
-ALTER TABLE subscriptions
-  ADD subscription_uuid UUID NOT NULL DEFAULT gen_random_uuid();
+ALTER TABLE subscriptions ADD COLUMN subscription_uuid UUID NOT NULL DEFAULT gen_random_uuid();
 
-ALTER TABLE subscriptions
-  ALTER COLUMN amount TYPE money;
+ALTER TABLE subscriptions ALTER COLUMN amount TYPE money;

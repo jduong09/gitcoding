@@ -50,7 +50,7 @@ class Dashboard extends React.Component {
           <button type="button" onClick={() => this.handleUpdate(subscription)}>Update</button>
           <button type="button" onClick={() => this.handleDelete(subscription_uuid)}>Delete</button>
         </li>
-      )
+      );
     });
 
     return (
@@ -67,7 +67,7 @@ class Dashboard extends React.Component {
           </a>
         </header>
       </div>
-    )
+    );
   }
 };
 

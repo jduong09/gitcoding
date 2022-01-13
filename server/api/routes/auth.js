@@ -74,7 +74,7 @@ router.get('/callback', (req, res, next) => {
       // store user's id from db in session storage for quering subscriptions
       req.session.userInfo = {
         user_id: data.id
-      }
+      };
       
       // URGENT: Need to look at prupose of deleting returnTo
       delete req.session.returnTo;
