@@ -36,6 +36,7 @@
         "cypress/no-async-tests": "error",
         "cypress/no-pause": "error",
         "no-console": 1,
-        "camelcase": "off"
+        "camelcase": "off",
+        "semi": "warn"
     }
 }
