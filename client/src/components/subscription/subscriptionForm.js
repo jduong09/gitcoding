@@ -33,9 +33,11 @@ class SubscriptionForm extends React.Component {
     const subscriptionInfo  = this.state;
     const { performUpdate } = this.props;
     const httpMethod = performUpdate ? 'PATCH' : 'PUT';
-    console.log('FRONT END subscription: ', performUpdate);
-    console.log('THIS.STATE: ', subscriptionInfo);
 
+    /* If parent component passed this.props.performUpdate
+       then we want to iterate over performUpdate and place all the values that aren't updating into 
+       subscriptionInfo, which we will pass to our request.
+    */
     if (performUpdate) {
       Object.keys(performUpdate).forEach(key => {
         if (subscriptionInfo[key] === '') {
@@ -45,8 +47,6 @@ class SubscriptionForm extends React.Component {
 
       subscriptionInfo.uuid = performUpdate.subscription_uuid;
     }
-
-    console.log('UPDATED.STATE: ', subscriptionInfo);
 
     // User wants to update their subscription.
     // perform update contains the subscription row, including subscription_uuid.

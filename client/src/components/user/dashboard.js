@@ -16,6 +16,7 @@ class Dashboard extends React.Component {
     };
 
     this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentDidMount() {
@@ -24,9 +25,19 @@ class Dashboard extends React.Component {
     fetch(`${window.location.pathname}/subscriptions`).then(data => data.json()).then(response => this.setState({ subscriptions: response }));
   }
 
-  handleUpdate(subscription) {
+  handleUpdate = (subscription) => {
     this.setState({ updatedSubscription: subscription });
   }
+
+  handleDelete = async (subscription_uuid) => {
+    try {
+      await fetch(`${window.location.pathname}/subscriptions/${subscription_uuid}`, {
+        method: 'DELETE'
+      }).then(() => alert('SUCCESSFULLY DELETED SUBSCRIPTION'));
+    } catch(error) {
+      alert('ERROR DELETING SUBSCRIPTION: ', error);
+    }
+  } 
 
   render() {
     const { subscriptions, updatedSubscription } = this.state;
@@ -37,6 +48,7 @@ class Dashboard extends React.Component {
         <li key={subscription_uuid}>
           <Subscription details={subscription} />
           <button type="button" onClick={() => this.handleUpdate(subscription)}>Update</button>
+          <button type="button" onClick={() => this.handleDelete(subscription_uuid)}>Delete</button>
         </li>
       )
     });

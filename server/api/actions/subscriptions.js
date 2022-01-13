@@ -12,14 +12,14 @@ const getSubscriptionBySubscriptionId = async (subId) => {
 };
 */
 
-const createSubscription = async (subscriptionInfo) => {
+const createSubscription = async ({ name, nickname, due_date, reminder_days, amount, user_id }) => {
   const params = {
-    name: subscriptionInfo.name,
-    nickname: subscriptionInfo.nickname,
-    due_date: subscriptionInfo.due_date,
-    reminder_days: parseInt(subscriptionInfo.reminder_days),
-    amount: subscriptionInfo.amount,
-    user_id: subscriptionInfo.user_id,
+    name,
+    nickname,
+    due_date,
+    reminder_days: parseInt(reminder_days),
+    amount,
+    user_id,
   }
   
   const { rows: data } = await db.execute('server/sql/subscriptions/putSubscription.sql', params);
@@ -27,11 +27,6 @@ const createSubscription = async (subscriptionInfo) => {
 };
 
 const updateSubscriptionBySubscriptionId = async (subscriptionInfo) => {
-  /*
-  console.log(subscriptionInfo);
-  const uuid = subscriptionInfo.uuid;
-  */
-  
   const params = { 
     name: subscriptionInfo.name,
     nickname: subscriptionInfo.nickname,
@@ -41,10 +36,17 @@ const updateSubscriptionBySubscriptionId = async (subscriptionInfo) => {
     amount: subscriptionInfo.amount,
     uuid: subscriptionInfo.uuid,
   }
-  console.log(params);
   
   const { rows: data } = await db.execute('server/sql/subscriptions/patchSubscription.sql', params);
-  console.log(data);
+  // Unnecesarily returning array with one object, the updated object in it.
+  // TO-DO: Handle this.
+  return data;
+}
+
+const deleteSubscriptionBySubscriptionId = async (subscription_uuid) => {
+  const { rows: data } = await db.execute('server/sql/subscriptions/deleteSubscription.sql', { subscription_uuid });
+  // query returns [ { bool: true } ]
+  // TO-DO: Handle this.
   return data;
 }
 
@@ -52,4 +54,5 @@ module.exports = {
   getSubscriptionsByUserId,
   createSubscription,
   updateSubscriptionBySubscriptionId,
+  deleteSubscriptionBySubscriptionId
 };

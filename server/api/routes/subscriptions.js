@@ -1,5 +1,5 @@
 const express = require('express');
-const { createSubscription, getSubscriptionsByUserId, updateSubscriptionBySubscriptionId } = require('../actions/subscriptions');
+const { createSubscription, getSubscriptionsByUserId, updateSubscriptionBySubscriptionId, deleteSubscriptionBySubscriptionId } = require('../actions/subscriptions');
 
 // Create a new router object, where we will have CRUD routes for our subscriptions table 
 // under the route /users/:userId/subscriptions/
@@ -47,26 +47,27 @@ router.route('/')
   })
   // Update a subscription
   .patch(async (req, res) => {
-    console.log('HIT UPDATE ROUTE');
     try {
-      // req.body contains the information needed to update the subscription.
+      // req.body contains all subscriptionInfo (name, nickname)
       const data = await updateSubscriptionBySubscriptionId(req.body);
       res.status(200).json(data);
     } catch (error) {
       res.status(400).json(error);
     }
   })
+
   // Delete a subscription
-  // Route: /users/:userId/subscriptions/:subscriptionId
-  .delete(async(req, res) => {
+  router.delete('/:subscriptionUuid', async (req, res) => {
+    // req.body contains uuid (subscription_uuid)
     try {
-      const data = await deleteSubscription();
-      res.status(200).json(data);
+      await deleteSubscriptionBySubscriptionId(req.params.subscriptionUuid);
+      res.status(200).send('Deleted Subscription Successfully');
     } catch (error) {
       res.status(400).json(error);
     }
-  });
+  })
 
+/*
 // READ a single user subscription
 // Route: /users/:userId/subscriptions/:subscriptionId
 router.get('/:subscriptionId', async (req, res) => {
@@ -83,5 +84,6 @@ router.get('/:subscriptionId', async (req, res) => {
     res.status(400).json(error)
   }
 });
+*/
 
 module.exports = router;
