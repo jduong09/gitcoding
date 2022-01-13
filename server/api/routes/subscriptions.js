@@ -1,21 +1,21 @@
 const express = require('express');
-const { createSubscription, getSubscriptionsByUserId } = require('../actions/subscriptions');
+const { createSubscription, getSubscriptionsByUserId, updateSubscriptionBySubscriptionId } = require('../actions/subscriptions');
 
 // Create a new router object, where we will have CRUD routes for our subscriptions table 
 // under the route /users/:userId/subscriptions/
 /** 
  * Wednesday Daily Work
- * read/update/delete routes for subscriptions
  * error messages for subscription routes
- * 
- *  
+ *    How do we want to handle errors messages on the frontend (ask Dan)
+ *    How are we error handling on the backend? (redirecting to login...)
  * display all user's subscriptions (done)
  *    Try/Catch statement for fetching all subscriptions. What happens if it fails?
  *    format timestampz for serving to client. (done)
  *    format display on client side (css) (done)
- * create a new subscription
- *    insert user_id from backend, not have it as input field on the client side
+ * create a new subscription (done)
+ *    insert user_id from backend, not have it as input field on the client side (done)
  * update an existing subscription 
+ *    Add frontend button, make request to backend to update.
  * delete a subscription
 */
 const router = express.Router({ mergeParams: true });
@@ -37,7 +37,7 @@ router.route('/')
     // req.body will contain the information necessary to make a new subscription
     // TODO: Need to autoassign the user id based on their uuid from the req.params
     const { user_id } = req.session.userInfo;
-    req.body.userId = user_id;
+    req.body.user_id = user_id;
     try {
       const data = await createSubscription(req.body);
       res.status(200).json(data);
@@ -46,11 +46,11 @@ router.route('/')
     }
   })
   // Update a subscription
-  // Route: /users/:userId/:subscriptionsId
   .patch(async (req, res) => {
+    console.log('HIT UPDATE ROUTE');
     try {
       // req.body contains the information needed to update the subscription.
-      const data = await updateSubscription(req.body);
+      const data = await updateSubscriptionBySubscriptionId(req.body);
       res.status(200).json(data);
     } catch (error) {
       res.status(400).json(error);

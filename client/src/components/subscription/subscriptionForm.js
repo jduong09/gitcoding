@@ -14,9 +14,9 @@ class SubscriptionForm extends React.Component {
     this.state = {
       name: '',
       nickname: '',
-      dueDate: '',
-      reminderDays: 0,
-      amount: 0,
+      due_date: '',
+      reminder_days: '',
+      amount: '',
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -30,26 +30,48 @@ class SubscriptionForm extends React.Component {
   async handleSubmit(e) {
     e.preventDefault();
 
-    const subscriptionInfo = this.state;
+    const subscriptionInfo  = this.state;
+    const { performUpdate } = this.props;
+    const httpMethod = performUpdate ? 'PATCH' : 'PUT';
+    console.log('FRONT END subscription: ', performUpdate);
+    console.log('THIS.STATE: ', subscriptionInfo);
+
+    if (performUpdate) {
+      Object.keys(performUpdate).forEach(key => {
+        if (subscriptionInfo[key] === '') {
+          subscriptionInfo[key] = performUpdate[key];
+        }
+      });
+
+      subscriptionInfo.uuid = performUpdate.subscription_uuid;
+    }
+
+    console.log('UPDATED.STATE: ', subscriptionInfo);
+
+    // User wants to update their subscription.
+    // perform update contains the subscription row, including subscription_uuid.
+
     try {
       await fetch(`${window.location.pathname}/subscriptions`, {
-        method: 'PUT',
+        method: httpMethod,
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(subscriptionInfo),
+        body: JSON.stringify(subscriptionInfo)
       }).then(() => alert('Successfully added subscription! Refresh page.'));
     } catch(error) {
       alert('Error Creating Subscription: ', error);
     }
-    this.setState({ name: '', nickname: '', dueDate: '', reminderDays: 0, amount: 0 })
+    this.setState({ name: '', nickname: '', due_date: '', reminder_days: 0, amount: 0 })
   }
 
   render() {
-    const { name, nickname, dueDate, reminderDays, amount } = this.state;
+    const { performUpdate } = this.props;
+    const { name, nickname, due_date, reminder_days, amount } = this.state;
 
     return (
       <section>
+        {!performUpdate ? <h2>Create Subscription</h2> : <h2>Update Subscription</h2>}
         <form onSubmit={this.handleSubmit}>
           <label htmlFor="subscription-name">
             Name:
@@ -63,12 +85,12 @@ class SubscriptionForm extends React.Component {
 
           <label htmlFor="subscription-due-date">
             Due Date: 
-            <input type="date" name="subscription-dueDate" value={dueDate} onChange={(e) => this.handleChange(e, 'dueDate')} />
+            <input type="date" name="subscription-due-date" value={due_date} onChange={(e) => this.handleChange(e, 'due_date')} />
           </label>
 
           <label htmlFor="subscription-reminder-days">
             Reminder Days: 
-            <input type="number" name="subscription-reminderDays" value={reminderDays} onChange={(e) => this.handleChange(e, 'reminderDays')} />
+            <input type="number" name="subscription-reminder-days" value={reminder_days} onChange={(e) => this.handleChange(e, 'reminder_days')} />
           </label>
 
           <label htmlFor="subscription-amount">
@@ -76,7 +98,7 @@ class SubscriptionForm extends React.Component {
             <input type="number" name="subscription-amount" value={amount} onChange={(e) => this.handleChange(e, 'amount')}  />
           </label>
 
-          <input type="submit" value="Create Subscription!" />
+          <input type="submit" value={!performUpdate ? 'Create Subscription' : 'Update Subscription'} />
         </form>
       </section>
     )

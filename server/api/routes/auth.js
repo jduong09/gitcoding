@@ -71,7 +71,6 @@ router.get('/callback', (req, res, next) => {
       }
 
       const { user_uuid } = data;
-
       // store user's id from db in session storage for quering subscriptions
       req.session.userInfo = {
         user_id: data.id

@@ -2,6 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import SubscriptionForm from '../subscription/subscriptionForm';
+import Subscription from '../subscription/subscription';
 
 const href = process.env.NODE_ENV === 'production' ? '/auth/logout' : 'http://localhost:5000/auth/logout';
 
@@ -10,8 +11,11 @@ class Dashboard extends React.Component {
     super();
 
     this.state = { 
-      subscriptions: []
+      subscriptions: [],
+      updatedSubscription: false
     };
+
+    this.handleUpdate = this.handleUpdate.bind(this);
   }
 
   componentDidMount() {
@@ -20,20 +24,22 @@ class Dashboard extends React.Component {
     fetch(`${window.location.pathname}/subscriptions`).then(data => data.json()).then(response => this.setState({ subscriptions: response }));
   }
 
+  handleUpdate(subscription) {
+    this.setState({ updatedSubscription: subscription });
+  }
+
   render() {
-    const { subscriptions } = this.state;
+    const { subscriptions, updatedSubscription } = this.state;
     
-    const subscriptionsList = subscriptions.map((subscription) => (
-    <li key={subscription.subscription_uuid}>
-      <ul className="subscription-details">
-        <li>Name: {subscription.name}</li>
-        <li>NickName: {subscription.nickname}</li>
-        <li>DueDate: {subscription.due_date}</li>
-        <li>ReminderDays: {subscription.reminder_days}</li>
-        <li>Amount: {subscription.amount}</li>
-      </ul>
-    </li>)
-    );
+    const subscriptionsList = subscriptions.map((subscription) => {
+      const { subscription_uuid } = subscription;
+      return (
+        <li key={subscription_uuid}>
+          <Subscription details={subscription} />
+          <button type="button" onClick={() => this.handleUpdate(subscription)}>Update</button>
+        </li>
+      )
+    });
 
     return (
       <div>
@@ -42,7 +48,7 @@ class Dashboard extends React.Component {
           <section className="subscription-list">
             <ul>{subscriptionsList}</ul>
           </section>
-          <SubscriptionForm />
+          <SubscriptionForm performUpdate={updatedSubscription} />
           <a href={href}>
             Sign Out!
             <FontAwesomeIcon icon={faSignOutAlt} />
