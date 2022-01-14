@@ -30,13 +30,12 @@ router.route('/')
   })
   // CREATE a subscription
   .put(async (req, res) => {
-    // req.body will contain the information necessary to make a new subscription
-    // TODO: Need to autoassign the user id based on their uuid from the req.params
+     // req.body will contain the information necessary to make a new subscription
+    // Line 36-37: Autoassign the user id based on their uuid from the req.params
     const { user_id } = req.session.userInfo;
     req.body.user_id = user_id;
     try {
       const data = await createSubscription(req.body);
-      console.log('CreatedSubscription: ', data);
       res.status(200).json(data);
     } catch(error) {
       res.status(400).json(error);
@@ -47,7 +46,6 @@ router.route('/')
     try {
       // req.body contains all subscriptionInfo (name, nickname)
       const data = await updateSubscriptionBySubscriptionId(req.body);
-      console.log('Updated Subscription: ', data);
       res.status(200).json(data);
     } catch (error) {
       res.status(400).json(error);
@@ -56,7 +54,6 @@ router.route('/')
 
   // Delete a subscription
   router.delete('/:subscriptionUuid', async (req, res) => {
-    // req.body contains uuid (subscription_uuid)
     try {
       await deleteSubscriptionBySubscriptionId(req.params.subscriptionUuid);
       res.status(200).send('Deleted Subscription Successfully');

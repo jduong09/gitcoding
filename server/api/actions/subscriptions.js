@@ -14,7 +14,13 @@ const getSubscriptionBySubscriptionId = async (subId) => {
 */
 
 const createSubscription = async (requestBody) => {
-  const { rows: [data] } = await db.execute('server/sql/subscriptions/putSubscription.sql', requestBody);
+  const params = {
+    ...requestBody,
+    due_date: requestBody.dueDate,
+    reminder_days: requestBody.reminderDays
+  }
+  
+  const { rows: [data] } = await db.execute('server/sql/subscriptions/putSubscription.sql', params);
   // returns createdSubscription (obj { name, nickname, due_date, reminder_days, amount, subscription_uuid })
   return data;
 };
