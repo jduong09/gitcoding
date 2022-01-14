@@ -43,9 +43,11 @@ router.route('/')
   })
   // Update a subscription
   .patch(async (req, res) => {
+    console.log('REQ BODY: ', req.body);
     try {
       // req.body contains all subscriptionInfo (name, nickname)
       const data = await updateSubscriptionBySubscriptionId(req.body);
+      console.log('SQL RESPONSE: ', data);
       res.status(200).json(data);
     } catch (error) {
       res.status(400).json(error);

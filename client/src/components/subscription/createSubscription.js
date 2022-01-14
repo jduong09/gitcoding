@@ -6,6 +6,9 @@ import React from 'react';
  * After creating a subscription, we need to reset all the input values to normal. (done)
 */
 
+const date = new Date();
+const todaysDate = date.toISOString().substring(0, 10);
+
 class CreateSubscription extends React.Component {
   constructor(props) {
     // Has addSubscription, currentSubscriptions in this.props;
@@ -15,7 +18,7 @@ class CreateSubscription extends React.Component {
     this.state = {
       name: '',
       nickname: '',
-      dueDate: '',
+      dueDate: todaysDate,
       reminderDays: 0,
       amount: 0,
     };
@@ -89,7 +92,7 @@ class CreateSubscription extends React.Component {
 
           <label htmlFor="subscription-amount">
             Amount: 
-            <input type="number" name="subscription-amount" value={amount} onChange={(event) => this.handleChange(event, 'amount')} />
+            <input type="number" name="subscription-amount" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} />
           </label>
 
           <input type="submit" value="Submit" />

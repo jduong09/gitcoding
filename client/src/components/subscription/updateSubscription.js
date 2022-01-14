@@ -77,7 +77,7 @@ class UpdateSubscription extends React.Component {
 
           <label htmlFor="subscription-amount">
             Amount: 
-            <input type="number" name="subscription-amount" value={amount} onChange={(event) => this.handleChange(event, 'amount')} />
+            <input type="number" name="subscription-amount" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} />
           </label>
 
           <input type="submit" value="Submit" />

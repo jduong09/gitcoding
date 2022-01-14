@@ -28,7 +28,8 @@ const createSubscription = async (requestBody) => {
 const updateSubscriptionBySubscriptionId = async (subscriptionInfo) => {
   const { rows: [data] } = await db.execute('server/sql/subscriptions/patchSubscription.sql', 
     { ...subscriptionInfo, 
-      removed_at: subscriptionInfo.removedAt || null
+      removed_at: subscriptionInfo.removedAt || null,
+      reminderDays: parseInt(subscriptionInfo.reminderDays),
     }
   );
   // returns updatedSubscription (obj { name, nickname, due_date, reminder_days, amount, subscription_uuid })
