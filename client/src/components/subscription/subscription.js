@@ -1,6 +1,5 @@
 import React from 'react';
 
-// Display Subscription.
 const Subscription = ({ details }) => {
   const { name, nickname, due_date, reminder_days, amount } = details;
 
@@ -10,9 +9,9 @@ const Subscription = ({ details }) => {
       <li>Nickname: {nickname}</li>
       <li>DueDate: {due_date}</li>
       <li>ReminderDays: {reminder_days}</li>
-      <li>Amount: {amount}</li>
+      <li>Amount: ${amount}</li>
     </ul>
-  )
+  );
 };
 
 export default Subscription;

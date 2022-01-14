@@ -8,6 +8,7 @@ import React from 'react';
 
 class SubscriptionForm extends React.Component {
   constructor(props) {
+    // Has updateSubscriptions, currentSubscriptions, performUpdate in this.props;
     super(props);
 
     // When a field is empty, and not required, it should save as NULL instead of an empty string.
@@ -15,16 +16,42 @@ class SubscriptionForm extends React.Component {
       name: '',
       nickname: '',
       due_date: '',
-      reminder_days: '',
-      amount: '',
+      reminder_days: 0,
+      amount: 0,
     };
 
+    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubscriptions = this.handleSubscriptions.bind(this);
   };
 
-  handleChange(e, key) {
-    e.preventDefault();
-    this.setState({ [key]: e.target.value });
+  componentDidUpdate(prevProps) {
+    const { performUpdate } = this.props;
+    const { name, nickname, due_date, reminder_days, amount } = performUpdate;
+    if (performUpdate && prevProps.performUpdate !== performUpdate) {
+      this.setState({ name, nickname, due_date, reminder_days, amount });
+    }
+  }
+
+  async handleSubscriptions(subscription) {
+    const { updateSubscriptions, currentSubscriptions, performUpdate } = this.props;
+    let newSubscriptionList;
+    // if subscriptionForm is updating a subscription
+    if (performUpdate) {
+       // make call to grab all the subscriptions (receives updated subscriptions)
+      newSubscriptionList = await fetch(`${window.location.pathname}/subscriptions`).then(data => data.json());
+    } else {
+       // If we get to here, then subscriptionForm is creating a subscription
+      newSubscriptionList = [ ...currentSubscriptions, subscription];
+    }
+    // Set parent state 'subscriptions' to our new updated subscription list
+    updateSubscriptions(newSubscriptionList);
+  }
+
+  handleChange(event, key) {
+    event.preventDefault();
+    const { value } = event.target;
+    this.setState({ [key]: value });
   }
 
   async handleSubmit(e) {
@@ -33,34 +60,20 @@ class SubscriptionForm extends React.Component {
     const subscriptionInfo  = this.state;
     const { performUpdate } = this.props;
     const httpMethod = performUpdate ? 'PATCH' : 'PUT';
+    let subscription;
 
-    /* If parent component passed this.props.performUpdate
-       then we want to iterate over performUpdate and place all the values that aren't updating into 
-       subscriptionInfo, which we will pass to our request.
-    */
-    if (performUpdate) {
-      Object.keys(performUpdate).forEach(key => {
-        if (subscriptionInfo[key] === '') {
-          subscriptionInfo[key] = performUpdate[key];
-        }
-      });
-
-      subscriptionInfo.uuid = performUpdate.subscription_uuid;
-    }
-
-    // User wants to update their subscription.
-    // perform update contains the subscription row, including subscription_uuid.
-
+    subscriptionInfo.uuid = performUpdate.subscription_uuid;
     try {
-      await fetch(`${window.location.pathname}/subscriptions`, {
+      subscription = await fetch(`${window.location.pathname}/subscriptions`, {
         method: httpMethod,
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify(subscriptionInfo)
-      }).then(() => alert('Successfully added subscription! Refresh page.'));
+      }).then(data => data.json());
     } catch(error) {
       alert('Error Creating Subscription: ', error);
     }
 
+    this.handleSubscriptions(subscription);
     this.setState({ name: '', nickname: '', due_date: '', reminder_days: 0, amount: 0 });
   }
 
@@ -74,30 +87,30 @@ class SubscriptionForm extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <label htmlFor="subscription-name">
             Name:
-            <input type="text" name="subscription-name" value={name} onChange={(e) => this.handleChange(e, 'name')}  />
+            <input type="text" name="subscription-name" value={name} onChange={(event) => this.handleChange(event, 'name')}  />
           </label>
 
           <label htmlFor="subscription-nickname">
             Nickname:
-            <input type="text" name="subscription-nickname" value={nickname} onChange={(e) => this.handleChange(e, 'nickname')}  /> 
+            <input type="text" name="subscription-nickname" value={nickname} onChange={(event) => this.handleChange(event, 'nickname')}  /> 
           </label>
 
           <label htmlFor="subscription-due-date">
             Due Date: 
-            <input type="date" name="subscription-due-date" value={due_date} onChange={(e) => this.handleChange(e, 'due_date')} />
+            <input type="date" name="subscription-due-date" value={due_date} onChange={(event) => this.handleChange(event, 'due_date')} />
           </label>
 
           <label htmlFor="subscription-reminder-days">
             Reminder Days: 
-            <input type="number" name="subscription-reminder-days" value={reminder_days} onChange={(e) => this.handleChange(e, 'reminder_days')} />
+            <input type="number" name="subscription-reminder-days" value={reminder_days} onChange={(event) => this.handleChange(event, 'reminder_days')} />
           </label>
 
           <label htmlFor="subscription-amount">
             Amount: 
-            <input type="number" name="subscription-amount" value={amount} onChange={(e) => this.handleChange(e, 'amount')}  />
+            <input type="number" name="subscription-amount" value={amount} onChange={(event) => this.handleChange(event, 'amount')} />
           </label>
 
-          <input type="submit" value={performUpdate ? 'Update Subscription' : 'Create Subscription'} />
+          <input type="submit" value="Submit" />
         </form>
       </section>
     );

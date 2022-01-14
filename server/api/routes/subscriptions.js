@@ -2,21 +2,17 @@ const express = require('express');
 const { createSubscription, getSubscriptionsByUserId, updateSubscriptionBySubscriptionId, deleteSubscriptionBySubscriptionId } = require('../actions/subscriptions');
 
 // Create a new router object, where we will have CRUD routes for our subscriptions table 
-// under the route /users/:userId/subscriptions/
 /** 
- * Wednesday Daily Work
- * error messages for subscription routes
+ * Friday Work
+ * error messages for subscription routes (toast notis)
  *    How do we want to handle errors messages on the frontend (ask Dan)
  *    How are we error handling on the backend? (redirecting to login...)
- * display all user's subscriptions (done)
  *    Try/Catch statement for fetching all subscriptions. What happens if it fails?
- *    format timestampz for serving to client. (done)
- *    format display on client side (css) (done)
- * create a new subscription (done)
- *    insert user_id from backend, not have it as input field on the client side (done)
  * update an existing subscription 
  *    Add frontend button, make request to backend to update.
+ *    Change SQL statement for when user wants to remove data from a column. 
  * delete a subscription
+ *    How do we handle the response we get back from the query. Success/failure cases.
 */
 const router = express.Router({ mergeParams: true });
 
@@ -40,6 +36,7 @@ router.route('/')
     req.body.user_id = user_id;
     try {
       const data = await createSubscription(req.body);
+      console.log('CreatedSubscription: ', data);
       res.status(200).json(data);
     } catch(error) {
       res.status(400).json(error);
@@ -50,6 +47,7 @@ router.route('/')
     try {
       // req.body contains all subscriptionInfo (name, nickname)
       const data = await updateSubscriptionBySubscriptionId(req.body);
+      console.log('Updated Subscription: ', data);
       res.status(200).json(data);
     } catch (error) {
       res.status(400).json(error);

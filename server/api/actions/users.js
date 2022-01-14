@@ -13,7 +13,7 @@ const createUser = async ({name, identifier}) => {
 const getUserByIdentifier = async (identifier) => {
   const { rows: [data] } = await db.execute('server/sql/users/getByIdentifier.sql', {identifier});
   return data;
-}
+};
 
 module.exports = {
   getUsers,

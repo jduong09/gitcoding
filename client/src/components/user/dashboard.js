@@ -12,35 +12,48 @@ class Dashboard extends React.Component {
 
     this.state = { 
       subscriptions: [],
-      updatedSubscription: false
+      updatedSubscription: false,
+      successMessage: ''
     };
 
+    this.updateSubscriptions = this.updateSubscriptions.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     // When browser directs user to their dashboard.
     // we want to make an async call to get all their subsacriptions
-    fetch(`${window.location.pathname}/subscriptions`).then(data => data.json()).then(response => this.setState({ subscriptions: response }));
+    await fetch(`${window.location.pathname}/subscriptions`).then(data => data.json()).then(response => this.setState({ subscriptions: response }));
   }
 
-  handleUpdate = (subscription) => {
-    this.setState({ updatedSubscription: subscription });
+  updateSubscriptions = (newSubscriptionList) => {
+    this.setState({ subscriptions: newSubscriptionList, updatedSubscription: false });
+  }
+
+  handleUpdate = (subscriptions) => {
+    this.setState({ updatedSubscription: subscriptions });
   }
 
   handleDelete = async (subscription_uuid) => {
+    let newSubscriptions;
+
     try {
-      await fetch(`${window.location.pathname}/subscriptions/${subscription_uuid}`, {
+      newSubscriptions = await fetch(`${window.location.pathname}/subscriptions/${subscription_uuid}`, {
         method: 'DELETE'
-      }).then(() => alert('SUCCESSFULLY DELETED SUBSCRIPTION'));
+      }).then(() => {
+        const { subscriptions } = this.state;
+        return subscriptions.filter(subscription => subscription.subscription_uuid !== subscription_uuid);
+      });
     } catch(error) {
       alert('ERROR DELETING SUBSCRIPTION: ', error);
     }
+
+    this.setState({ subscriptions: newSubscriptions });
   } 
 
   render() {
-    const { subscriptions, updatedSubscription } = this.state;
+    const { subscriptions, updatedSubscription, successMessage } = this.state;
     
     const subscriptionsList = subscriptions.map((subscription) => {
       const { subscription_uuid } = subscription;
@@ -60,7 +73,8 @@ class Dashboard extends React.Component {
           <section className="subscription-list">
             <ul>{subscriptionsList}</ul>
           </section>
-          <SubscriptionForm performUpdate={updatedSubscription} />
+          {successMessage}
+          <SubscriptionForm performUpdate={updatedSubscription} updateSubscriptions={this.updateSubscriptions} currentSubscriptions={subscriptions} />
           <a href={href}>
             Sign Out!
             <FontAwesomeIcon icon={faSignOutAlt} />
