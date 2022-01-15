@@ -15,7 +15,9 @@ class SubscriptionsList extends React.Component {
   }
 
   async componentDidMount() {
-    await fetch(`${window.location.pathname}/subscriptions`).then(data => data.json()).then(response => this.setState({ subscriptions: response }));
+    await fetch(`${window.location.pathname}/subscriptions`)
+      .then(data => data.json())
+      .then(response => this.setState({ subscriptions: response }));
   }
 
   handleUpdate = (newSubscriptionsList) => {

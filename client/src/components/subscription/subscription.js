@@ -7,8 +7,8 @@ const Subscription = ({ details }) => {
     <ul className="subscription-details">
       <li>Name: {name}</li>
       <li>Nickname: {nickname}</li>
-      <li>DueDate: {dueDate}</li>
-      <li>ReminderDays: {reminderDays}</li>
+      <li>Due Date: {dueDate}</li>
+      <li>Reminder Days: {reminderDays}</li>
       <li>Amount: ${amount}</li>
     </ul>
   );
