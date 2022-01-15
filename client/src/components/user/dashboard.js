@@ -10,19 +10,9 @@ class Dashboard extends React.Component {
     super();
 
     this.state = { 
-      // updatedSubscription: false,
       successMessage: ''
     };
-
-    // this.updateSubscriptions = this.updateSubscriptions.bind(this);
-    // this.handleUpdate = this.handleUpdate.bind(this);
   }
-
-  /*
-  updateSubscriptions = (newSubscriptionList) => {
-    this.setState({ subscriptions: newSubscriptionList, updatedSubscription: false });
-  }
-  */
 
   render() {
     const { successMessage } = this.state;

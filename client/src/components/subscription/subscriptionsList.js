@@ -15,7 +15,6 @@ class SubscriptionsList extends React.Component {
   }
 
   async componentDidMount() {
-    // When browser mounts subscriptionsList component, we make a call to get all their subscription
     await fetch(`${window.location.pathname}/subscriptions`).then(data => data.json()).then(response => this.setState({ subscriptions: response }));
   }
 

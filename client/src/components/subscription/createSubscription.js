@@ -1,9 +1,7 @@
 import React from 'react';
 
-/** TODO
+/** TODO:
  * Indicator if the form is correctly or incorrectly filled out. (done in dev, need to be done in prod)
- * We don't need to require the userId as state. This should be filled in auto because route for creating is /user/:userUUID/subscriptions (done)
- * After creating a subscription, we need to reset all the input values to normal. (done)
 */
 
 const date = new Date();

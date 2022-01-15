@@ -2,7 +2,6 @@ import React from 'react';
 
 class UpdateSubscription extends React.Component {
   constructor(props) {
-    // Props are updateSubscription, currentSubscriptions, prevSubscription
     super(props);
     const { prevSubscription } = props;
 
@@ -37,7 +36,6 @@ class UpdateSubscription extends React.Component {
     const updatedSubscriptionForm = this.state;
     event.preventDefault();
 
-    // Attach subscriptionUuid to request.
     updatedSubscriptionForm.subscriptionUuid = prevSubscription.subscriptionUuid;
 
     await fetch(`${window.location.pathname}/subscriptions`, {
@@ -46,7 +44,6 @@ class UpdateSubscription extends React.Component {
       body: JSON.stringify(updatedSubscriptionForm)
     }).then(data => data.json());
 
-    // Then we send the updatedSubscription back up to the subscriptionsList, so it can display the updatedSubscription.
     this.handleSubscriptions();
   }
 

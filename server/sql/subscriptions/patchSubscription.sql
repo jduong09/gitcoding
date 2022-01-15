@@ -6,4 +6,4 @@ SET name = NULLIF(${name}, ''),
     reminder_days = NULLIF(${reminderDays}, 0),
     amount = ${amount}
 WHERE subscription_uuid = ${subscriptionUuid}
-RETURNING name, nickname, to_char(due_date, 'YYYY-MM-DD') AS "dueDate", reminder_days AS "reminderDays", amount::numeric, subscription_uuid AS "subscriptionUuid";
+RETURNING name, nickname, to_char(due_date, 'YYYY-MM-DD') AS 'dueDate', reminder_days AS 'reminderDays', amount::numeric, subscription_uuid AS 'subscriptionUuid';
