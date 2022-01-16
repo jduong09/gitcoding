@@ -1,19 +1,6 @@
 const express = require('express');
 const { createSubscription, getSubscriptionsByUserId, updateSubscriptionBySubscriptionId, deleteSubscriptionBySubscriptionId } = require('../actions/subscriptions');
 
-// Create a new router object, where we will have CRUD routes for our subscriptions table 
-/** 
- * Friday Work
- * error messages for subscription routes (toast notis)
- *    How do we want to handle errors messages on the frontend (ask Dan)
- *    How are we error handling on the backend? (redirecting to login...)
- *    Try/Catch statement for fetching all subscriptions. What happens if it fails?
- * update an existing subscription 
- *    Add frontend button, make request to backend to update.
- *    Change SQL statement for when user wants to remove data from a column. 
- * delete a subscription
- *    How do we handle the response we get back from the query. Success/failure cases.
-*/
 const router = express.Router({ mergeParams: true });
 
 router.route('/')
