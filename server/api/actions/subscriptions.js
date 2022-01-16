@@ -6,13 +6,6 @@ const getSubscriptionsByUserId = async (userId) => {
   return data;
 };
 
-/*
-const getSubscriptionBySubscriptionId = async (subId) => {
-  const { rows: data } = await db.execute('../../sql/subscriptions/getSubscriptionBySubscriptionId.sql', {subId});
-  return data;
-};
-*/
-
 const createSubscription = async (requestBody) => {  
   const { rows: [data] } = await db.execute('server/sql/subscriptions/putSubscription.sql', { ...requestBody, reminderDays: parseInt(requestBody.reminderDays) });
   return data;
@@ -25,14 +18,11 @@ const updateSubscriptionBySubscriptionId = async (subscriptionInfo) => {
     reminderDays: parseInt(subscriptionInfo.reminderDays)
     }
   );
-  // returns updatedSubscription (obj { name, nickname, due_date, reminder_days, amount, subscription_uuid })
   return data;
 }
 
 const deleteSubscriptionBySubscriptionId = async (subscription_uuid) => {
   const { rows: data } = await db.execute('server/sql/subscriptions/deleteSubscription.sql', { subscription_uuid });
-  // returns []
-  // TODO: Handle this.
   return data;
 }
 

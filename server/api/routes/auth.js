@@ -50,8 +50,6 @@ router.get('/callback', (req, res, next) => {
         identifier: user.id
       };
       
-      // After retrieving user from db, redirect them to their user page.
-      // Try to find a user with their user.id in the users db.
       let userExists;
       let data;
       
@@ -62,7 +60,6 @@ router.get('/callback', (req, res, next) => {
       }
 
       if (!userExists) {
-        // Try to create a user.
         try {
           data = await users.createUser(userInfo);
         } catch(e) {
@@ -71,12 +68,11 @@ router.get('/callback', (req, res, next) => {
       }
 
       const { user_uuid, id } = data;
-      // store user's id from db in session storage for quering subscriptions
       req.session.userInfo = {
         user_id: id
       };
       
-      // URGENT: Need to look at prupose of deleting returnTo
+      // URGENT: Need to look at purpose of deleting returnTo
       delete req.session.returnTo;
       await res.redirect(`${process.env.BASE_URL}/users/${user_uuid}`);
       res.end();

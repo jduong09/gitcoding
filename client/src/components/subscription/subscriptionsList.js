@@ -35,7 +35,7 @@ class SubscriptionsList extends React.Component {
         return subscriptions.filter(subscription => subscription.subscriptionUuid !== subscriptionUuid);
       });
     } catch(error) {
-      alert('ERROR DELETING SUBSCRIPTION: ', error);
+      console.log('Error deleting subscription: ', error);
     }
 
     this.setState({ subscriptions: newSubscriptionList });

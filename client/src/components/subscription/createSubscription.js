@@ -1,18 +1,12 @@
 import React from 'react';
 
-/** TODO:
- * Indicator if the form is correctly or incorrectly filled out. (done in dev, need to be done in prod)
-*/
-
 const date = new Date();
 const todaysDate = date.toISOString().substring(0, 10);
 
 class CreateSubscription extends React.Component {
   constructor(props) {
-    // Has addSubscription, currentSubscriptions in this.props;
     super(props);
 
-    // When a field is empty, and not required, it should save as NULL instead of an empty string.
     this.state = {
       name: '',
       nickname: '',
@@ -30,7 +24,6 @@ class CreateSubscription extends React.Component {
     const { addSubscription, currentSubscriptions } = this.props;
 
     const newSubscriptionList = [ ...currentSubscriptions, subscription];
-    // Set parent state 'subscriptions' to our new updated subscription list
     addSubscription(newSubscriptionList);
   }
 
@@ -53,11 +46,10 @@ class CreateSubscription extends React.Component {
         body: JSON.stringify(subscriptionInfo)
       }).then(data => data.json());
     } catch(error) {
-      alert('Error Creating Subscription: ', error);
+      console.log('Error creating subscription: ', error);
     }
 
     this.handleSubscriptions(subscription);
-    // set Create Form back to null. 
     this.setState({ name: '', nickname: '', dueDate: '', reminderDays: 0, amount: 0 });
   }
 

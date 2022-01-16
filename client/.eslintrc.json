@@ -30,7 +30,6 @@
         "react/require-default-props": "off",
         "react/prop-types": "off",
         "react/no-did-update-set-state": 0,
-        "camelcase": "off",
         "semi": "warn"
     }
 }
