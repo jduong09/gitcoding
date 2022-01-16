@@ -13,23 +13,16 @@ const getSubscriptionBySubscriptionId = async (subId) => {
 };
 */
 
-const createSubscription = async (requestBody) => {
-  const params = {
-    ...requestBody,
-    due_date: requestBody.dueDate,
-    reminder_days: requestBody.reminderDays
-  }
-  
-  const { rows: [data] } = await db.execute('server/sql/subscriptions/putSubscription.sql', params);
-  // returns createdSubscription (obj { name, nickname, due_date, reminder_days, amount, subscription_uuid })
+const createSubscription = async (requestBody) => {  
+  const { rows: [data] } = await db.execute('server/sql/subscriptions/putSubscription.sql', { ...requestBody, reminderDays: parseInt(requestBody.reminderDays) });
   return data;
 };
 
 const updateSubscriptionBySubscriptionId = async (subscriptionInfo) => {
   const { rows: [data] } = await db.execute('server/sql/subscriptions/patchSubscription.sql', 
     { ...subscriptionInfo, 
-      removed_at: subscriptionInfo.removedAt || null,
-      reminderDays: parseInt(subscriptionInfo.reminderDays),
+    removedAt: subscriptionInfo.removedAt || null,
+    reminderDays: parseInt(subscriptionInfo.reminderDays)
     }
   );
   // returns updatedSubscription (obj { name, nickname, due_date, reminder_days, amount, subscription_uuid })
@@ -37,7 +30,7 @@ const updateSubscriptionBySubscriptionId = async (subscriptionInfo) => {
 }
 
 const deleteSubscriptionBySubscriptionId = async (subscription_uuid) => {
-  const { rows: data} = await db.execute('server/sql/subscriptions/deleteSubscription.sql', { subscription_uuid });
+  const { rows: data } = await db.execute('server/sql/subscriptions/deleteSubscription.sql', { subscription_uuid });
   // returns []
   // TODO: Handle this.
   return data;
