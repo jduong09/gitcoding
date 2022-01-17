@@ -38,13 +38,13 @@ class SubscriptionsList extends React.Component {
     });
 
     const { status } = deleteSubscription;
-
+    const response = await deleteSubscription.json();
     if (status === 400) {
-      toast.error('Error: Error deleting subscription!');
+      const { errorMessage } = response;
+      toast.error(errorMessage);
       return;
     }
 
-    const response = await deleteSubscription.json();
     toast.success(response);
     
     const { subscriptions } = this.state;

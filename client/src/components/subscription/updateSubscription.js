@@ -56,7 +56,8 @@ class UpdateSubscription extends React.Component {
 
     const { status } = updatedSubscription;
     if (status === 400 ) {
-      toast.error('Error: Error while updating subscription! Try again!');
+      const { errorMessage } = await updatedSubscription.json();
+      toast.error(errorMessage);
       return;
     };
 
