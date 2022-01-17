@@ -67,6 +67,7 @@ const strategy = new Auth0Strategy({
  * App Configuration
 */
 
+// auth router attaches /login, /logout, and /callback routes to the baseURL
 // middleware for passport and expressSession.
 passport.use(strategy);
 
@@ -106,4 +107,3 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(process.cwd(), 'client', 'build', 'index.html'));
   });
 }
- 
