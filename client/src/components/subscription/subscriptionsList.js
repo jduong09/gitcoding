@@ -23,7 +23,7 @@ class SubscriptionsList extends React.Component {
       window.location = '/not-found';
     }
 
-    if (status === 404) {
+    if (status === 400) {
       toast.error('Error: Error getting your subscriptions!');
       return;
     }
