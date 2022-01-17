@@ -72,7 +72,6 @@ const migrate = async () => {
     console.log('First migration');
   }
 
-  // Get outstanding migrations
   const outstandingMigrations = await getOutStandingMigrations(existingMigrations);
 
   await pgPool.connect(async (error, client, release) => {
@@ -81,7 +80,6 @@ const migrate = async () => {
     };
 
     try {
-      // Start transaction
       await client.query('BEGIN');
       // eslint-disable-next-line no-restricted-syntax
       for (const migration of outstandingMigrations) {

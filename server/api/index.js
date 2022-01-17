@@ -4,7 +4,7 @@ const auth = require('./routes/auth');
 
 const router = express.Router();
 
-router.use('/api/users', users);
 router.use('/auth', auth);
+router.use('/users', users);
 
 module.exports = router;

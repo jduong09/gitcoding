@@ -8,7 +8,7 @@ class User extends React.Component {
 
     this.state = {
       isAuth: true,
-    }
+    };
   }
   
   render() {

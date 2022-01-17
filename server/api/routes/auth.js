@@ -40,37 +40,45 @@ router.get('/callback', (req, res, next) => {
       return res.redirect('/login');
     }
 
-    req.logIn(user, (error) => {
+    req.logIn(user, async (error) => {
       if (error) {
         return next(error);
       }
       
-      // store user_id?
       const userInfo = {
         name: user.displayName,
         identifier: user.id
       };
       
-      // User.createUser(userInfo);
+      let userExists;
+      let data;
+
+      // TODO: Handle alert on catch statement.
       try {
-        users.findUser(user.id).then(data => {
-          if (data.length === 0) {
-            try {
-              users.createUser(userInfo);
-            } catch (e) {
-              console.log('Error Creating User: ', e);
-            }
-          }
-        });
-      } catch (e) {
-        console.log('Error finding user: ', e);
+        userExists = await users.getUserByIdentifier(userInfo.identifier).then(user => data = user);
+      } catch(e) {
+        return res.redirect('/');
       }
-  
-      const { returnTo } = req.session;
+
+      // TODO: Handle alert on catch statement.
+      if (!userExists) {
+        try {
+          data = await users.createUser(userInfo);
+        } catch(e) {
+          return res.redirect('/');
+        }
+      }
+
+      const { user_uuid, id } = data;
+      req.session.userInfo = {
+        user_id: id
+      };
+      
+      // URGENT: Need to look at purpose of deleting returnTo
       delete req.session.returnTo;
-      res.redirect(returnTo || `${process.env.BASE_URL}/users/1`);
+      await res.redirect(`${process.env.BASE_URL}/users/${user_uuid}`);
+      res.end();
     });
-    res.end();
   })(req, res, next);
 });
 
