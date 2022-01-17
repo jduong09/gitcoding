@@ -34,8 +34,8 @@ router.route('/')
 
 router.delete('/:subscriptionUuid', async (req, res) => {
   try {
-    const data = await deleteSubscriptionBySubscriptionId(req.params.subscriptionUuid);
-    res.status(200).json(data);
+    await deleteSubscriptionBySubscriptionId(req.params.subscriptionUuid);
+    res.status(200).json('Successfully deleted subscription!');
   } catch(error) {
     res.status(400).json({ errorMessage: 'Error deleting subscription!' });
   }
