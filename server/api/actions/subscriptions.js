@@ -8,8 +8,9 @@ const getSubscriptionsByUserId = async (userId) => {
 
 const createSubscription = async (requestBody) => {
   console.log(typeof requestBody.amount);
-  const { rows: [data] } = await db.execute('server/sql/subscriptions/putSubscription.sql', 
-    { ...requestBody, 
+  const { rows: [data] } = await db.execute('server/sql/subscriptions/putSubscription.sql',
+    {
+      ...requestBody,
       reminderDays: parseInt(requestBody.reminderDays),
       amount: requestBody.amount * 100
     }
@@ -18,10 +19,11 @@ const createSubscription = async (requestBody) => {
 };
 
 const updateSubscriptionBySubscriptionId = async (subscriptionInfo) => {
-  const { rows: [data] } = await db.execute('server/sql/subscriptions/patchSubscription.sql', 
-    { ...subscriptionInfo, 
-    removedAt: subscriptionInfo.removedAt || null,
-    reminderDays: parseInt(subscriptionInfo.reminderDays)
+  const { rows: [data] } = await db.execute('server/sql/subscriptions/patchSubscription.sql',
+    {
+      ...subscriptionInfo,
+      removedAt: subscriptionInfo.removedAt || null,
+      reminderDays: parseInt(subscriptionInfo.reminderDays)
     }
   );
   return data;
