@@ -1,7 +1,7 @@
 const db = require('../../db/db');
 
 const getUsers = async () => {
-  const { rows: data } = await db.execute('server/sql/users/get_all.sql');
+  const { rows: data } = await db.execute('server/sql/users/getAll.sql');
   return data;
 };
 

@@ -1,9 +1,16 @@
 const express = require('express');
-const { createSubscription, getSubscriptionsByUserId, updateSubscriptionBySubscriptionId, deleteSubscriptionBySubscriptionId } = require('../actions/subscriptions');
+const {
+  createSubscription,
+  getSubscriptionsByUserId,
+  updateSubscriptionBySubscriptionId,
+  deleteSubscriptionBySubscriptionId,
+} = require('../actions/subscriptions');
+const { confirmUser } = require('./middleware');
 
 const router = express.Router({ mergeParams: true });
 
 router.route('/')
+  .all(confirmUser)
   .get(async (req, res) => {
     const { user_id } = req.session.userInfo;
     try {

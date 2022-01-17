@@ -11,9 +11,9 @@ import NotFound from './notFound';
 const App = () => (
   <div className="App">
     <Routes>
-      <Route path='*' element={<NotFound />} />
       <Route exact path='/' element={<LandingPage />} />
       <Route path='/users/:userId' element={<User />} />
+      <Route path='/*' element={<NotFound />} />
     </Routes>
     <ToastContainer />
   </div>
