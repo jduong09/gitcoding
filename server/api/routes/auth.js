@@ -52,18 +52,20 @@ router.get('/callback', (req, res, next) => {
       
       let userExists;
       let data;
-      
+
+      // TODO: Handle alert on catch statement.
       try {
         userExists = await users.getUserByIdentifier(userInfo.identifier).then(user => data = user);
       } catch(e) {
-        console.log('Error finding user: ', e);
+        return res.redirect('/');
       }
 
+      // TODO: Handle alert on catch statement.
       if (!userExists) {
         try {
           data = await users.createUser(userInfo);
         } catch(e) {
-          console.log('Error creating user: ', e);
+          return res.redirect('/');
         }
       }
 
