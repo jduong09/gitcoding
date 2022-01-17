@@ -1,4 +1,5 @@
 import React from 'react';
+import { toast } from 'react-toastify';
 
 const date = new Date();
 const todaysDate = date.toISOString().substring(0, 10);
@@ -37,20 +38,26 @@ class CreateSubscription extends React.Component {
     event.preventDefault();
 
     const subscriptionInfo  = this.state;
-    let subscription;
 
-    try {
-      subscription = await fetch(`${window.location.pathname}/subscriptions`, {
-        method: 'PUT',
-        headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify(subscriptionInfo)
-      }).then(data => data.json());
-    } catch(error) {
-      console.log('Error creating subscription: ', error);
-    }
+    await fetch(`${window.location.pathname}/subscriptions`, {
+      method: 'PUT',
+      headers: { 'Content-type': 'application/json' },
+      body: JSON.stringify(subscriptionInfo)
+    }).then(data => {
+      if (data.status === 400) {
+        console.log('hey');
+        throw new Error(`OH NO! ${data.json()}`);
+      }
 
-    this.handleSubscriptions(subscription);
-    this.setState({ name: '', nickname: '', dueDate: '', reminderDays: 0, amount: 0 });
+      toast.success('Successfully created subscription!');
+      return data.json();
+    }).catch((error) => {
+      console.log(error);
+      toast.error(error);
+    });
+
+    // this.handleSubscriptions(subscription);
+    // this.setState({ name: '', nickname: '', dueDate: '', reminderDays: 0, amount: 0 });
   }
 
   render() {

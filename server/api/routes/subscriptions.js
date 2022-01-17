@@ -20,7 +20,7 @@ router.route('/')
       const data = await createSubscription(req.body);
       res.status(200).json(data);
     } catch(error) {
-      res.status(400).json(error);
+      res.status(400).json(`Error in column: ${error.column}`);
     }
   })
   .patch(async (req, res) => {
