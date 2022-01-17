@@ -1,8 +1,9 @@
 const db = require('../../db/db');
 
 /**
- * Authentication check middleware
+ * @description Confirms the user's UUID to the request session's identifier
 */
+
 const confirmUser = async (req, res, next) => {
   const { userUuid: user_uuid } = req.params;
   try {
