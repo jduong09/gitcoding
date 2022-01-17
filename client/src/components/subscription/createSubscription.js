@@ -34,27 +34,23 @@ class CreateSubscription extends React.Component {
     this.setState({ [key]: value });
   }
 
-  async handleSubmit(event) {
+  handleSubmit(event) {
     event.preventDefault();
 
     const subscriptionInfo  = this.state;
 
-    await fetch(`${window.location.pathname}/subscriptions`, {
+    fetch(`${window.location.pathname}/subscriptions`, {
       method: 'PUT',
       headers: { 'Content-type': 'application/json' },
       body: JSON.stringify(subscriptionInfo)
-    }).then(data => {
-      if (data.status === 400) {
-        console.log('hey');
-        throw new Error(`OH NO! ${data.json()}`);
-      }
+    }).then(response => response.json()).then((message) => {
+      if (message.status === 400) {
+        toast.error(`Error: ${message.errorMessage}`);
+        return;
+      } 
 
       toast.success('Successfully created subscription!');
-      return data.json();
-    }).catch((error) => {
-      console.log(error);
-      toast.error(error);
-    });
+    })
 
     // this.handleSubscriptions(subscription);
     // this.setState({ name: '', nickname: '', dueDate: '', reminderDays: 0, amount: 0 });
