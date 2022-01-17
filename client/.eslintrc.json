@@ -30,6 +30,7 @@
         "react/require-default-props": "off",
         "react/prop-types": "off",
         "react/no-did-update-set-state": 0,
-        "semi": "warn"
+        "semi": "warn",
+        "react/no-unescaped-entities": 0
     }
 }
