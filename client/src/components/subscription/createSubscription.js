@@ -34,26 +34,27 @@ class CreateSubscription extends React.Component {
     this.setState({ [key]: value });
   }
 
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault();
 
     const subscriptionInfo  = this.state;
 
-    fetch(`${window.location.pathname}/subscriptions`, {
+    const subscription = await fetch(`${window.location.pathname}/subscriptions`, {
       method: 'PUT',
       headers: { 'Content-type': 'application/json' },
       body: JSON.stringify(subscriptionInfo)
-    }).then(response => response.json()).then((message) => {
-      if (message.status === 400) {
-        toast.error(`Error: ${message.errorMessage}`);
-        return;
-      } 
+    });
 
-      toast.success('Successfully created subscription!');
-    })
+    const { status } = subscription;
+    const response = await subscription.json();
+    if (status === 400) {
+      toast.error('Error: Error while creating subscription! Try again!');
+      return;
+    }
+    toast.success('Successfully created subscription!');
 
-    // this.handleSubscriptions(subscription);
-    // this.setState({ name: '', nickname: '', dueDate: '', reminderDays: 0, amount: 0 });
+    this.handleSubscriptions(response);
+    this.setState({ name: '', nickname: '', dueDate: '', reminderDays: 0, amount: 0 });
   }
 
   render() {
@@ -65,7 +66,7 @@ class CreateSubscription extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <label htmlFor="subscription-name">
             Name:
-            <input type="text" name="subscription-name" value={name} onChange={(event) => this.handleChange(event, 'name')}  />
+            <input type="text" name="subscription-name" value={name} onChange={(event) => this.handleChange(event, 'name')} required />
           </label>
 
           <label htmlFor="subscription-nickname">
@@ -75,17 +76,17 @@ class CreateSubscription extends React.Component {
 
           <label htmlFor="subscription-due-date">
             Due Date: 
-            <input type="date" name="subscription-due-date" value={dueDate} onChange={(event) => this.handleChange(event, 'dueDate')} />
+            <input type="date" name="subscription-due-date" value={dueDate} onChange={(event) => this.handleChange(event, 'dueDate')} required />
           </label>
 
           <label htmlFor="subscription-reminder-days">
             Reminder Days: 
-            <input type="number" name="subscription-reminder-days" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} />
+            <input type="number" name="subscription-reminder-days" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} required />
           </label>
 
           <label htmlFor="subscription-amount">
             Amount: 
-            <input type="number" name="subscription-amount" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} />
+            <input type="number" name="subscription-amount" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} required />
           </label>
 
           <input type="submit" value="Submit" />

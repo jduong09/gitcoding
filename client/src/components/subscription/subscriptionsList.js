@@ -1,4 +1,5 @@
 import React from 'react';
+import { toast } from 'react-toastify';
 import Subscription from './subscription';
 import UpdateSubscription from './updateSubscription';
 import CreateSubscription from './createSubscription';
@@ -15,9 +16,16 @@ class SubscriptionsList extends React.Component {
   }
 
   async componentDidMount() {
-    await fetch(`${window.location.pathname}/subscriptions`)
-      .then(data => data.json())
-      .then(response => this.setState({ subscriptions: response }));
+    const allSusbcriptions = await fetch(`${window.location.pathname}/subscriptions`);
+
+    const { status } = allSusbcriptions;
+    const response = await allSusbcriptions.json();
+    if (status === 400) {
+      toast.error('Error: Error getting your subscriptions!');
+      return;
+    }
+    
+    this.setState({ subscriptions: response });
   }
 
   handleUpdate = (newSubscriptionsList) => {
@@ -25,20 +33,24 @@ class SubscriptionsList extends React.Component {
   }
 
   handleDelete = async (subscriptionUuid) => {
-    let newSubscriptionList;
-
-    try {
-      newSubscriptionList = await fetch(`${window.location.pathname}/subscriptions/${subscriptionUuid}`, {
+    const deleteSubscription = await fetch(`${window.location.pathname}/subscriptions/${subscriptionUuid}`, {
         method: 'DELETE'
-      }).then(() => {
-        const { subscriptions } = this.state;
-        return subscriptions.filter(subscription => subscription.subscriptionUuid !== subscriptionUuid);
-      });
-    } catch(error) {
-      console.log('Error deleting subscription: ', error);
+    });
+
+    const { status } = deleteSubscription;
+
+    if (status === 400) {
+      toast.error('Error: Error deleting subscription!');
+      return;
     }
 
-    this.setState({ subscriptions: newSubscriptionList });
+    const response = await deleteSubscription.json();
+    toast.success(response);
+    
+    const { subscriptions } = this.state;
+    const updatedSubscriptionsList = await subscriptions.filter(subscription => subscription.subscriptionUuid !== subscriptionUuid);
+
+    this.setState({ subscriptions: updatedSubscriptionsList });
   } 
   
   render() {

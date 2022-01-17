@@ -6,12 +6,9 @@ const router = express.Router({ mergeParams: true });
 router.route('/')
   .get(async (req, res) => {
     const { user_id } = req.session.userInfo;
-    try {
-      const data = await getSubscriptionsByUserId(user_id);
-      res.status(200).json(data);
-    } catch(error) {
-      res.status(400).json(error);
-    }
+    await getSubscriptionsByUserId(user_id)
+      .then(data => res.status(200).json(data))
+      .catch(error => res.status(400).json(error));
   })
   .put(async (req, res) => {
     const { user_id } = req.session.userInfo;
@@ -19,29 +16,20 @@ router.route('/')
 
     await createSubscription(req.body)
       .then(data => {
-        console.log(data);
         res.status(200).json(data)
       })
-      .catch(error => {
-        res.status(400).json({ status: 400, errorMessage: error.column });
-      }); 
+      .catch(error => res.status(400).json(error)); 
   })
   .patch(async (req, res) => {
-    try {
-      const data = await updateSubscriptionBySubscriptionId(req.body);
-      res.status(200).json(data);
-    } catch (error) {
-      res.status(400).json(error);
-    }
-  })
+    await updateSubscriptionBySubscriptionId(req.body)
+      .then(data => res.status(200).json(data))
+      .catch(error => res.status(400).json(error));
+  });
 
 router.delete('/:subscriptionUuid', async (req, res) => {
-  try {
-    await deleteSubscriptionBySubscriptionId(req.params.subscriptionUuid);
-    res.status(200).send('Deleted Subscription Successfully');
-  } catch (error) {
-    res.status(400).json(error);
-  }
-})
+  await deleteSubscriptionBySubscriptionId(req.params.subscriptionUuid)
+    .then(() => res.status(200).json('Deleted Subscription Successfully'))
+    .catch(error => res.status(400).json(error));
+});
 
 module.exports = router;
