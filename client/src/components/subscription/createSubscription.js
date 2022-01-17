@@ -1,4 +1,5 @@
 import React from 'react';
+import { toast } from 'react-toastify';
 
 const date = new Date();
 const todaysDate = date.toISOString().substring(0, 10);
@@ -37,20 +38,24 @@ class CreateSubscription extends React.Component {
     event.preventDefault();
 
     const subscriptionInfo  = this.state;
-    let subscription;
 
-    try {
-      subscription = await fetch(`${window.location.pathname}/subscriptions`, {
-        method: 'PUT',
-        headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify(subscriptionInfo)
-      }).then(data => data.json());
-    } catch(error) {
-      console.log('Error creating subscription: ', error);
+    const subscription = await fetch(`${window.location.pathname}/subscriptions`, {
+      method: 'PUT',
+      headers: { 'Content-type': 'application/json' },
+      body: JSON.stringify(subscriptionInfo)
+    });
+
+    const { status } = subscription;
+    const response = await subscription.json();
+    if (status === 400) {
+      const { errorMessage } = response;
+      toast.error(errorMessage);
+      return;
     }
+    toast.success('Successfully created subscription!');
 
-    this.handleSubscriptions(subscription);
-    this.setState({ name: '', nickname: '', dueDate: '', reminderDays: 0, amount: 0 });
+    this.handleSubscriptions(response);
+    this.setState({ name: '', nickname: '', dueDate: todaysDate, reminderDays: 0, amount: 0 });
   }
 
   render() {
@@ -62,27 +67,27 @@ class CreateSubscription extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <label htmlFor="subscription-name">
             Name:
-            <input type="text" name="subscription-name" value={name} onChange={(event) => this.handleChange(event, 'name')}  />
+            <input type="text" placeholder="e.g. Crunchyroll" name="subscription-name" value={name} onChange={(event) => this.handleChange(event, 'name')} required />
           </label>
 
           <label htmlFor="subscription-nickname">
             Nickname:
-            <input type="text" name="subscription-nickname" value={nickname} onChange={(event) => this.handleChange(event, 'nickname')}  /> 
+            <input type="text" placeholder="e.g. My favorite streaming site"name="subscription-nickname" value={nickname} onChange={(event) => this.handleChange(event, 'nickname')}  /> 
           </label>
 
           <label htmlFor="subscription-due-date">
             Due Date: 
-            <input type="date" name="subscription-due-date" value={dueDate} onChange={(event) => this.handleChange(event, 'dueDate')} />
+            <input type="date" name="subscription-due-date" value={dueDate} onChange={(event) => this.handleChange(event, 'dueDate')} required />
           </label>
 
           <label htmlFor="subscription-reminder-days">
             Reminder Days: 
-            <input type="number" name="subscription-reminder-days" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} />
+            <input type="number" name="subscription-reminder-days" min="0" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} required />
           </label>
 
           <label htmlFor="subscription-amount">
             Amount: 
-            <input type="number" name="subscription-amount" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} />
+            <input type="number" name="subscription-amount" min="0" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} required />
           </label>
 
           <input type="submit" value="Submit" />
