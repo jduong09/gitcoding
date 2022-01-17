@@ -13,7 +13,7 @@ router.route('/')
   .put(async (req, res) => {
     const { user_id } = req.session.userInfo;
     req.body.userId = user_id;
-
+    console.log(req.body);
     await createSubscription(req.body)
       .then(data => {
         res.status(200).json(data)

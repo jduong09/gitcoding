@@ -54,7 +54,7 @@ class CreateSubscription extends React.Component {
     toast.success('Successfully created subscription!');
 
     this.handleSubscriptions(response);
-    this.setState({ name: '', nickname: '', dueDate: '', reminderDays: 0, amount: 0 });
+    this.setState({ name: '', nickname: '', dueDate: todaysDate, reminderDays: 0, amount: 0 });
   }
 
   render() {
@@ -81,12 +81,12 @@ class CreateSubscription extends React.Component {
 
           <label htmlFor="subscription-reminder-days">
             Reminder Days: 
-            <input type="number" name="subscription-reminder-days" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} required />
+            <input type="number" name="subscription-reminder-days" min="0" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} required />
           </label>
 
           <label htmlFor="subscription-amount">
             Amount: 
-            <input type="number" name="subscription-amount" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} required />
+            <input type="number" name="subscription-amount" min="0" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} required />
           </label>
 
           <input type="submit" value="Submit" />

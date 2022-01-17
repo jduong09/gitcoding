@@ -6,8 +6,14 @@ const getSubscriptionsByUserId = async (userId) => {
   return data;
 };
 
-const createSubscription = async (requestBody) => {  
-  const { rows: [data] } = await db.execute('server/sql/subscriptions/putSubscription.sql', { ...requestBody, reminderDays: parseInt(requestBody.reminderDays) });
+const createSubscription = async (requestBody) => {
+  console.log(typeof requestBody.amount);
+  const { rows: [data] } = await db.execute('server/sql/subscriptions/putSubscription.sql', 
+    { ...requestBody, 
+      reminderDays: parseInt(requestBody.reminderDays),
+      amount: requestBody.amount * 100
+    }
+  );
   return data;
 };
 

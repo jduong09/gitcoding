@@ -11,7 +11,7 @@ class UpdateSubscription extends React.Component {
       nickname: prevSubscription.nickname || '', 
       dueDate: prevSubscription.dueDate || '',
       reminderDays: prevSubscription.reminderDays || 0,
-      amount: prevSubscription.amount || 0
+      amount: prevSubscription.amount/100 || 0
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -85,12 +85,12 @@ class UpdateSubscription extends React.Component {
 
           <label htmlFor="subscription-reminder-days">
             Reminder Days: 
-            <input type="number" name="subscription-reminder-days" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} />
+            <input type="number" name="subscription-reminder-days" min="0" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} />
           </label>
 
           <label htmlFor="subscription-amount">
             Amount: 
-            <input type="number" name="subscription-amount" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} />
+            <input type="number" name="subscription-amount" min="0" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} />
           </label>
 
           <input type="submit" value="Submit" />

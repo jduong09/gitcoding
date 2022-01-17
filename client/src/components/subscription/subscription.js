@@ -9,7 +9,7 @@ const Subscription = ({ details }) => {
       <li>Nickname: {nickname}</li>
       <li>Due Date: {dueDate}</li>
       <li>Reminder Days: {reminderDays}</li>
-      <li>Amount: ${amount}</li>
+      <li>Amount: ${amount/100}</li>
     </ul>
   );
 };
