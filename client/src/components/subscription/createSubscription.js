@@ -48,7 +48,8 @@ class CreateSubscription extends React.Component {
     const { status } = subscription;
     const response = await subscription.json();
     if (status === 400) {
-      toast.error('Error: Error while creating subscription! Try again!');
+      const { errorMessage } = response;
+      toast.error(errorMessage);
       return;
     }
     toast.success('Successfully created subscription!');
@@ -66,12 +67,12 @@ class CreateSubscription extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <label htmlFor="subscription-name">
             Name:
-            <input type="text" name="subscription-name" value={name} onChange={(event) => this.handleChange(event, 'name')} required />
+            <input type="text" placeholder="e.g. Crunchyroll" name="subscription-name" value={name} onChange={(event) => this.handleChange(event, 'name')} required />
           </label>
 
           <label htmlFor="subscription-nickname">
             Nickname:
-            <input type="text" name="subscription-nickname" value={nickname} onChange={(event) => this.handleChange(event, 'nickname')}  /> 
+            <input type="text" placeholder="e.g. My favorite streaming site"name="subscription-nickname" value={nickname} onChange={(event) => this.handleChange(event, 'nickname')}  /> 
           </label>
 
           <label htmlFor="subscription-due-date">
