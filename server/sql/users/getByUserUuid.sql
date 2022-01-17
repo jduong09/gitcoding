@@ -1,0 +1,1 @@
+SELECT * FROM users WHERE user_uuid = ${user_uuid}::UUID;

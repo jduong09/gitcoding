@@ -16,15 +16,19 @@ class SubscriptionsList extends React.Component {
   }
 
   async componentDidMount() {
-    const allSusbcriptions = await fetch(`${window.location.pathname}/subscriptions`);
+    const allSubscriptions = await fetch(`${window.location.pathname}/subscriptions`);
+    const { status } = allSubscriptions;
 
-    const { status } = allSusbcriptions;
-    const response = await allSusbcriptions.json();
-    if (status === 400) {
+    if (status === 404) {
+      window.location = '/not-found';
+    }
+
+    if (status === 404) {
       toast.error('Error: Error getting your subscriptions!');
       return;
     }
-    
+
+    const response = await allSubscriptions.json();
     this.setState({ subscriptions: response });
   }
 
