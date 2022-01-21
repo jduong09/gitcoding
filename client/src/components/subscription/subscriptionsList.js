@@ -9,7 +9,9 @@ class SubscriptionsList extends React.Component {
     super();
 
     this.state = {
-      subscriptions: []
+      subscriptions: [],
+      addingSubscription: false,
+      editingSubscription: null,
     };
 
     this.handleDelete = this.handleDelete.bind(this);
@@ -58,23 +60,42 @@ class SubscriptionsList extends React.Component {
   } 
   
   render() {
-    const { subscriptions } = this.state;
+    const {
+      subscriptions,
+      addingSubscription,
+      editingSubscription
+    } = this.state;
 
     const subscriptionsList = subscriptions.map((subscription) => {
       const { subscriptionUuid } = subscription;
       return (
-        <li key={subscriptionUuid}>
-          <Subscription details={subscription} />
-          <button type="button" onClick={() => this.handleDelete(subscriptionUuid)}>Delete</button>
-          <UpdateSubscription updateSubscription={this.handleUpdate} currentSubscriptions={subscriptions} prevSubscription={subscription} />
-        </li>
+        <div key={subscriptionUuid} className="m-2">
+          {!editingSubscription &&
+            <div className="d-flex align-items-center flex-wrap">
+              <Subscription details={subscription} handleEdit={() => this.setState({ editingSubscription: subscriptionUuid})} handleDelete={() => this.handleDelete(subscriptionUuid)} />
+            </div>
+          }
+          {editingSubscription === subscriptionUuid && 
+            <div className="card p-3 m-2 d-flex flex-wrap">
+              <UpdateSubscription updateSubscription={this.handleUpdate} currentSubscriptions={subscriptions} prevSubscription={subscription} />
+              <button onClick={() => this.setState({ editingSubscription: null })} className="btn btn-link my-2" type="button">Cancel</button>
+            </div>
+            }
+        </div>
       );
     });
 
     return (
-      <section className="subscription-list">
-        <ul>{subscriptionsList}</ul>
-        <CreateSubscription addSubscription={this.handleUpdate} currentSubscriptions={subscriptions} />
+      <section className="subscription-list p-3">
+        <div className="d-flex flex-wrap">{subscriptionsList}</div>
+        {
+          addingSubscription
+            ? <div className="card p-3 m-2 d-flex flex-column">
+                <CreateSubscription addSubscription={this.handleUpdate} currentSubscriptions={subscriptions} />
+                <button onClick={() => this.setState({ addingSubscription: !addingSubscription })} className="btn btn-link my-2" type="button">Cancel</button>
+              </div>
+            : <button onClick={() => this.setState({ addingSubscription: !addingSubscription })} className="btn btn-primary my-2" type="button">Add New Subscription</button>
+        }
       </section>
     );
   }
