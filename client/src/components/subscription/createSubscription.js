@@ -1,5 +1,7 @@
 import React from 'react';
 import { toast } from 'react-toastify';
+import ReactDayPicker from '../utils/datepicker';
+
 
 const date = new Date();
 const todaysDate = date.toISOString().substring(0, 10);
@@ -14,11 +16,13 @@ class CreateSubscription extends React.Component {
       dueDate: todaysDate,
       reminderDays: 0,
       amount: 0,
+      dueDateOption: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSubscriptions = this.handleSubscriptions.bind(this);
+    this.addSelectedDay = this.addSelectedDay.bind(this);
   }
 
   async handleSubscriptions(subscription) {
@@ -58,8 +62,57 @@ class CreateSubscription extends React.Component {
     this.setState({ name: '', nickname: '', dueDate: todaysDate, reminderDays: 0, amount: 0 });
   }
 
+  addSelectedDay(e) {
+    console.log('hey');
+    console.log(`Selected ${e.target}.`, this);
+  }
+
+  renderSwitch(frequency) {
+    console.log(this);
+    switch (frequency) {
+      case 'yearly':
+        return (
+          <div>
+            On what day do you want to be reminded?
+            <ReactDayPicker />
+          </div>
+        );
+      case 'monthly':
+        return (
+          <div>
+             <label htmlFor="occurence">
+                How many months in between do you want to be reminded?
+                <input type="number" id="occurence" />
+              </label>
+              <div>On What day(s) do you want to be reminded?</div>
+              <ReactDayPicker />
+          </div>
+        );
+      case 'weekly':
+        return (
+          <div>
+            <label htmlFor="occurence">
+              How many weeks in between do you want to be reminded?
+              <input type="number" id="occurence" />
+            </label>
+            <div>On what day(s) do you want to be reminded?</div>
+            <ReactDayPicker />
+          </div>
+        );
+      case 'daily':
+        return (
+          <label htmlFor="occurence">
+            How many days do you want to be reminded? ex: (every 2 days)
+            <input type="number" id="occurence" />
+          </label>
+        );
+      default:
+        return ('');
+    }
+  }
+
   render() {
-    const { name, nickname, dueDate, reminderDays, amount } = this.state;
+    const { name, nickname, dueDate, reminderDays, amount, dueDateOption } = this.state;
 
     return (
       <section>
@@ -85,6 +138,27 @@ class CreateSubscription extends React.Component {
             <input type="number" name="subscription-reminder-days" min="0" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} required />
           </label>
 
+          { /* Due_Date changes to jsonb Object 
+              {
+                "frequency": ['yearly', 'monthly', 'daily'] SELECT HTML TAG.
+                "occurence": How frequent do you want reminders on your due_date? UI is dependent on frequency.
+                "days": Which day(s) do you want to be reminded? Dependent on frequency.
+              }
+          */}
+
+          <label htmlFor="due-date-select">
+            Repeat:
+            <select onChange={(event) => this.handleChange(event, 'dueDateOption')} id="due-date-select">
+              <option value="" defaultValue>--Please Choose an Option--</option>
+              <option value="yearly">Yearly</option>
+              <option value="monthly">Monthly</option>
+              <option value="weekly">Weekly</option>
+              <option value="daily">Daily</option>
+            </select>  
+          </label>
+
+          {this.renderSwitch(dueDateOption)}
+          
           <label htmlFor="subscription-amount">
             Amount: 
             <input type="number" name="subscription-amount" min="0" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} required />
