@@ -12,7 +12,7 @@ class CreateSubscription extends React.Component {
       reminderDays: 0,
       amount: 0,
       frequency: '',
-      occurence: 0,
+      occurence: 1,
       days: []
     };
 
@@ -43,11 +43,10 @@ class CreateSubscription extends React.Component {
   async handleSubmit(event) {
     event.preventDefault();
     const { name, nickname, reminderDays, amount, frequency, occurence }  = this.state;
-    const parsedDay = this.parseDueDate();
-    const dueDate = { frequency, occurence, days: parsedDay };
+    const dates = this.parseDueDate();
+    const dueDate = { frequency, occurence, dates };
 
-    const subscriptionInfo = { name, nickname, dueDate, reminderDays, amount };
-    console.log(subscriptionInfo);
+    const subscriptionInfo = { name, nickname, reminderDays, amount, dueDate };
     const subscription = await fetch(`${window.location.pathname}/subscriptions`, {
       method: 'PUT',
       headers: { 'Content-type': 'application/json' },

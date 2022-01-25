@@ -7,9 +7,11 @@ const getSubscriptionsByUserId = async (userId) => {
 };
 
 const createSubscription = async (requestBody) => {
+  console.log(requestBody);
   const { rows: [data] } = await db.execute('server/sql/subscriptions/putSubscription.sql', 
     {
-      ...requestBody, 
+      ...requestBody,
+      occurence: parseInt(requestBody.occurence),
       reminderDays: parseInt(requestBody.reminderDays),
       amount: requestBody.amount * 100
     }
