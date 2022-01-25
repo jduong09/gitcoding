@@ -22,6 +22,7 @@ const updateSubscriptionBySubscriptionId = async (subscriptionInfo) => {
   const { rows: [data] } = await db.execute('server/sql/subscriptions/patchSubscription.sql', 
     {
       ...subscriptionInfo, 
+      occurence: parseInt(subscriptionInfo.occurence),
       removedAt: subscriptionInfo.removedAt || null,
       reminderDays: parseInt(subscriptionInfo.reminderDays),
       amount: subscriptionInfo.amount * 100

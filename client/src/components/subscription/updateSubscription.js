@@ -65,11 +65,14 @@ class UpdateSubscription extends React.Component {
   }
 
   async handleSubmit(event) {
-    const { prevSubscription } = this.props;
-    const updatedSubscriptionForm = this.state;
     event.preventDefault();
+    const { prevSubscription } = this.props;
+    const { name, nickname, reminderDays, amount, frequency, occurence } = this.state;
+    const dates = this.parseDueDate();
+    const dueDate = { frequency, occurence, dates };
 
-    updatedSubscriptionForm.subscriptionUuid = prevSubscription.subscriptionUuid;
+
+    const updatedSubscriptionForm = { name, nickname, reminderDays, amount, dueDate, subscriptionUuid: prevSubscription.subscriptionUuid };
 
     const updatedSubscription = await fetch(`${window.location.pathname}/subscriptions`, {
       method: 'PATCH',
@@ -89,6 +92,28 @@ class UpdateSubscription extends React.Component {
 
   handleDays(days) {
     this.setState({ days });
+  }
+
+  parseDueDate() {
+    const { frequency, days } = this.state;
+    let parsedDay;
+    switch (frequency) {
+      case 'yearly':
+        parsedDay = days.map((day) => day.toISOString());
+        break;
+      case 'monthly':
+        parsedDay = days.map((day) => day.toISOString());
+        break;
+      case 'weekly':
+        parsedDay = days.map((day) => day.getDay());
+        break;
+      case 'daily':
+        parsedDay = null;
+        break;
+      default:
+        break;
+    }
+    return parsedDay;
   }
 
   renderSwitch(frequency) {
@@ -143,7 +168,6 @@ class UpdateSubscription extends React.Component {
 
   render() {
     const { name, nickname, reminderDays, amount, frequency, days } = this.state;
-    console.log(days);
     const daysList = days.map((day) => <div key={day}>{new Date(day).toDateString()}</div>);
     return (
       <form onSubmit={this.handleSubmit}>
