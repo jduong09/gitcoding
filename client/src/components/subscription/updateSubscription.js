@@ -162,9 +162,9 @@ class UpdateSubscription extends React.Component {
             <input type="number" name="subscription-reminder-days" min="0" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} />
           </label>
 
-          <label htmlFor="due-date-select">
+          <label htmlFor="subscription-due-date">
             Repeat:
-            <select onChange={(event) => this.handleChange(event, 'frequency')} id="due-date-select" value={frequency}>
+            <select onChange={(event) => this.handleChange(event, 'frequency')} id="subscription-due-date" value={frequency}>
               <option value="yearly">Yearly</option>
               <option value="monthly">Monthly</option>
               <option value="weekly">Weekly</option>
