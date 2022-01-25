@@ -25,6 +25,7 @@ class SubscriptionsList extends React.Component {
       return;
     }
     
+    console.log(response);
     this.setState({ subscriptions: response });
   }
 

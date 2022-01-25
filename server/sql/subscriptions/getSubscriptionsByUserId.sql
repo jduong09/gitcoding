@@ -1,7 +1,7 @@
 SELECT 
   name, 
   nickname, 
-  to_char(due_date, 'YYYY-MM-DD') AS "dueDate", 
+  due_date AS "dueDate", 
   reminder_days AS "reminderDays", 
   amount, 
   subscription_uuid AS "subscriptionUuid"
