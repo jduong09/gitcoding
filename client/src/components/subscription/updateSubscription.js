@@ -1,21 +1,40 @@
 import React from 'react';
 import { toast } from 'react-toastify';
+import ReactDayPicker from '../utils/datepicker';
+
+const WEEKLY_DAYS = {
+  0: '2022-01-02T00:00:00',
+  1: '2022-01-03T00:00:00',
+  2: '2022-01-04T00:00:00',
+  3: '2022-01-05T00:00:00',
+  4: '2022-01-06T00:00:00',
+  5: '2022-01-07T00:00:00',
+  6: '2022-01-08T00:00:00',
+};
+
+function convertWeekDayToDate(datesArray) {
+  return datesArray.map((weekDay) => WEEKLY_DAYS[weekDay]);   
+}
 
 class UpdateSubscription extends React.Component {
   constructor(props) {
     super(props);
     const { prevSubscription } = props;
-
+    const { dueDate } = prevSubscription;
+    const updatedDays = dueDate.frequency === 'weekly' ? convertWeekDayToDate(dueDate.dates) : dueDate.dates;
     this.state = {
       name: prevSubscription.name || '', 
       nickname: prevSubscription.nickname || '', 
-      dueDate: prevSubscription.dueDate || '',
       reminderDays: prevSubscription.reminderDays || 0,
-      amount: prevSubscription.amount/100 || 0
+      amount: prevSubscription.amount/100 || 0,
+      frequency: dueDate.frequency || '',
+      occurence: dueDate.occurence || 1,
+      days: updatedDays || []
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSubscriptions = this.handleSubscriptions.bind(this);
+    this.handleDays = this.handleDays.bind(this);
   }
 
   async handleSubscriptions() {
@@ -38,7 +57,11 @@ class UpdateSubscription extends React.Component {
     const { value } = event.target;
     event.preventDefault();
 
-    this.setState({ [key]: value });
+    if (key === 'frequency') {
+      return this.setState({ [key]: value, days: [] });
+    }
+
+    return this.setState({ [key]: value });
   }
 
   async handleSubmit(event) {
@@ -64,9 +87,64 @@ class UpdateSubscription extends React.Component {
     this.handleSubscriptions();
   }
 
-  render() {
-    const { name, nickname, dueDate, reminderDays, amount } = this.state;
+  handleDays(days) {
+    this.setState({ days });
+  }
 
+  renderSwitch(frequency) {
+    const { occurence, days } = this.state;
+
+    switch (frequency) {
+      case 'yearly':
+        return (
+          <div>
+            On what day do you want to be reminded?
+            <ReactDayPicker handleUpdate={this.handleDays} resetDays="yearly" updating={days} />
+          </div>
+        );
+      case 'monthly':
+        return (
+          <div>
+             <label htmlFor="occurence">
+                Every (?) Months:
+                <input type="number" id="occurence" value={occurence} onChange={(event) => this.handleChange(event, 'occurence')} min="0" max="12" />
+              </label>
+              <div>On What day(s) do you want to be reminded?</div>
+              <ReactDayPicker handleUpdate={this.handleDays} resetDays="monthly" updating={days} />
+          </div>
+        );
+      case 'weekly':
+        return (
+          <div>
+            <label htmlFor="occurence">
+              How many weeks in between do you want to be reminded?
+              <select id="occurence" placeholder="ex: Every 2 weeks" onChange={(event) => this.handleChange(event, 'occurence')}>
+                <option value="1">Every Week</option>
+                <option value="2">Every 2 Weeks</option>
+                <option value="3">Every 3 Weeks</option>
+                <option value="4">Every 4 Weeks</option>
+              </select>
+            </label>
+            <div>Day of the week:</div>
+            <ReactDayPicker disabledDays={{ after: new Date(2022, 0, 8), before: new Date(2022, 0, 2) }} handleUpdate={this.handleDays} resetDays="weekly" updating={days} />
+          </div>
+        );
+      case 'daily':
+        return (
+          <label htmlFor="occurence">
+            Every:
+            <input type="number" id="occurence" value={occurence} onChange={(event) => this.handleChange(event, 'occurence')} />
+          </label>
+        );
+      default:
+        return ('');
+    }
+  }
+
+  render() {
+    const { name, nickname, reminderDays, amount, frequency, days } = this.state;
+    console.log(days);
+    const daysList = days.map((day) => <div key={day}>{new Date(day).toDateString()}</div>);
     return (
       <form onSubmit={this.handleSubmit}>
           <label htmlFor="subscription-name">
@@ -79,15 +157,24 @@ class UpdateSubscription extends React.Component {
             <input type="text" name="subscription-nickname" value={nickname} onChange={(event) => this.handleChange(event, 'nickname')}  /> 
           </label>
 
-          <label htmlFor="subscription-due-date">
-            Due Date: 
-            <input type="date" name="subscription-due-date" value={dueDate} onChange={(event) => this.handleChange(event, 'dueDate')} />
-          </label>
-
           <label htmlFor="subscription-reminder-days">
             Reminder Days: 
             <input type="number" name="subscription-reminder-days" min="0" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} />
           </label>
+
+          <label htmlFor="due-date-select">
+            Repeat:
+            <select onChange={(event) => this.handleChange(event, 'frequency')} id="due-date-select" value={frequency}>
+              <option value="yearly">Yearly</option>
+              <option value="monthly">Monthly</option>
+              <option value="weekly">Weekly</option>
+              <option value="daily">Daily</option>
+            </select>
+          </label>
+
+          {this.renderSwitch(frequency)}
+          
+          Days List: {daysList}
 
           <label htmlFor="subscription-amount">
             Amount: 

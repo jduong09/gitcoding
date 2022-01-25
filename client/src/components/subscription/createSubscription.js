@@ -75,10 +75,10 @@ class CreateSubscription extends React.Component {
     let parsedDay;
     switch (frequency) {
       case 'yearly':
-        parsedDay = days.map((day) => day.toISOString().substring(0, 10));
+        parsedDay = days.map((day) => day.toISOString());
         break;
       case 'monthly':
-        parsedDay = days.map((day) => day.toISOString().substring(0, 10));
+        parsedDay = days.map((day) => day.toISOString());
         break;
       case 'weekly':
         parsedDay = days.map((day) => day.getDay());
