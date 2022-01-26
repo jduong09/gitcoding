@@ -67,7 +67,12 @@ class UpdateSubscription extends React.Component {
   async handleSubmit(event) {
     event.preventDefault();
     const { prevSubscription } = this.props;
-    const { name, nickname, reminderDays, amount, frequency, occurence } = this.state;
+    const { name, nickname, reminderDays, amount, frequency, occurence, days } = this.state;
+
+    if (days.length === 0) {
+      toast.error('Failed to Update: Dates not selected for reminder.');
+      return;
+    }
     const dates = this.parseDueDate();
     const dueDate = { frequency, occurence, dates };
 

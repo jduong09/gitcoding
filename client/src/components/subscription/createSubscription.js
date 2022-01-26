@@ -42,11 +42,17 @@ class CreateSubscription extends React.Component {
 
   async handleSubmit(event) {
     event.preventDefault();
-    const { name, nickname, reminderDays, amount, frequency, occurence }  = this.state;
+    const { name, nickname, reminderDays, amount, frequency, occurence, days }  = this.state;
+
+    if (days.length === 0) {
+      toast.error('Failed to Create: Dates not selected for reminder.');
+      return;
+    }
     const dates = this.parseDueDate();
     const dueDate = { frequency, occurence, dates };
 
     const subscriptionInfo = { name, nickname, reminderDays, amount, dueDate };
+
     const subscription = await fetch(`${window.location.pathname}/subscriptions`, {
       method: 'PUT',
       headers: { 'Content-type': 'application/json' },
@@ -108,7 +114,7 @@ class CreateSubscription extends React.Component {
           <div>
              <label htmlFor="occurence">
                 Every (?) Months:
-                <input type="number" id="occurence" value={occurence} onChange={(event) => this.handleChange(event, 'occurence')} min="0" max="12" />
+                <input type="number" id="occurence" value={occurence} onChange={(event) => this.handleChange(event, 'occurence')} min="0" max="12" required />
               </label>
               <div>On What day(s) do you want to be reminded?</div>
               <ReactDayPicker handleUpdate={this.handleDays} resetDays="monthly" />
@@ -119,7 +125,7 @@ class CreateSubscription extends React.Component {
           <div>
             <label htmlFor="occurence">
               How many weeks in between do you want to be reminded?
-              <select id="occurence" placeholder="ex: Every 2 weeks" onChange={(event) => this.handleChange(event, 'occurence')}>
+              <select id="occurence" placeholder="ex: Every 2 weeks" onChange={(event) => this.handleChange(event, 'occurence')} required >
                 <option value="1">Every Week</option>
                 <option value="2">Every 2 Weeks</option>
                 <option value="3">Every 3 Weeks</option>
@@ -134,7 +140,7 @@ class CreateSubscription extends React.Component {
         return (
           <label htmlFor="occurence">
             Every:
-            <input type="number" id="occurence" value={occurence} onChange={(event) => this.handleChange(event, 'occurence')} />
+            <input type="number" id="occurence" value={occurence} onChange={(event) => this.handleChange(event, 'occurence')} required />
           </label>
         );
       default:
@@ -167,7 +173,7 @@ class CreateSubscription extends React.Component {
 
           <label htmlFor="due-date-select">
             Repeat:
-            <select onChange={(event) => this.handleChange(event, 'frequency')} id="due-date-select">
+            <select onChange={(event) => this.handleChange(event, 'frequency')} id="due-date-select" required >
               <option value="" defaultValue>--Please Choose an Option--</option>
               <option value="yearly">Yearly</option>
               <option value="monthly">Monthly</option>
