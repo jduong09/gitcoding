@@ -3,7 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import SubscriptionsList from '../subscription/subscriptionsList';
 
-const href = process.env.NODE_ENV === 'production' ? '/auth/logout' : 'http://localhost:5000/auth/logout';
+const href = process && process.env && process.env.NODE_ENV === 'production'
+  ? '/auth/logout'
+  : 'http://localhost:5000/auth/logout';
 
 class Dashboard extends React.Component {
   constructor() {

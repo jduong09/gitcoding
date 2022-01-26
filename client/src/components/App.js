@@ -6,12 +6,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import '../css/App.css';
 import User from './user/user';
 import LandingPage from './landingPage';
+import NotFound from './notFound';
 
-const App = () =>  (
+const App = () => (
   <div className="App">
     <Routes>
       <Route exact path='/' element={<LandingPage />} />
       <Route path='/users/:userId' element={<User />} />
+      <Route path='/*' element={<NotFound />} />
     </Routes>
     <ToastContainer />
   </div>
