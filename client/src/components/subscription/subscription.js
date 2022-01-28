@@ -3,7 +3,6 @@ import React from 'react';
 const Subscription = ({ details, handleEdit, handleDelete }) => {
   const { name, nickname, dueDate, reminderDays, amount } = details;
 
-  // const datesList = dueDate.dates.map((day) => )
   return (
     <ul className="subscription-details card d-flex flex-column align-items-start p-3">
       <li><strong>Name:</strong> {name}</li>

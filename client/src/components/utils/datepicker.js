@@ -29,7 +29,7 @@ const ReactDayPicker = ({ handleUpdate, disabledDays, resetDays, updating }) => 
   };
 
   return (
-      <DayPicker onDayClick={handleDayClick} selectedDays={days} hideOnDayClick={false} disabledDays={disabledDays} />
+    <DayPicker onDayClick={handleDayClick} selectedDays={days} hideOnDayClick={false} disabledDays={disabledDays} />
   );
 };
 

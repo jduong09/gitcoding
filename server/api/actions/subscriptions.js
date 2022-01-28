@@ -2,7 +2,6 @@ const db = require('../../db/db');
 
 const getSubscriptionsByUserId = async (userId) => {
   const { rows: data } = await db.execute('server/sql/subscriptions/getSubscriptionsByUserId.sql', {userId});
-  // returns all user's subscriptions (array containing objects of subscription)
   return data;
 };
 
