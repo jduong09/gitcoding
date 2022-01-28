@@ -44,7 +44,7 @@ class UpdateSubscription extends React.Component {
   }
 
   async handleSubmit(event) {
-    const { prevSubscription } = this.props;
+    const { showSubscriptionList, prevSubscription } = this.props;
     const updatedSubscriptionForm = this.state;
     event.preventDefault();
 
@@ -64,6 +64,7 @@ class UpdateSubscription extends React.Component {
     };
 
     this.handleSubscriptions();
+    showSubscriptionList();
   }
 
   render() {

@@ -35,7 +35,7 @@ class CreateSubscription extends React.Component {
   }
 
   async handleSubmit(event) {
-    const { toggleLoadingState } = this.props;
+    const { showSubscriptionList, toggleLoadingState } = this.props;
     event.preventDefault();
     toggleLoadingState();
 
@@ -58,7 +58,7 @@ class CreateSubscription extends React.Component {
     toast.success('Successfully created subscription!');
 
     this.handleSubscriptions(response);
-    this.setState({ name: '', nickname: '', dueDate: todaysDate, reminderDays: 0, amount: 0 });
+    showSubscriptionList();
   }
 
   render() {

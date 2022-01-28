@@ -18,6 +18,7 @@ class SubscriptionsList extends React.Component {
     };
 
     this.handleDelete = this.handleDelete.bind(this);
+    this.showSubscriptionList = this.showSubscriptionList.bind(this);
     this.toggleLoadingState = this.toggleLoadingState.bind(this);
   }
 
@@ -67,6 +68,10 @@ class SubscriptionsList extends React.Component {
     this.setState({ subscriptions: updatedSubscriptionsList });
   }
 
+  showSubscriptionList() {
+    this.setState({ addingSubscription: false, editingSubscription: null });
+  }
+
   toggleLoadingState() {
     const { loading } = this.state;
     if (loading) {
@@ -97,7 +102,12 @@ class SubscriptionsList extends React.Component {
           }
           {editingSubscription === subscriptionUuid && 
             <div className="card p-3 m-2 d-flex flex-wrap">
-              <UpdateSubscription updateSubscription={this.handleUpdate} toggleLoadingState={this.toggleLoadingState} currentSubscriptions={subscriptions} prevSubscription={subscription} />
+              <UpdateSubscription
+                updateSubscription={this.handleUpdate}
+                showSubscriptionList={this.showSubscriptionList}
+                toggleLoadingState={this.toggleLoadingState}
+                currentSubscriptions={subscriptions}
+                prevSubscription={subscription} />
               <button onClick={() => this.setState({ editingSubscription: null })} className="btn btn-link my-2" type="button">Cancel</button>
             </div>
             }
@@ -105,9 +115,12 @@ class SubscriptionsList extends React.Component {
       );
     });
 
-    const addSubScriptionTemplates = addingSubscription
+    const addSubscriptionTemplates = addingSubscription
       ? <div className="card p-3 m-2 d-flex flex-column">
-          <CreateSubscription addSubscription={this.handleUpdate} toggleLoadingState={this.toggleLoadingState} currentSubscriptions={subscriptions} />
+          <CreateSubscription addSubscription={this.handleUpdate}
+            toggleLoadingState={this.toggleLoadingState}
+            showSubscriptionList={this.showSubscriptionList}
+            currentSubscriptions={subscriptions} />
           <button onClick={() => this.setState({ addingSubscription: !addingSubscription })} className="btn btn-link my-2" type="button">Cancel</button>
         </div>
       : <button onClick={() => this.setState({ addingSubscription: !addingSubscription, editingSubscription: null })} className="btn btn-primary my-2" type="button">Add New Subscription</button>;
@@ -123,7 +136,7 @@ class SubscriptionsList extends React.Component {
               <div className="d-flex flex-wrap">
                 {!addingSubscription && subscriptionsList}
               </div>
-              {!editingSubscription && addSubScriptionTemplates}
+              {!editingSubscription && addSubscriptionTemplates}
             </div>
         }
       </section>
