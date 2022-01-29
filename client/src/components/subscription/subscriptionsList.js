@@ -117,7 +117,8 @@ class SubscriptionsList extends React.Component {
 
     const addSubscriptionTemplates = addingSubscription
       ? <div className="card p-3 m-2 d-flex flex-column">
-          <CreateSubscription addSubscription={this.handleUpdate}
+          <CreateSubscription 
+            addSubscription={this.handleUpdate}
             toggleLoadingState={this.toggleLoadingState}
             showSubscriptionList={this.showSubscriptionList}
             currentSubscriptions={subscriptions} />
