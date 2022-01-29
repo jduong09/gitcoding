@@ -1,5 +1,7 @@
 import React from 'react';
 import { toast } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import Subscription from './subscription';
 import UpdateSubscription from './updateSubscription';
 import CreateSubscription from './createSubscription';
@@ -9,12 +11,15 @@ class SubscriptionsList extends React.Component {
     super();
 
     this.state = {
+      loading: true,
       subscriptions: [],
       addingSubscription: false,
       editingSubscription: null,
     };
 
     this.handleDelete = this.handleDelete.bind(this);
+    this.showSubscriptionList = this.showSubscriptionList.bind(this);
+    this.toggleLoadingState = this.toggleLoadingState.bind(this);
   }
 
   async componentDidMount() {
@@ -31,7 +36,9 @@ class SubscriptionsList extends React.Component {
     }
 
     const response = await allSubscriptions.json();
-    this.setState({ subscriptions: response });
+    setTimeout(() => {
+      this.setState({ subscriptions: response, loading: false });
+    }, 1000); // This is probably not necessary but in local provides perceived loading since the DB calls are instant
   }
 
   handleUpdate = (newSubscriptionsList) => {
@@ -39,12 +46,14 @@ class SubscriptionsList extends React.Component {
   }
 
   handleDelete = async (subscriptionUuid) => {
+    this.toggleLoadingState();
     const deleteSubscription = await fetch(`${window.location.pathname}/subscriptions/${subscriptionUuid}`, {
         method: 'DELETE'
     });
 
     const { status } = deleteSubscription;
     const response = await deleteSubscription.json();
+    this.toggleLoadingState();
     if (status === 400) {
       const { errorMessage } = response;
       toast.error(errorMessage);
@@ -57,10 +66,26 @@ class SubscriptionsList extends React.Component {
     const updatedSubscriptionsList = await subscriptions.filter(subscription => subscription.subscriptionUuid !== subscriptionUuid);
 
     this.setState({ subscriptions: updatedSubscriptionsList });
-  } 
-  
+  }
+
+  showSubscriptionList() {
+    this.setState({ addingSubscription: false, editingSubscription: null });
+  }
+
+  toggleLoadingState() {
+    const { loading } = this.state;
+    if (loading) {
+      setTimeout(() => {
+        this.setState({ loading: false });
+      }, 1000); // Perceived loading to avoid the "jumpiness" of immediate fetch requsts
+    } else {
+      this.setState({ loading: true });
+    }
+  };
+
   render() {
     const {
+      loading,
       subscriptions,
       addingSubscription,
       editingSubscription
@@ -72,12 +97,17 @@ class SubscriptionsList extends React.Component {
         <div key={subscriptionUuid} className="m-2">
           {!editingSubscription &&
             <div className="d-flex align-items-center flex-wrap">
-              <Subscription details={subscription} handleEdit={() => this.setState({ editingSubscription: subscriptionUuid})} handleDelete={() => this.handleDelete(subscriptionUuid)} />
+              <Subscription details={subscription} handleEdit={() => this.setState({ editingSubscription: subscriptionUuid, addingSubscription: false })} handleDelete={() => this.handleDelete(subscriptionUuid)} />
             </div>
           }
           {editingSubscription === subscriptionUuid && 
             <div className="card p-3 m-2 d-flex flex-wrap">
-              <UpdateSubscription updateSubscription={this.handleUpdate} currentSubscriptions={subscriptions} prevSubscription={subscription} />
+              <UpdateSubscription
+                updateSubscription={this.handleUpdate}
+                showSubscriptionList={this.showSubscriptionList}
+                toggleLoadingState={this.toggleLoadingState}
+                currentSubscriptions={subscriptions}
+                prevSubscription={subscription} />
               <button onClick={() => this.setState({ editingSubscription: null })} className="btn btn-link my-2" type="button">Cancel</button>
             </div>
             }
@@ -85,16 +115,30 @@ class SubscriptionsList extends React.Component {
       );
     });
 
+    const addSubscriptionTemplates = addingSubscription
+      ? <div className="card p-3 m-2 d-flex flex-column">
+          <CreateSubscription 
+            addSubscription={this.handleUpdate}
+            toggleLoadingState={this.toggleLoadingState}
+            showSubscriptionList={this.showSubscriptionList}
+            currentSubscriptions={subscriptions} />
+          <button onClick={() => this.setState({ addingSubscription: !addingSubscription })} className="btn btn-link my-2" type="button">Cancel</button>
+        </div>
+      : <button onClick={() => this.setState({ addingSubscription: !addingSubscription, editingSubscription: null })} className="btn btn-primary my-2" type="button">Add New Subscription</button>;
+
     return (
       <section className="subscription-list p-3">
-        <div className="d-flex flex-wrap">{subscriptionsList}</div>
-        {
-          addingSubscription
-            ? <div className="card p-3 m-2 d-flex flex-column">
-                <CreateSubscription addSubscription={this.handleUpdate} currentSubscriptions={subscriptions} />
-                <button onClick={() => this.setState({ addingSubscription: !addingSubscription })} className="btn btn-link my-2" type="button">Cancel</button>
+        {loading
+          ? <div className="d-flex flex-column justify-content-center align-items-center fs-1">
+            <FontAwesomeIcon icon={faSpinner} className="mb-2 spin" />
+            Loading...
+            </div>
+          : <div>
+              <div className="d-flex flex-wrap">
+                {!addingSubscription && subscriptionsList}
               </div>
-            : <button onClick={() => this.setState({ addingSubscription: !addingSubscription })} className="btn btn-primary my-2" type="button">Add New Subscription</button>
+              {!editingSubscription && addSubscriptionTemplates}
+            </div>
         }
       </section>
     );

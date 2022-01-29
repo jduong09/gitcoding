@@ -19,12 +19,14 @@ class UpdateSubscription extends React.Component {
   }
 
   async handleSubscriptions() {
-    const { updateSubscription } = this.props;
+    const { updateSubscription, toggleLoadingState } = this.props;
+    toggleLoadingState();
 
     const newSubscriptionList = await fetch(`${window.location.pathname}/subscriptions`);
     
     const { status } = newSubscriptionList;
     const response = await newSubscriptionList.json();
+    toggleLoadingState();
     if (status === 400) {
       toast.error('Error: Error fetching your updated subscription!');
       return;
@@ -42,7 +44,7 @@ class UpdateSubscription extends React.Component {
   }
 
   async handleSubmit(event) {
-    const { prevSubscription } = this.props;
+    const { showSubscriptionList, prevSubscription } = this.props;
     const updatedSubscriptionForm = this.state;
     event.preventDefault();
 
@@ -62,40 +64,44 @@ class UpdateSubscription extends React.Component {
     };
 
     this.handleSubscriptions();
+    showSubscriptionList();
   }
 
   render() {
     const { name, nickname, dueDate, reminderDays, amount } = this.state;
 
     return (
-      <form onSubmit={this.handleSubmit}>
-          <label htmlFor="subscription-name">
+      <div>
+        <h4 className="mb-4">Editing Subscription</h4>
+        <form onSubmit={this.handleSubmit} className="d-flex flex-column align-items-start">
+          <label className="w-100 mb-2 d-flex flex-row justify-content-between align-items-center" htmlFor="subscription-name">
             Name:
             <input type="text" name="subscription-name" value={name} onChange={(event) => this.handleChange(event, 'name')}  />
           </label>
 
-          <label htmlFor="subscription-nickname">
+          <label className="w-100 mb-2 d-flex flex-row justify-content-between align-items-center" htmlFor="subscription-nickname">
             Nickname:
             <input type="text" name="subscription-nickname" value={nickname} onChange={(event) => this.handleChange(event, 'nickname')}  /> 
           </label>
 
-          <label htmlFor="subscription-due-date">
+          <label className="w-100 mb-2 d-flex flex-row justify-content-between align-items-center" htmlFor="subscription-due-date">
             Due Date: 
             <input type="date" name="subscription-due-date" value={dueDate} onChange={(event) => this.handleChange(event, 'dueDate')} />
           </label>
 
-          <label htmlFor="subscription-reminder-days">
+          <label className="w-100 mb-2 d-flex flex-row justify-content-between align-items-center" htmlFor="subscription-reminder-days">
             Reminder Days: 
             <input type="number" name="subscription-reminder-days" min="0" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} />
           </label>
 
-          <label htmlFor="subscription-amount">
+          <label className="w-100 mb-2 d-flex flex-row justify-content-between align-items-center" htmlFor="subscription-amount">
             Amount: 
             <input type="number" name="subscription-amount" min="0" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} />
           </label>
 
-          <input type="submit" value="Submit" />
+          <input type="submit" value="Submit" className="btn btn-primary w-100" />
         </form>
+      </div>
     );
   }
 };

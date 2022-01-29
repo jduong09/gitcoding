@@ -35,7 +35,9 @@ class CreateSubscription extends React.Component {
   }
 
   async handleSubmit(event) {
+    const { showSubscriptionList, toggleLoadingState } = this.props;
     event.preventDefault();
+    toggleLoadingState();
 
     const subscriptionInfo  = this.state;
 
@@ -47,6 +49,7 @@ class CreateSubscription extends React.Component {
 
     const { status } = subscription;
     const response = await subscription.json();
+    toggleLoadingState();
     if (status === 400) {
       const { errorMessage } = response;
       toast.error(errorMessage);
@@ -55,7 +58,7 @@ class CreateSubscription extends React.Component {
     toast.success('Successfully created subscription!');
 
     this.handleSubscriptions(response);
-    this.setState({ name: '', nickname: '', dueDate: todaysDate, reminderDays: 0, amount: 0 });
+    showSubscriptionList();
   }
 
   render() {
