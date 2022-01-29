@@ -15,7 +15,7 @@ const UpdateSubscription = ({ updateSubscription, prevSubscription }) => {
     }
 
     updateSubscription(response);
-    toast.success('Successfully updated your subscription!');
+    toast.success('Successfully updated subscription!');
   };
 
   return (
