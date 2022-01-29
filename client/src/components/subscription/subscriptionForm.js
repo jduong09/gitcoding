@@ -101,11 +101,9 @@ class SubscriptionForm extends React.Component {
 
     handleSubscriptions(response);
     showSubscriptionList();
-    /*
     if (method === 'PUT') {
       this.setState({ name: '', nickname: '', reminderDays: 0, amount: 0, frequency: '', occurence: 0, days: [] });
     }
-    */
   }
 
   handleDays(days) {

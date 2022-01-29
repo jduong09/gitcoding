@@ -2,16 +2,30 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import SubscriptionForm from './subscriptionForm';
 
-const CreateSubscription = ({ addSubscription, currentSubscriptions, showSubscriptionList, toggleLoadingState }) => {
-  const handleSubscriptions = async (subscription) => {
+class CreateSubscription extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleSubscriptions = this.handleSubscriptions.bind(this);
+  }
+
+  async handleSubscriptions(subscription) {
+    const { addSubscription, currentSubscriptions } = this.props;
     const newSubscriptionList = [ ...currentSubscriptions, subscription];
     addSubscription(newSubscriptionList);
     toast.success('Successfully created subscription!');
-  };
+  }
 
-  return (
-    <SubscriptionForm method="PUT" handleSubscriptions={handleSubscriptions} showSubscriptionList={showSubscriptionList} toggleLoadingState={toggleLoadingState} />
-  );
+  render() {
+    const { toggleLoadingState, showSubscriptionList } = this.props;
+    return (
+      <SubscriptionForm 
+        method="PUT"
+        toggleLoadingState={toggleLoadingState}
+        showSubscriptionList={showSubscriptionList}
+        handleSubscriptions={this.handleSubscriptions} />
+    );
+  }
 };
 
 export default CreateSubscription;
