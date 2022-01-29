@@ -6,17 +6,17 @@ const Subscription = ({ details, handleEdit, handleDelete }) => {
   const repeatString = parseDueDate(dueDate);
 
   return (
-    <ul className="subscription-details card d-flex flex-column align-items-start p-3">
-      <li><strong>Name:</strong> {name}</li>
-      <li><strong>Nickname:</strong> {nickname}</li>
-      <li><strong>Reminder Days:</strong> {reminderDays}</li>
-      <li><strong>Repeat:</strong> {repeatString}</li>
-      <li><strong>Amount:</strong> ${amount/100}</li>
+    <div className="subscription-details card d-flex flex-column align-items-start p-3">
+      <p><strong>Name:</strong> {name}</p>
+      <p><strong>Nickname:</strong> {nickname}</p>
+      <p><strong>Repeat</strong> {repeatString}</p>
+      <p><strong>Reminder Days:</strong> {reminderDays}</p>
+      <p><strong>Amount:</strong> ${amount/100}</p>
       <div className="d-flex justify-content-between w-100">
         <button onClick={handleEdit} className="btn btn-link p-0" type="button">Edit</button>
         <button onClick={handleDelete} className="btn btn-link p-0 text-danger" type="button">Delete</button>
       </div>
-    </ul>
+    </div>
   );
 };
 

@@ -64,9 +64,10 @@ class SubscriptionForm extends React.Component {
 
   // Need to set occurence to 1 if user updates their dueDate column to yearly.
   async handleSubmit(event) {
-    event.preventDefault();
-    const { method, handleSubscriptions } = this.props;
+    const { method, handleSubscriptions, showSubscriptionList, toggleLoadingState } = this.props;
     const { name, nickname, reminderDays, amount, frequency, occurence, days }  = this.state;
+    event.preventDefault();
+    toggleLoadingState();
 
     if (frequency !== 'daily' && days.length === 0) {
       toast.error('Failed to Submit: Dates not selected for reminder.');
@@ -91,6 +92,7 @@ class SubscriptionForm extends React.Component {
 
     const { status } = subscription;
     const response = await subscription.json();
+    toggleLoadingState();
     if (status === 400) {
       const { errorMessage } = response;
       toast.error(errorMessage);
@@ -98,9 +100,12 @@ class SubscriptionForm extends React.Component {
     }
 
     handleSubscriptions(response);
+    showSubscriptionList();
+    /*
     if (method === 'PUT') {
       this.setState({ name: '', nickname: '', reminderDays: 0, amount: 0, frequency: '', occurence: 0, days: [] });
     }
+    */
   }
 
   handleDays(days) {
