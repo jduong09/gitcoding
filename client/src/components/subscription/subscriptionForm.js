@@ -221,8 +221,6 @@ class SubscriptionForm extends React.Component {
 
           {this.renderSwitch(frequency)}
           
-          {/* Days List: {daysList} */ }
-          
           <label htmlFor="subscription-amount">
             Amount: 
             <input type="number" name="subscription-amount" min="0" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} required />
