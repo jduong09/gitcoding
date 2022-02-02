@@ -1,6 +1,7 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 import ReactDayPicker from '../utils/datepicker';
+import { addDays } from '../utils/date';
 
 function convertStringToDate(datesArray) {
   return datesArray.map((day) => new Date(day));   
@@ -111,7 +112,8 @@ class SubscriptionForm extends React.Component {
   }
 
   parseDueDate() {
-    const { frequency, days } = this.state;
+    const { frequency, occurence, days } = this.state;
+    const todaysDate = new Date();
     let parsedDay;
     switch (frequency) {
       case 'yearly':
@@ -124,7 +126,7 @@ class SubscriptionForm extends React.Component {
         parsedDay = days;
         break;
       case 'daily':
-        parsedDay = null;
+        parsedDay = [addDays(todaysDate, parseInt(occurence, 10)).toISOString()];
         break;
       default:
         break;

@@ -1,10 +1,16 @@
 import { DateUtils } from 'react-day-picker';
 
-const displayDueDate = ({ frequency, occurence, dates }) => {
+export const addDays = (date, days) => {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+};
+
+export const displayDueDate = ({ frequency, occurence, dates }) => {
   const todaysDate = new Date();
   const firstDate = new Date(dates[0]);
-  let nearestDueDate = firstDate;
-  let dueDateString = '';
+  let nearestDueDate;
+  let dueDateString;
   // Yearly: If date is before current date, then we set due date to following year.
   // If date is after current date, then we set due date to given date.
   if (frequency === 'yearly') {
@@ -29,8 +35,8 @@ const displayDueDate = ({ frequency, occurence, dates }) => {
       : `${DateUtils.addMonths(nearestDueDate, 12).toLocaleDateString()}, Yearly`;
   } else if (frequency === 'monthly') {
     for (let i = 0; i < dates.length; i += 1) {
+      nearestDueDate = firstDate;
       const dateObject = new Date(dates[i]);
-
       if (DateUtils.isSameDay(todaysDate, dateObject)) {
         nearestDueDate = todaysDate;
         break;
@@ -47,7 +53,39 @@ const displayDueDate = ({ frequency, occurence, dates }) => {
       ? `${DateUtils.addMonths(nearestDueDate, parseInt(occurence, 10)).toLocaleDateString()}, Monthly`
       : `${nearestDueDate.toLocaleDateString()}, Monthly`;
   } else if (frequency === 'weekly') {
-    console.log(todaysDate.getDay());
+    nearestDueDate = addDays(todaysDate, 7);
+    const todaysWeeklyDay = todaysDate.getDay();
+    let differenceBetweenDays;
+    for (let i = 0; i < dates.length; i += 1) {
+      if (todaysWeeklyDay === parseInt(dates[i], 10)) {
+        nearestDueDate = todaysDate;
+        break;
+      }
+
+      if (todaysWeeklyDay > dates[i]) {
+        differenceBetweenDays = (occurence * 7) - todaysWeeklyDay - dates[i];
+        nearestDueDate = addDays(todaysDate, differenceBetweenDays);
+      } else if (todaysWeeklyDay < dates[i]) {
+        differenceBetweenDays = dates[i] - todaysWeeklyDay;
+        console.log(differenceBetweenDays);
+        const calculateDay = addDays(todaysDate, differenceBetweenDays);
+        if (calculateDay < nearestDueDate) {
+          nearestDueDate = calculateDay;
+        }
+      }
+    }
+    dueDateString = `${nearestDueDate.toLocaleDateString()}, Weekly`;
+  } else if (frequency === 'daily') {
+    const currentDueDate = firstDate;
+    if (DateUtils.isSameDay(todaysDate, currentDueDate)) {
+      nearestDueDate = todaysDate;
+    } else if (todaysDate < currentDueDate) {
+      nearestDueDate = currentDueDate;
+    } else {
+      nearestDueDate = addDays(currentDueDate, parseInt(occurence, 10));
+    }
+
+    dueDateString = `${nearestDueDate.toLocaleDateString()}, Daily`;
   }
   return dueDateString;
 
@@ -59,5 +97,3 @@ const displayDueDate = ({ frequency, occurence, dates }) => {
 
   // Daily: Add how many days to current date. Set dueDate.
 };
-
-export default displayDueDate;

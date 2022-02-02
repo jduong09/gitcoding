@@ -1,5 +1,5 @@
 import React from 'react';
-import displayDueDate from '../utils/date';
+import { displayDueDate } from '../utils/date';
 
 const Subscription = ({ details, handleEdit, handleDelete }) => {
   const { name, nickname, dueDate, reminderDays, amount } = details;
