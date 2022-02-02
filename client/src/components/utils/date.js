@@ -1,56 +1,55 @@
-const concatenateDates = (dates) => {
-  const string = dates.reduce((previousValue, currentValue, currentIndex) => {
-    if (currentIndex === 0) {
-      return `${previousValue} ${currentValue.substring(0, 10)}`;
-    }
-    if (currentIndex === (dates.length - 1)) {
-      return `${previousValue}, and ${currentValue.substring(0, 10)}`;
-    }
-    return `${previousValue}, ${currentValue.substring(0, 10)}`;
-  }, '');
+import { DateUtils } from 'react-day-picker';
 
-  return string;
-};
+const displayDueDate = ({ frequency, occurence, dates }) => {
+  const todaysDate = new Date();
+  const firstDate = new Date(dates[0]);
+  let nearestDueDate = firstDate < todaysDate ?  DateUtils.addMonths(firstDate, 12) : firstDate;
+  let dueDateString = '';
 
-const concatenateWeekDays = (dates) => {
-  const weekdays = {
-    0: 'Sunday',
-    1: 'Monday',
-    2: 'Tuesday',
-    3: 'Wednesday',
-    4: 'Thursday',
-    5: 'Friday', 
-    6: 'Saturday', 
-  };
+  // Yearly: If date is before current date, then we set due date to following year.
+  // If date is after current date, then we set due date to given date.
+  if (frequency === 'yearly') {
+    // if date is after current date, then we set dueDate to given date.
+    dates.map((date) => {
+      const dateObject = new Date(date);
+      if (dateObject > todaysDate) {
+        if (dateObject < nearestDueDate) {
+          nearestDueDate = new Date(date);
+        } 
+      };
+      return nearestDueDate;
+    });
 
-  const string = dates.reduce((previousValue, currentValue, currentIndex) => {
-    if (currentIndex === (dates.length - 1)) {
-      return `${weekdays[previousValue]}, and ${weekdays[currentValue]}`;
-    }
-    return `${weekdays[previousValue]}, ${weekdays[currentValue]}`;
-  });
-  return string;
-};
+    dueDateString = (nearestDueDate > todaysDate) 
+      ? `${nearestDueDate.toLocaleDateString()}, Yearly` 
+      : `${DateUtils.addMonths(nearestDueDate, 12).toLocaleDateString()}, Yearly`;
+  } else if (frequency === 'monthly') {
+    dates.map((date) => {
+      const dateObject = new Date(date);
 
-const parseDueDate = ({ frequency, occurence, dates }) => {
-  let dueDateString;
-  switch (frequency) {
-    case 'yearly':
-      dueDateString = `Every year on ${concatenateDates(dates)}.`;
-      break;
-    case 'monthly':
-      dueDateString = `Every ${occurence} months on ${concatenateDates(dates)}.`;
-      break;
-    case 'weekly':
-      dueDateString = `Every ${occurence} weeks on ${concatenateWeekDays(dates)}.`;
-      break;
-    case 'daily':
-      dueDateString = `Every ${occurence} days.`;
-      break;
-    default:
-      break;
+      
+      if (dateObject > todaysDate) {
+        if (dateObject < nearestDueDate) {
+          nearestDueDate = new Date(date);
+        }
+      };
+      return nearestDueDate;
+    });
+
+    // if occurence is greater than 1, we need to set reminder for the current month as well.
+    dueDateString = (occurence > 1) 
+      ? `${DateUtils.addMonths(nearestDueDate, parseInt(occurence, 10)).toLocaleDateString()}, Monthly`
+      : `${nearestDueDate.toLocaleDateString()}, Monthly`;
   }
   return dueDateString;
+
+  // Monthly: If there is only one date, such as every 15th of the month.
+  // We want to look at occurence, and then determine which month, and then set date.
+  // If there is more than one date, we need to find the nearest date and set that as the dueDate.
+
+  // Weekly: Find nearest date. Similar to Monthly 
+
+  // Daily: Add how many days to current date. Set dueDate.
 };
 
-export default parseDueDate;
+export default displayDueDate;

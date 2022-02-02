@@ -1,15 +1,15 @@
 import React from 'react';
-import parseDueDate from '../utils/date';
+import displayDueDate from '../utils/date';
 
 const Subscription = ({ details, handleEdit, handleDelete }) => {
   const { name, nickname, dueDate, reminderDays, amount } = details;
-  const repeatString = parseDueDate(dueDate);
+  const repeatString = displayDueDate(dueDate);
 
   return (
     <div className="subscription-details card d-flex flex-column align-items-start p-3">
       <p><strong>Name:</strong> {name}</p>
       <p><strong>Nickname:</strong> {nickname}</p>
-      <p><strong>Repeat</strong> {repeatString}</p>
+      <p><strong>Due Date:</strong> {repeatString}</p>
       <p><strong>Reminder Days:</strong> {reminderDays}</p>
       <p><strong>Amount:</strong> ${amount/100}</p>
       <div className="d-flex justify-content-between w-100">

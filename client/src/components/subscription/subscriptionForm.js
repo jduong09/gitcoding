@@ -156,8 +156,8 @@ class SubscriptionForm extends React.Component {
                 Every (?) Months:
                 <input type="number" id="occurence" value={occurence} onChange={(event) => this.handleChange(event, 'occurence')} min="0" max="12" />
               </label>
-              <div>On What day(s) do you want to be reminded?</div>
-              <ReactDayPicker handleUpdate={this.handleDays} resetDays="monthly" updating={days} />
+              <div>On which day(s) do you want to be reminded?</div>
+              <ReactDayPicker handleUpdate={this.handleDays} resetDays="monthly" updating={days} canChangeMonth={false} />
           </div>
         );
       case 'weekly':
