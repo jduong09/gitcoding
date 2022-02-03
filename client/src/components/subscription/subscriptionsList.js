@@ -5,6 +5,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import Subscription from './subscription';
 import UpdateSubscription from './updateSubscription';
 import CreateSubscription from './createSubscription';
+import { updateNextDueDate } from '../utils/date';
 
 class SubscriptionsList extends React.Component {
   constructor() {
@@ -34,8 +35,13 @@ class SubscriptionsList extends React.Component {
       toast.error('Error: Error getting your subscriptions!');
       return;
     }
-
+    // Here we gather all the user's subscriptions.
     const response = await allSubscriptions.json();
+    // With our array of subscriptions, iterate over them and check their due dates for updates?
+    response.map(async (subscription) => {
+      await updateNextDueDate(subscription.dueDate, subscription.subscriptionUuid);
+      return 'hi';
+    });
     setTimeout(() => {
       this.setState({ subscriptions: response, loading: false });
     }, 1000); // This is probably not necessary but in local provides perceived loading since the DB calls are instant

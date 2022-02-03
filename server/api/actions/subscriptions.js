@@ -30,6 +30,12 @@ const updateSubscriptionBySubscriptionId = async (subscriptionInfo) => {
   return data;
 }
 
+
+const updateDatesForSubscription = async (requestBody) => {
+  const { rows: data } = await db.execute('server/sql/subscriptions/updateSubscriptionDueDate.sql', requestBody);
+  return data;
+}
+
 const deleteSubscriptionBySubscriptionId = async (subscription_uuid) => {
   const { rows: data } = await db.execute('server/sql/subscriptions/deleteSubscription.sql', { subscription_uuid });
   return data;
@@ -39,5 +45,6 @@ module.exports = {
   getSubscriptionsByUserId,
   createSubscription,
   updateSubscriptionBySubscriptionId,
-  deleteSubscriptionBySubscriptionId
+  deleteSubscriptionBySubscriptionId,
+  updateDatesForSubscription
 };

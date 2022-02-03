@@ -4,6 +4,7 @@ const {
   getSubscriptionsByUserId,
   updateSubscriptionBySubscriptionId,
   deleteSubscriptionBySubscriptionId,
+  updateDatesForSubscription
 } = require('../actions/subscriptions');
 const { confirmUser } = require('./middleware');
 
@@ -38,6 +39,21 @@ router.route('/')
       res.status(400).json({ errorMessage: 'Error updating subscription! Try again!' });
     }
   });
+
+/** 
+ * function to run sql query, that will update all subscriptions? 
+
+*/
+router.patch('/:subscriptionUuid', async (req, res) => {
+  const { subscriptionUuid } = req.params;
+  req.body.subscriptionUuid = subscriptionUuid;
+  try {
+    await updateDatesForSubscription(req.body);
+    res.status(200).json('Successfully updated due dates!');
+  } catch(error) {
+    res.status(400).json({ errorMessage: 'Error updating subscriptions!' });
+  }
+});
 
 router.delete('/:subscriptionUuid', async (req, res) => {
   try {
