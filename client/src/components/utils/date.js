@@ -1,5 +1,6 @@
 import { DateUtils } from 'react-day-picker';
 
+// Need to scrap the previosu dates with the new dates! 
 export const addDays = (date, days) => {
   const result = new Date(date);
   result.setDate(result.getDate() + days);
@@ -34,8 +35,8 @@ export const displayDueDate = ({ frequency, occurence, dates }) => {
       ? `${nearestDueDate.toLocaleDateString()}, Yearly` 
       : `${DateUtils.addMonths(nearestDueDate, 12).toLocaleDateString()}, Yearly`;
   } else if (frequency === 'monthly') {
+    nearestDueDate = firstDate;
     for (let i = 0; i < dates.length; i += 1) {
-      nearestDueDate = firstDate;
       const dateObject = new Date(dates[i]);
       if (DateUtils.isSameDay(todaysDate, dateObject)) {
         nearestDueDate = todaysDate;
@@ -63,8 +64,11 @@ export const displayDueDate = ({ frequency, occurence, dates }) => {
       }
 
       if (todaysWeeklyDay > dates[i]) {
-        differenceBetweenDays = (occurence * 7) - todaysWeeklyDay - dates[i];
-        nearestDueDate = addDays(todaysDate, differenceBetweenDays);
+        differenceBetweenDays = (occurence * 7) - todaysWeeklyDay + parseInt(dates[i], 10);
+        const calculateDay = addDays(todaysDate, differenceBetweenDays);
+        if (calculateDay < nearestDueDate) {
+          nearestDueDate = calculateDay;
+        }
       } else if (todaysWeeklyDay < dates[i]) {
         differenceBetweenDays = dates[i] - todaysWeeklyDay;
         console.log(differenceBetweenDays);
@@ -103,7 +107,6 @@ export const displayDueDate = ({ frequency, occurence, dates }) => {
 // if user has viewed it, due date would be the next upcoming due date.
 export const updateNextDueDate = async (dueDate, subscriptionUuid) => {
   const { frequency, occurence, dates } = dueDate;
-  console.log(subscriptionUuid);
   // initialize today's date.
   const todaysDate = new Date();
   /**
@@ -150,30 +153,54 @@ export const updateNextDueDate = async (dueDate, subscriptionUuid) => {
       console.log('Error: ', error);
     }
   } else if (frequency === 'monthly') {
-    dates.map(async (day) => {
+    const nextDueDate = await dates.map((day) => {
       const date = new Date(day);
       if (date < todaysDate) {
-        const nextDueDate = DateUtils.addMonths(date, parseInt(occurence, 10)).toISOString();
-        const newDueDateObject = {
-          frequency,
-          occurence,
-          dates: [nextDueDate]
-        };
-
-        try {
-          await fetch(`${window.location.pathname}/subscriptions/${subscriptionUuid}`, {
-            method: 'PATCH',
-            headers: {
-              'Content-type': 'application/json'
-            },
-            body: JSON.stringify({
-              dueDate: newDueDateObject
-            })
-          });
-        } catch(error) {
-          console.log('Error: ', error);
-        }
+        return DateUtils.addMonths(date, parseInt(occurence, 10)).toISOString();
       }
+      return day;
     });
+
+    const newDueDateObject = {
+      frequency,
+      occurence,
+      dates: nextDueDate
+    };
+
+    try {
+      await fetch(`${window.location.pathname}/subscriptions/${subscriptionUuid}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          dueDate: newDueDateObject
+        })
+      });
+    } catch(error) {
+      console.log('Error: ', error);
+    }
+  } else if (frequency === 'daily') {
+    // dates will be a one item array.
+    let newDueDate = dates[0];
+    if (newDueDate < todaysDate) {
+      // alert them that their subscription has passed.
+      // set next due date.
+      newDueDate = addDays(newDueDate, occurence);
+
+      try {
+        await fetch(`${window.location.pathname}/subscriptions/${subscriptionUuid}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            dueDate: [newDueDate]
+          })
+        });
+      } catch(error) {
+        console.log('Error: ', error);
+      }
+    }
   }
 };
