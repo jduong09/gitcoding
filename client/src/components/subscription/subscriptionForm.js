@@ -146,7 +146,7 @@ class SubscriptionForm extends React.Component {
         return (
           <div>
             On what day do you want to be reminded?
-            <ReactDayPicker handleUpdate={this.handleDays} resetDays="yearly" updating={days} />
+            <ReactDayPicker handleUpdate={this.handleDays} />
           </div>
         );
       case 'monthly':
@@ -157,7 +157,7 @@ class SubscriptionForm extends React.Component {
                 <input type="number" id="occurence" value={occurence} onChange={(event) => this.handleChange(event, 'occurence')} min="0" max="12" />
               </label>
               <div>On which day(s) do you want to be reminded?</div>
-              <ReactDayPicker handleUpdate={this.handleDays} resetDays="monthly" updating={days} canChangeMonth={false} />
+              <ReactDayPicker handleUpdate={this.handleDays} canChangeMonth={false} />
           </div>
         );
       case 'weekly':
@@ -181,7 +181,7 @@ class SubscriptionForm extends React.Component {
           <label htmlFor="occurence">
             Every:
             <input type="number" id="occurence" value={occurence} onChange={(event) => this.handleChange(event, 'occurence')} />
-            <ReactDayPicker handleUpdate={this.handleDays} resetDays="daily" updating={days} canChangeMonth={false} />
+            <ReactDayPicker handleUpdate={this.handleDays} canChangeMonth={false} />
           </label>
         );
       default:
