@@ -1,10 +1,10 @@
 const express = require('express');
+const { updateNextDueDate } = require('../../utils/date');
 const {
   createSubscription,
   getSubscriptionsByUserId,
   updateSubscriptionBySubscriptionId,
   deleteSubscriptionBySubscriptionId,
-  updateDatesForSubscription
 } = require('../actions/subscriptions');
 const { confirmUser } = require('./middleware');
 
@@ -46,7 +46,6 @@ router.route('/')
 /** 
  * function to run sql query, that will update all subscriptions? 
 
-*/
 router.patch('/:subscriptionUuid', async (req, res) => {
   const { subscriptionUuid } = req.params;
   req.body.subscriptionUuid = subscriptionUuid;
@@ -57,6 +56,7 @@ router.patch('/:subscriptionUuid', async (req, res) => {
     res.status(400).json({ errorMessage: 'Error updating subscriptions!' });
   }
 });
+*/
 
 router.delete('/:subscriptionUuid', async (req, res) => {
   try {
@@ -64,6 +64,23 @@ router.delete('/:subscriptionUuid', async (req, res) => {
     res.status(200).json('Successfully deleted subscription!');
   } catch(error) {
     res.status(400).json({ errorMessage: 'Error deleting subscription!' });
+  }
+});
+
+router.get('/update', async (req, res) => {
+  const { user_id } = req.session.userInfo;
+  try {
+    const allSubscriptions = await getSubscriptionsByUserId(user_id);
+
+    for (let i = 0; i < allSubscriptions.length; i += 1) {
+      const subscription = allSubscriptions[i];
+      updateNextDueDate(subscription.dueDate, subscription.subscriptionUuid);
+    }
+
+    res.status(200);
+    res.end();
+  } catch(error) {
+    console.log('Error: ', error);
   }
 });
 

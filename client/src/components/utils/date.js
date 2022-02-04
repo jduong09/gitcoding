@@ -1,4 +1,5 @@
 import { DateUtils } from 'react-day-picker';
+import { toast } from 'react-toastify';
 
 export const addDays = (date, days) => {
   const result = new Date(date);
@@ -19,7 +20,7 @@ export const displayDueDate = ({ frequency, occurence, dates }) => {
       // if dates contains today, dueDate is today.
       if (DateUtils.isSameDay(todaysDate, dateObject)) {
         nearestDueDate = todaysDate;
-        console.log('hit');
+        toast('Your subscription is due!');
         break;
       }
 
@@ -30,7 +31,7 @@ export const displayDueDate = ({ frequency, occurence, dates }) => {
       }
     }
 
-    dueDateString = (nearestDueDate > todaysDate) 
+    dueDateString = (nearestDueDate >= todaysDate) 
       ? `${nearestDueDate.toLocaleDateString()}, Yearly` 
       : `${DateUtils.addMonths(nearestDueDate, 12).toLocaleDateString()}, Yearly`;
   } else if (frequency === 'monthly') {
@@ -39,7 +40,7 @@ export const displayDueDate = ({ frequency, occurence, dates }) => {
       const dateObject = new Date(dates[i]);
       if (DateUtils.isSameDay(todaysDate, dateObject)) {
         nearestDueDate = todaysDate;
-        console.log('hit');
+        toast('Your subscription is due!');
         break;
       }
 
@@ -60,7 +61,7 @@ export const displayDueDate = ({ frequency, occurence, dates }) => {
     for (let i = 0; i < dates.length; i += 1) {
       if (todaysWeeklyDay === parseInt(dates[i], 10)) {
         nearestDueDate = todaysDate;
-        console.log('hit');
+        toast('Your subscription is due!');
         break;
       }
 
@@ -83,7 +84,7 @@ export const displayDueDate = ({ frequency, occurence, dates }) => {
     const currentDueDate = firstDate;
     if (DateUtils.isSameDay(todaysDate, currentDueDate)) {
       nearestDueDate = todaysDate;
-      console.log('hit');
+      toast('Your subscription is due!');
     } else if (todaysDate < currentDueDate) {
       nearestDueDate = currentDueDate;
     } else {
@@ -95,6 +96,7 @@ export const displayDueDate = ({ frequency, occurence, dates }) => {
   return dueDateString;
 };
 
+/*
 // due_date (jsonb) = { frequency: 'yearly', occurence: 1, dates: ['2022-2-3'], nextDueDate: ? };
 // viewed (boolean) = if user has not viewed it, due date would be the due date that was previously calculated.
 // if user has viewed it, due date would be the next upcoming due date. Viewed boolean would then be true.
@@ -171,12 +173,10 @@ export const updateNextDueDate = async (dueDate, subscriptionUuid) => {
     let newDueDate = dates[0];
     if (newDueDate < todaysDate) {
       // alert them that their subscription has passed.
-      /*
       if (!viewed) {
         toast.alert('Your due date for your subscription has passed!)
       }
       * Set the viewed to true.
-      */
       // set next due date.
       newDueDate = addDays(newDueDate, occurence);
 
@@ -196,3 +196,4 @@ export const updateNextDueDate = async (dueDate, subscriptionUuid) => {
     }
   }
 };
+*/
