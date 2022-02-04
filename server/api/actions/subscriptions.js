@@ -11,7 +11,7 @@ const createSubscription = async (requestBody) => {
       ...requestBody,
       occurence: parseInt(requestBody.occurence),
       reminderDays: parseInt(requestBody.reminderDays),
-      amount: requestBody.amount * 100
+      amount: Math.round((requestBody.amount * 100) * 100) / 100
     }
   );
   return data;
@@ -24,7 +24,7 @@ const updateSubscriptionBySubscriptionId = async (subscriptionInfo) => {
       occurence: parseInt(subscriptionInfo.occurence),
       removedAt: subscriptionInfo.removedAt || null,
       reminderDays: parseInt(subscriptionInfo.reminderDays),
-      amount: subscriptionInfo.amount * 100
+      amount: Math.round((subscriptionInfo.amount * 100) * 100) / 100
     }
   );
   return data;

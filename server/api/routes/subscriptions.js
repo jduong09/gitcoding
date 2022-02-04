@@ -26,14 +26,17 @@ router.route('/')
     req.body.userId = user_id;
     try {
       const data = await createSubscription(req.body);
+      console.log(data);
       res.status(200).json(data);
     } catch(error) {
       res.status(400).json({ errorMessage: 'Error creating subscription! Try again!' });
     }
   })
   .patch(async (req, res) => {
+    console.log(req.body);
     try {
       const data = await updateSubscriptionBySubscriptionId(req.body);
+      console.log(data);
       res.status(200).json(data);
     } catch(error) {
       res.status(400).json({ errorMessage: 'Error updating subscription! Try again!' });
