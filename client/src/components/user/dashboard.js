@@ -14,10 +14,7 @@ class Dashboard extends React.Component {
 
     this.state = { 
       successMessage: '',
-      subscriptionListChanged: false
     };
-
-    this.handleSubscriptionList = this.handleSubscriptionList.bind(this);
   }
 
   async componentDidMount() {
@@ -43,11 +40,6 @@ class Dashboard extends React.Component {
     }
   }
 
-  handleSubscriptionList() {
-    const { subscriptionListChanged } = this.state;
-    this.setState({ subscriptionListChanged: !subscriptionListChanged  });
-  }
-
   render() {
     const { successMessage } = this.state;
     return (
@@ -55,7 +47,7 @@ class Dashboard extends React.Component {
         <header>
           <h1>Hello this is the users dashboard page.</h1>
           <section className="subscription-list">
-            <SubscriptionsList handleSubscriptionList={this.handleSubscriptionList} />
+            <SubscriptionsList />
           </section>
           {successMessage}
           <a href={href}>
