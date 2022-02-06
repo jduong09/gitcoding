@@ -7,8 +7,8 @@ import UpdateSubscription from './updateSubscription';
 import CreateSubscription from './createSubscription';
 
 class SubscriptionsList extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       loading: true,
@@ -41,13 +41,6 @@ class SubscriptionsList extends React.Component {
     }, 1000); // This is probably not necessary but in local provides perceived loading since the DB calls are instant
   }
 
-  async componentDidUpdate(prevState) {
-    const { subscriptions } = this.state;
-    if (prevState.subscriptions !== subscriptions) {
-      await fetch(`${window.location.pathname}/subscriptions/update`);
-    }
-  }
-
   handleUpdate = (newSubscriptionsList) => {
     this.setState({ subscriptions: newSubscriptionsList });
   }
@@ -76,6 +69,8 @@ class SubscriptionsList extends React.Component {
   }
 
   showSubscriptionList() {
+    const { handleSubscriptionList } = this.props;
+    handleSubscriptionList();
     this.setState({ addingSubscription: false, editingSubscription: null });
   }
 

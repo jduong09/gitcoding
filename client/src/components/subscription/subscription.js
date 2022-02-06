@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { displayDueDate } from '../utils/date';
 
 const Subscription = ({ details, handleEdit, handleDelete }) => {
   const { name, nickname, dueDate, reminderDays, amount } = details;
-  const repeatString = displayDueDate(dueDate);
+
+  const [repeatString, setRepeatString] = useState('');
+
+  useEffect(() => {
+    const string = displayDueDate(dueDate, name);
+    setRepeatString(string);
+  }, [dueDate, name]);
+
 
   return (
     <div className="subscription-details card d-flex flex-column align-items-start p-3">

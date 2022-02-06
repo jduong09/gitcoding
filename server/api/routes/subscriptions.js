@@ -26,7 +26,6 @@ router.route('/')
     req.body.userId = user_id;
     try {
       const data = await createSubscription(req.body);
-      console.log(data);
       res.status(200).json(data);
     } catch(error) {
       res.status(400).json({ errorMessage: 'Error creating subscription! Try again!' });
@@ -36,27 +35,11 @@ router.route('/')
     console.log(req.body);
     try {
       const data = await updateSubscriptionBySubscriptionId(req.body);
-      console.log(data);
       res.status(200).json(data);
     } catch(error) {
       res.status(400).json({ errorMessage: 'Error updating subscription! Try again!' });
     }
   });
-
-/** 
- * function to run sql query, that will update all subscriptions? 
-
-router.patch('/:subscriptionUuid', async (req, res) => {
-  const { subscriptionUuid } = req.params;
-  req.body.subscriptionUuid = subscriptionUuid;
-  try {
-    await updateDatesForSubscription(req.body);
-    res.status(200).json('Successfully updated due dates!');
-  } catch(error) {
-    res.status(400).json({ errorMessage: 'Error updating subscriptions!' });
-  }
-});
-*/
 
 router.delete('/:subscriptionUuid', async (req, res) => {
   try {
@@ -67,17 +50,24 @@ router.delete('/:subscriptionUuid', async (req, res) => {
   }
 });
 
+// Grabs user's user id, fetches their subscriptions in the backend. 
+// It will then iterate through their subscriptions, and hopefully, store late due dates.
+// It will then also update late due dates to the next time it is due.
 router.get('/update', async (req, res) => {
   const { user_id } = req.session.userInfo;
+  const lateDueDates = [];
   try {
     const allSubscriptions = await getSubscriptionsByUserId(user_id);
-
     for (let i = 0; i < allSubscriptions.length; i += 1) {
       const subscription = allSubscriptions[i];
-      updateNextDueDate(subscription.dueDate, subscription.subscriptionUuid);
+      const updatedSubscription = await updateNextDueDate(subscription.dueDate, subscription.subscriptionUuid);
+      const { dueDate, name } = updatedSubscription;
+      if (dueDate.lateDueDate) {
+        lateDueDates.push({ name, date: dueDate.lateDueDate });
+      }
     }
 
-    res.status(200);
+    res.status(200).json({ lateDueDates });
     res.end();
   } catch(error) {
     console.log('Error: ', error);

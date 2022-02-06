@@ -7,8 +7,13 @@ export const addDays = (date, days) => {
   return result;
 };
 
-export const displayDueDate = ({ frequency, occurence, dates }) => {
+// To-Do: Refactor function.
+export const displayDueDate = (dueDate, name) => {
+  const { frequency, occurence, dates } = dueDate;
   const todaysDate = new Date();
+  const filteredArray = dates.filter(date => new Date(date) > todaysDate);
+
+  console.log(filteredArray);
   const firstDate = new Date(dates[0]);
   let nearestDueDate;
   let dueDateString;
@@ -20,7 +25,7 @@ export const displayDueDate = ({ frequency, occurence, dates }) => {
       // if dates contains today, dueDate is today.
       if (DateUtils.isSameDay(todaysDate, dateObject)) {
         nearestDueDate = todaysDate;
-        toast('Your subscription is due!');
+        toast(`Your subscription ${name} is due!`);
         break;
       }
 
@@ -35,20 +40,18 @@ export const displayDueDate = ({ frequency, occurence, dates }) => {
       ? `${nearestDueDate.toLocaleDateString()}, Yearly` 
       : `${DateUtils.addMonths(nearestDueDate, 12).toLocaleDateString()}, Yearly`;
   } else if (frequency === 'monthly') {
-    nearestDueDate = firstDate;
-    for (let i = 0; i < dates.length; i += 1) {
-      const dateObject = new Date(dates[i]);
+    nearestDueDate = new Date(filteredArray[0]);
+    for (let i = 0; i < filteredArray.length; i += 1) {
+      const dateObject = new Date(filteredArray[i]);
       if (DateUtils.isSameDay(todaysDate, dateObject)) {
         nearestDueDate = todaysDate;
-        toast('Your subscription is due!');
+        toast(`Your subcription ${name} is due!`);
         break;
       }
 
-      if (dateObject > todaysDate) {
-        if (dateObject < nearestDueDate) {
-          nearestDueDate = new Date(dates[i]);
-        }
-      }
+      if ((Math.abs(todaysDate.valueOf() - dateObject.valueOf()) < Math.abs(todaysDate.valueOf() - nearestDueDate.valueOf()))) {
+        nearestDueDate = dateObject;
+      } 
     }
     // if occurence is greater than 1, we need to set reminder for the current month as well.
     dueDateString = (occurence > 1 && nearestDueDate < todaysDate) 
@@ -61,7 +64,7 @@ export const displayDueDate = ({ frequency, occurence, dates }) => {
     for (let i = 0; i < dates.length; i += 1) {
       if (todaysWeeklyDay === parseInt(dates[i], 10)) {
         nearestDueDate = todaysDate;
-        toast('Your subscription is due!');
+        toast(`Your subcription ${name} is due!`);
         break;
       }
 
@@ -84,7 +87,7 @@ export const displayDueDate = ({ frequency, occurence, dates }) => {
     const currentDueDate = firstDate;
     if (DateUtils.isSameDay(todaysDate, currentDueDate)) {
       nearestDueDate = todaysDate;
-      toast('Your subscription is due!');
+      toast(`Your subcription ${name} is due!`);
     } else if (todaysDate < currentDueDate) {
       nearestDueDate = currentDueDate;
     } else {

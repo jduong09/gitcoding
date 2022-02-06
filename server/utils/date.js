@@ -7,15 +7,17 @@ const { updateDatesBySubscriptionId } = require('../api/actions/subscriptions');
 const updateNextDueDate = async (dueDate, subscriptionUuid) => {
   const { frequency, occurence, dates } = dueDate;
   const todaysDate = new Date();
+  let lateDueDate;
   if (frequency === 'yearly') {
     const newDatesObject = await dates.map((day) => {
       const date = new Date(day);
-      if (date.toDateString() < todaysDate.toDateString()) {
-        console.log('hey');
+      if (date < todaysDate) {
         // we want to alert them that the due date is passed.
         // we will switch our viewed boolean to true. This is because this function is called when user views their subscriptions.
         // we want to set the nextDueDate or maybe even dates array value, to next years date.
         // create a new date object, where the date that has passed is set to be a year from itself.
+        lateDueDate = date;
+
         return DateUtils.addMonths(date, 12).toISOString();
         // both of these last comments require a patch request to subscriptions, and changing the due_date column.
       }
@@ -32,19 +34,29 @@ const updateNextDueDate = async (dueDate, subscriptionUuid) => {
         occurence,
         dates: newDatesObject
       },
-      subscriptionUuid
+      subscriptionUuid,
     };
+
+    if (lateDueDate) {
+      body.dueDate.lateDueDate = lateDueDate;
+    }
+
     // set dates array to have our now updated due date.
     try {
-      await updateDatesBySubscriptionId(body);
+      lateDueDate = await updateDatesBySubscriptionId(body);
+      console.log(lateDueDate);
     } catch(error) {
       console.log('Error: ', error);
     }
+
+    return lateDueDate;
   } else if (frequency === 'monthly') {
     const nextDueDate = await dates.map((day) => {
       const date = new Date(day);
       if (date < todaysDate) {
+        lateDueDate = day;
         return DateUtils.addMonths(date, parseInt(occurence, 10)).toISOString();
+
       }
       return day;
     });
@@ -53,16 +65,24 @@ const updateNextDueDate = async (dueDate, subscriptionUuid) => {
       dueDate: {
         frequency,
         occurence,
-        dates: nextDueDate
+        dates: nextDueDate,
       },
       subscriptionUuid
     };
 
+    if (lateDueDate) {
+      body.dueDate.lateDueDate = lateDueDate;
+    }
+
     try {
-      await updateDatesBySubscriptionId(body);
+      lateDueDate = await updateDatesBySubscriptionId(body);
     } catch(error) {
       console.log('Error: ', error);
     }
+
+    return lateDueDate;
+  } else if (frequency === 'weekly'){
+    console.log('hey');
   } else if (frequency === 'daily') {
     // dates will be a one item array.
     let newDueDate = dates[0];
@@ -75,22 +95,29 @@ const updateNextDueDate = async (dueDate, subscriptionUuid) => {
       * Set the viewed to true.
       */
       // set next due date.
+      lateDueDate = newDueDate;
       newDueDate = addDays(newDueDate, occurence);
       const body = {
         dueDate: {
           frequency,
           occurence,
-          dates: [newDueDate]
+          dates: [newDueDate],
         },
         subscriptionUuid
       };
 
+      if (lateDueDate) {
+        body.dueDate.lateDueDate = lateDueDate;
+      }
+
       try {
-        await updateDatesBySubscriptionId(body);
+        lateDueDate = await updateDatesBySubscriptionId(body);
       } catch(error) {
         console.log('Error: ', error);
       }
     }
+
+    return lateDueDate;
   }
 };
 

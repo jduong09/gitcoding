@@ -32,7 +32,7 @@ const updateSubscriptionBySubscriptionId = async (subscriptionInfo) => {
 
 
 const updateDatesBySubscriptionId = async (requestBody) => {
-  const { rows: data } = await db.execute('server/sql/subscriptions/updateSubscriptionDueDate.sql', requestBody);
+  const { rows: [data] } = await db.execute('server/sql/subscriptions/updateSubscriptionDueDate.sql', requestBody);
   return data;
 }
 
