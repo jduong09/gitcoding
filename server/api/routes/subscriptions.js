@@ -32,7 +32,6 @@ router.route('/')
     }
   })
   .patch(async (req, res) => {
-    console.log(req.body);
     try {
       const data = await updateSubscriptionBySubscriptionId(req.body);
       res.status(200).json(data);
@@ -68,7 +67,6 @@ router.get('/update', async (req, res) => {
     }
 
     res.status(200).json({ lateDueDates });
-    res.end();
   } catch(error) {
     console.log('Error: ', error);
   }

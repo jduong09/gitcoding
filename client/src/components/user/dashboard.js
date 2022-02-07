@@ -26,7 +26,6 @@ class Dashboard extends React.Component {
       const response = await dueDates.json();
 
       const { lateDueDates } = response;
-      console.log(lateDueDates);
       if (lateDueDates.length === 0) {
         return;
       }

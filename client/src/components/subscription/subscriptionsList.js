@@ -17,6 +17,7 @@ class SubscriptionsList extends React.Component {
       editingSubscription: null,
     };
 
+    this.handleUpdate = this.handleUpdate.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.showSubscriptionList = this.showSubscriptionList.bind(this);
     this.toggleLoadingState = this.toggleLoadingState.bind(this);
@@ -48,8 +49,8 @@ class SubscriptionsList extends React.Component {
     }
   }
 
-  handleUpdate = (newSubscriptionsList) => {
-    this.setState({ subscriptions: newSubscriptionsList });
+  handleUpdate = async (newSubscriptionsList) => {
+    await this.setState({ subscriptions: newSubscriptionsList });
   }
 
   handleDelete = async (subscriptionUuid) => {

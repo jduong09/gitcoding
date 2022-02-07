@@ -1,6 +1,7 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 import ReactDayPicker from '../utils/datepicker';
+import { convertWeekdaysToDates } from '../utils/date';
 
 function convertStringToDate(datesArray) {
   return datesArray.map((day) => new Date(day));   
@@ -16,7 +17,7 @@ class SubscriptionForm extends React.Component {
 
     if (method === 'PATCH') {
       const { dueDate, nickname } = prevSubscription;
-      parseDate = dueDate.frequency === 'yearly' || dueDate.frequency === 'monthly' ? convertStringToDate(dueDate.dates) : dueDate.dates;
+      parseDate = convertStringToDate(dueDate.dates);
       updatedNickname = nickname || '';
     }
 
@@ -27,7 +28,8 @@ class SubscriptionForm extends React.Component {
       amount: prevSubscription ? prevSubscription.amount/100 : 0,
       frequency: prevSubscription ? prevSubscription.dueDate.frequency : '',
       occurence: prevSubscription ? prevSubscription.dueDate.occurence : 1,
-      days: parseDate || '',
+      days: parseDate || [],
+      checkedDays: []
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -51,18 +53,19 @@ class SubscriptionForm extends React.Component {
   }
 
   handleCheck(event) {
-    const { days } = this.state;
+    const { checkedDays } = this.state;
     const { checked, value } = event.target;
-    let updatedList = days;
+    let updatedList = checkedDays;
     if (checked) {
-      updatedList = [ ...days, value];
+      updatedList = [ ...checkedDays, value];
     } else {
-      updatedList.splice(days.indexOf(value), 1);
+      updatedList.splice(checkedDays.indexOf(value), 1);
     }
-    this.setState({ days: updatedList });
+
+    console.log(updatedList);
+    this.setState({ days: updatedList, checkedDays: updatedList });
   }
 
-  // Need to set occurence to 1 if user updates their dueDate column to yearly.
   async handleSubmit(event) {
     const { method, handleSubscriptions, showSubscriptionList, toggleLoadingState } = this.props;
     const { name, nickname, reminderDays, amount, frequency, occurence, days }  = this.state;
@@ -99,11 +102,8 @@ class SubscriptionForm extends React.Component {
       return;
     }
 
-    handleSubscriptions(response);
     showSubscriptionList();
-    if (method === 'PUT') {
-      this.setState({ name: '', nickname: '', reminderDays: 0, amount: 0, frequency: '', occurence: 0, days: [] });
-    }
+    handleSubscriptions(response);
   }
 
   handleDays(days) {
@@ -111,7 +111,7 @@ class SubscriptionForm extends React.Component {
   }
 
   parseDueDate() {
-    const { frequency, days } = this.state;
+    const { frequency, occurence, days } = this.state;
     let parsedDay;
     switch (frequency) {
       case 'yearly':
@@ -121,7 +121,7 @@ class SubscriptionForm extends React.Component {
         parsedDay = days.map((day) => day.toISOString());
         break;
       case 'weekly':
-        parsedDay = days;
+        parsedDay = convertWeekdaysToDates(occurence, days);
         break;
       case 'daily':
         parsedDay = days.map((day) => day.toISOString());
@@ -181,7 +181,7 @@ class SubscriptionForm extends React.Component {
           <label htmlFor="occurence">
             Every:
             <input type="number" id="occurence" value={occurence} onChange={(event) => this.handleChange(event, 'occurence')} />
-            <ReactDayPicker handleUpdate={this.handleDays} canChangeMonth={false} />
+            <ReactDayPicker handleUpdate={this.handleDays} canChangeMonth={false} disabledDays={[{ before: new Date() }]} />
           </label>
         );
       default:

@@ -1,6 +1,12 @@
 const { DateUtils } = require('react-day-picker');
 const { updateDatesBySubscriptionId } = require('../api/actions/subscriptions');
 
+const addDays = (date, days) => {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+};
+
 // due_date (jsonb) = { frequency: 'yearly', occurence: 1, dates: ['2022-2-3'], nextDueDate: ? };
 // viewed (boolean) = if user has not viewed it, due date would be the due date that was previously calculated.
 // if user has viewed it, due date would be the next upcoming due date. Viewed boolean would then be true.
@@ -44,7 +50,6 @@ const updateNextDueDate = async (dueDate, subscriptionUuid) => {
     // set dates array to have our now updated due date.
     try {
       lateDueDate = await updateDatesBySubscriptionId(body);
-      console.log(lateDueDate);
     } catch(error) {
       console.log('Error: ', error);
     }
@@ -81,40 +86,67 @@ const updateNextDueDate = async (dueDate, subscriptionUuid) => {
     }
 
     return lateDueDate;
-  } else if (frequency === 'weekly'){
-    console.log('hey');
+  } else if (frequency === 'weekly') {
+    // we need to gather the upcoming due dates and store into dates.
+    const newDatesObject = dates.map((date) => {
+      const dateObject = new Date(date);
+      if (dateObject < todaysDate) {
+        const dateObjectWeekDay = dateObject.getDay();
+        const numberDaysToAdd = 7 - todaysDate.getDay() - dateObjectWeekDay;
+        lateDueDate = date;
+        return addDays(todaysDate, numberDaysToAdd);
+      }
+      return date;
+    });
+
+    const body = {
+      dueDate: {
+        frequency, 
+        occurence,
+        dates: newDatesObject
+      },
+      subscriptionUuid
+    };
+
+    if (lateDueDate) {
+      body.dueDate.lateDueDate = lateDueDate;
+    }
+
+    try {
+      lateDueDate = await updateDatesBySubscriptionId(body);
+    } catch(error) {
+      console.log('Error: ', error);
+    }
+
+    return lateDueDate;
   } else if (frequency === 'daily') {
-    // dates will be a one item array.
-    let newDueDate = dates[0];
+    let newDueDate = new Date(dates[0]);
     if (newDueDate < todaysDate) {
-      // alert them that their subscription has passed.
-      /*
-      if (!viewed) {
-        toast.alert('Your due date for your subscription has passed!)
-      }
-      * Set the viewed to true.
-      */
-      // set next due date.
       lateDueDate = newDueDate;
-      newDueDate = addDays(newDueDate, occurence);
-      const body = {
-        dueDate: {
-          frequency,
-          occurence,
-          dates: [newDueDate],
-        },
-        subscriptionUuid
-      };
 
-      if (lateDueDate) {
-        body.dueDate.lateDueDate = lateDueDate;
+      while (newDueDate < todaysDate) {
+        console.log(newDueDate.toDateString());
+        newDueDate = new Date(addDays(newDueDate, parseInt(occurence, 10)));
       }
+    }
 
-      try {
-        lateDueDate = await updateDatesBySubscriptionId(body);
-      } catch(error) {
-        console.log('Error: ', error);
-      }
+    const body = {
+      dueDate: {
+        frequency,
+        occurence,
+        dates: [newDueDate.toUTCString()],
+      },
+      subscriptionUuid
+    };
+
+    if (lateDueDate) {
+      body.dueDate.lateDueDate = lateDueDate.toUTCString();
+    }
+
+    try {
+      lateDueDate = await updateDatesBySubscriptionId(body);
+    } catch(error) {
+      console.log('Error: ', error);
     }
 
     return lateDueDate;

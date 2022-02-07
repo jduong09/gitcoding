@@ -12,8 +12,6 @@ export const displayDueDate = (dueDate, name) => {
   const { frequency, occurence, dates } = dueDate;
   const todaysDate = new Date();
   const filteredArray = dates.filter(date => new Date(date) > todaysDate);
-
-  console.log(filteredArray);
   const firstDate = new Date(dates[0]);
   let nearestDueDate;
   let dueDateString;
@@ -58,29 +56,18 @@ export const displayDueDate = (dueDate, name) => {
       ? `${DateUtils.addMonths(nearestDueDate, parseInt(occurence, 10)).toLocaleDateString()}, Monthly`
       : `${nearestDueDate.toLocaleDateString()}, Monthly`;
   } else if (frequency === 'weekly') {
-    nearestDueDate = addDays(todaysDate, 7);
-    const todaysWeeklyDay = todaysDate.getDay();
-    let differenceBetweenDays;
-    for (let i = 0; i < dates.length; i += 1) {
-      if (todaysWeeklyDay === parseInt(dates[i], 10)) {
+    nearestDueDate = new Date(filteredArray[0]);
+    for (let i = 0; i < filteredArray.length; i += 1) {
+      const dateObject = new Date(filteredArray[i]);
+      if (DateUtils.isSameDay(todaysDate, dateObject)) {
         nearestDueDate = todaysDate;
         toast(`Your subcription ${name} is due!`);
         break;
       }
 
-      if (todaysWeeklyDay > dates[i]) {
-        differenceBetweenDays = (occurence * 7) - todaysWeeklyDay + parseInt(dates[i], 10);
-        const calculateDay = addDays(todaysDate, differenceBetweenDays);
-        if (calculateDay < nearestDueDate) {
-          nearestDueDate = calculateDay;
-        }
-      } else if (todaysWeeklyDay < dates[i]) {
-        differenceBetweenDays = dates[i] - todaysWeeklyDay;
-        const calculateDay = addDays(todaysDate, differenceBetweenDays);
-        if (calculateDay < nearestDueDate) {
-          nearestDueDate = calculateDay;
-        }
-      }
+      if ((Math.abs(todaysDate.valueOf() - dateObject.valueOf()) < Math.abs(todaysDate.valueOf() - nearestDueDate.valueOf()))) {
+        nearestDueDate = dateObject;
+      } 
     }
     dueDateString = `${nearestDueDate.toLocaleDateString()}, Weekly`;
   } else if (frequency === 'daily') {
@@ -97,6 +84,18 @@ export const displayDueDate = (dueDate, name) => {
     dueDateString = `${nearestDueDate.toLocaleDateString()}, Daily`;
   }
   return dueDateString;
+};
+
+export const convertWeekdaysToDates = (occurence, days) => {
+  const todaysDate = new Date();
+  const todaysWeekDay = todaysDate.getDay();
+  const dates = days.map((weekday) => {
+    const differenceBetweenDays = occurence * (weekday - todaysWeekDay);
+    const date = addDays(todaysDate, differenceBetweenDays);
+    return new Date(date);
+  });
+
+  return dates;
 };
 
 /*
