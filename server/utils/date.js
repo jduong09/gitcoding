@@ -4,7 +4,14 @@ const { updateDatesBySubscriptionId } = require('../api/actions/subscriptions');
 const addDays = (date, days) => {
   const result = new Date(date);
   result.setDate(result.getDate() + days);
-  return result;
+  return result.toISOString().substring(0, 10);
+};
+
+const addMonths = (date, numberOfMonths) => {
+  const dateObject = new Date(date.toISOString().substring(0, 10));
+  const newMonth = dateObject.getUTCMonth() + numberOfMonths;
+  const dateValue = date.setUTCMonth(newMonth);
+  return new Date(dateValue).toISOString().substring(0, 10);
 };
 
 // due_date (jsonb) = { frequency: 'yearly', occurence: 1, dates: ['2022-2-3'], nextDueDate: ? };
@@ -12,26 +19,22 @@ const addDays = (date, days) => {
 // if user has viewed it, due date would be the next upcoming due date. Viewed boolean would then be true.
 const updateNextDueDate = async (dueDate, subscriptionUuid) => {
   const { frequency, occurence, dates } = dueDate;
-  const todaysDate = new Date();
+  // todaysDate format: 'yyyy-mm-dd'
+  const todaysDate = new Date(new Date().setHours(0, 0, 0, 0)).toISOString().substring(0, 10);
   let lateDueDate;
   if (frequency === 'yearly') {
     const newDatesObject = await dates.map((day) => {
       const date = new Date(day);
-      if (date < todaysDate) {
+      if (date < new Date(todaysDate)) {
         // we want to alert them that the due date is passed.
         // we will switch our viewed boolean to true. This is because this function is called when user views their subscriptions.
         // we want to set the nextDueDate or maybe even dates array value, to next years date.
         // create a new date object, where the date that has passed is set to be a year from itself.
-        lateDueDate = date;
+        lateDueDate = date.toISOString().substring(0, 10);
 
-        return DateUtils.addMonths(date, 12).toISOString();
-        // both of these last comments require a patch request to subscriptions, and changing the due_date column.
+        return DateUtils.addMonths(date, 12).toISOString().substring(0, 10);
       }
       return day;
-      // ELSE: 
-      // todays date has not passed the due date.
-      // we want to display that their due date is coming up.
-      // we want to make sure next due date is set to this date.
     });
 
     const body = {
@@ -58,10 +61,9 @@ const updateNextDueDate = async (dueDate, subscriptionUuid) => {
   } else if (frequency === 'monthly') {
     const nextDueDate = await dates.map((day) => {
       const date = new Date(day);
-      if (date < todaysDate) {
-        lateDueDate = day;
-        return DateUtils.addMonths(date, parseInt(occurence, 10)).toISOString();
-
+      if (date < new Date(todaysDate)) {
+        lateDueDate = date.toISOString().substring(0, 10);
+        return addMonths(date, parseInt(occurence, 10));
       }
       return day;
     });
@@ -87,14 +89,12 @@ const updateNextDueDate = async (dueDate, subscriptionUuid) => {
 
     return lateDueDate;
   } else if (frequency === 'weekly') {
-    // we need to gather the upcoming due dates and store into dates.
     const newDatesObject = dates.map((date) => {
       const dateObject = new Date(date);
-      if (dateObject < todaysDate) {
-        const dateObjectWeekDay = dateObject.getDay();
-        const numberDaysToAdd = 7 - todaysDate.getDay() - dateObjectWeekDay;
-        lateDueDate = date;
-        return addDays(todaysDate, numberDaysToAdd);
+      if (dateObject < new Date(todaysDate)) {
+        lateDueDate = dateObject.toISOString().substring(0, 10);
+        console.log(addDays(dateObject, occurence * 7).toISOString().substring(0, 10));
+        return addDays(dateObject, occurence * 7).toISOString().substring(0, 10);
       }
       return date;
     });
@@ -121,11 +121,10 @@ const updateNextDueDate = async (dueDate, subscriptionUuid) => {
     return lateDueDate;
   } else if (frequency === 'daily') {
     let newDueDate = new Date(dates[0]);
-    if (newDueDate < todaysDate) {
+    if (newDueDate < new Date(todaysDate)) {
       lateDueDate = newDueDate;
 
-      while (newDueDate < todaysDate) {
-        console.log(newDueDate.toDateString());
+      while (newDueDate < new Date(todaysDate)) {
         newDueDate = new Date(addDays(newDueDate, parseInt(occurence, 10)));
       }
     }
@@ -134,7 +133,7 @@ const updateNextDueDate = async (dueDate, subscriptionUuid) => {
       dueDate: {
         frequency,
         occurence,
-        dates: [newDueDate.toUTCString()],
+        dates: [newDueDate.toISOString().substring(0, 10)],
       },
       subscriptionUuid
     };

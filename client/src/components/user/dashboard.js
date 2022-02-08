@@ -35,7 +35,7 @@ class Dashboard extends React.Component {
         toast(`Your subscription ${name} was due ${new Date(date).toLocaleDateString()}`);
       }
     } catch(error) {
-      console.log('Error: ', error);
+      toast.error(`Error: ${error}`);
     }
   }
 

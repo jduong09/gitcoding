@@ -61,8 +61,7 @@ class SubscriptionForm extends React.Component {
     } else {
       updatedList.splice(checkedDays.indexOf(value), 1);
     }
-
-    console.log(updatedList);
+    
     this.setState({ days: updatedList, checkedDays: updatedList });
   }
 
@@ -115,10 +114,10 @@ class SubscriptionForm extends React.Component {
     let parsedDay;
     switch (frequency) {
       case 'yearly':
-        parsedDay = days.map((day) => day.toISOString());
+        parsedDay = days.map((day) => day.toISOString().substring(0, 10));
         break;
       case 'monthly':
-        parsedDay = days.map((day) => day.toISOString());
+        parsedDay = days.map((day) => day.toISOString().substring(0, 10));
         break;
       case 'weekly':
         parsedDay = convertWeekdaysToDates(occurence, days);

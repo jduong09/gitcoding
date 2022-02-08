@@ -4,198 +4,123 @@ import { toast } from 'react-toastify';
 export const addDays = (date, days) => {
   const result = new Date(date);
   result.setDate(result.getDate() + days);
-  return result;
+  return result.toISOString().substring(0, 10);
+};
+
+const addMonths = (date, numberOfMonths) => {
+  const dateObject = new Date(date.toISOString().substring(0, 10));
+  const newMonth = dateObject.getUTCMonth() + numberOfMonths;
+  const dateValue = date.setUTCMonth(newMonth);
+  return new Date(dateValue).toISOString().substring(0, 10);
+};
+
+export const convertWeekdaysToDates = (occurence, days) => {
+  const todaysDate = new Date(new Date().setHours(0, 0, 0, 0)).toISOString().substring(0, 10);
+  const todaysWeekDay = new Date(todaysDate).getUTCDay();
+  const dates = days.map((weekday) => {
+    const differenceBetweenDays = occurence * (weekday - todaysWeekDay);
+    const date = addDays(todaysDate, differenceBetweenDays);
+    return date;
+  });
+  return dates;
 };
 
 // To-Do: Refactor function.
 export const displayDueDate = (dueDate, name) => {
   const { frequency, occurence, dates } = dueDate;
-  const todaysDate = new Date();
-  const filteredArray = dates.filter(date => new Date(date) > todaysDate);
+  const todaysDate = new Date(new Date().setHours(0, 0, 0, 0)).toISOString().substring(0, 10);
   const firstDate = new Date(dates[0]);
+  const firstDateString = firstDate.toISOString().substring(0, 10);
   let nearestDueDate;
   let dueDateString;
 
   if (frequency === 'yearly') {
-    nearestDueDate = firstDate < todaysDate ?  DateUtils.addMonths(firstDate, 12) : firstDate;
+    nearestDueDate = new Date(firstDateString) < new Date(todaysDate) ? new Date(addMonths(firstDate, 12)) : new Date(firstDateString);
     for (let i = 0; i < dates.length; i += 1) {
       const dateObject = new Date(dates[i]);
-      // if dates contains today, dueDate is today.
-      if (DateUtils.isSameDay(todaysDate, dateObject)) {
-        nearestDueDate = todaysDate;
+      if (DateUtils.isSameDay(dateObject, new Date(todaysDate))) {
+        nearestDueDate = dateObject;
         toast(`Your subscription ${name} is due!`);
         break;
       }
 
-      if (dateObject > todaysDate) {
+      if (dateObject < new Date(todaysDate)) {
+        const adjustedDate = addMonths(dateObject, 12);
+        if (adjustedDate < nearestDueDate) {
+          nearestDueDate = adjustedDate;
+        }
+      }
+
+      if (dateObject > new Date(todaysDate)) {
         if (dateObject < nearestDueDate) {
-          nearestDueDate = new Date(dates[i]);
-        } 
+          nearestDueDate = dateObject;
+        }
       }
     }
 
-    dueDateString = (nearestDueDate >= todaysDate) 
-      ? `${nearestDueDate.toLocaleDateString()}, Yearly` 
-      : `${DateUtils.addMonths(nearestDueDate, 12).toLocaleDateString()}, Yearly`;
+    dueDateString = (nearestDueDate < new Date(todaysDate)) 
+    ? `${DateUtils.addMonths(nearestDueDate, 12).toISOString().substring(0, 10)}, Yearly`
+    : `${nearestDueDate.toISOString().substring(0, 10)}, Yearly`;
   } else if (frequency === 'monthly') {
-    nearestDueDate = new Date(filteredArray[0]);
-    for (let i = 0; i < filteredArray.length; i += 1) {
-      const dateObject = new Date(filteredArray[i]);
-      if (DateUtils.isSameDay(todaysDate, dateObject)) {
+    nearestDueDate = (new Date(firstDateString) < new Date(todaysDate)) ? new Date(addMonths(firstDate, occurence)) : new Date(firstDateString);
+    for (let i = 0; i < dates.length; i += 1) {
+      const dateObject = new Date(dates[i]);
+      if (DateUtils.isSameDay(dateObject, new Date(todaysDate))) {
         nearestDueDate = todaysDate;
         toast(`Your subcription ${name} is due!`);
         break;
       }
 
-      if ((Math.abs(todaysDate.valueOf() - dateObject.valueOf()) < Math.abs(todaysDate.valueOf() - nearestDueDate.valueOf()))) {
-        nearestDueDate = dateObject;
-      } 
+      if (dateObject < new Date(todaysDate)) {
+        const adjustedDate = addMonths(dateObject, occurence);
+        if (adjustedDate < nearestDueDate) {
+          nearestDueDate = adjustedDate;
+        }
+      }
+
+      if (dateObject > new Date(todaysDate)) {
+        if (dateObject < nearestDueDate) {
+          nearestDueDate = dateObject;
+        }
+      }
     }
+
     // if occurence is greater than 1, we need to set reminder for the current month as well.
-    dueDateString = (occurence > 1 && nearestDueDate < todaysDate) 
-      ? `${DateUtils.addMonths(nearestDueDate, parseInt(occurence, 10)).toLocaleDateString()}, Monthly`
-      : `${nearestDueDate.toLocaleDateString()}, Monthly`;
+    dueDateString = (nearestDueDate < new Date(todaysDate)) 
+      ? `${addMonths(nearestDueDate, occurence)}, Monthly`
+      : `${new Date(nearestDueDate).toISOString().substring(0, 10)}, Monthly`;
   } else if (frequency === 'weekly') {
-    nearestDueDate = new Date(filteredArray[0]);
-    for (let i = 0; i < filteredArray.length; i += 1) {
-      const dateObject = new Date(filteredArray[i]);
-      if (DateUtils.isSameDay(todaysDate, dateObject)) {
+    nearestDueDate = (new Date(firstDateString) < new Date(todaysDate)) ? addDays(firstDate, 7) : new Date(firstDateString);
+    for (let i = 0; i < dates.length; i += 1) {
+      const dateObject = new Date(dates[i]);
+      if (DateUtils.isSameDay(dateObject, new Date(todaysDate))) {
         nearestDueDate = todaysDate;
         toast(`Your subcription ${name} is due!`);
         break;
       }
 
-      if ((Math.abs(todaysDate.valueOf() - dateObject.valueOf()) < Math.abs(todaysDate.valueOf() - nearestDueDate.valueOf()))) {
-        nearestDueDate = dateObject;
-      } 
+      if (dateObject > new Date(todaysDate)) {
+        if (dateObject < nearestDueDate) {
+          nearestDueDate = dateObject;
+        }
+      }
     }
-    dueDateString = `${nearestDueDate.toLocaleDateString()}, Weekly`;
+
+    dueDateString = `${new Date(nearestDueDate).toISOString().substring(0, 10)}, Weekly`;
   } else if (frequency === 'daily') {
-    const currentDueDate = firstDate;
-    if (DateUtils.isSameDay(todaysDate, currentDueDate)) {
+    if (DateUtils.isSameDay(firstDate, new Date(todaysDate))) {
       nearestDueDate = todaysDate;
       toast(`Your subcription ${name} is due!`);
-    } else if (todaysDate < currentDueDate) {
-      nearestDueDate = currentDueDate;
+    } else if (firstDate > new Date(todaysDate)) {
+      nearestDueDate = firstDate;
     } else {
-      nearestDueDate = addDays(currentDueDate, parseInt(occurence, 10));
+      nearestDueDate = firstDate;
+      while (nearestDueDate < new Date(todaysDate)) {
+        nearestDueDate = new Date(addDays(nearestDueDate, parseInt(occurence, 10)));
+      }
     }
 
-    dueDateString = `${nearestDueDate.toLocaleDateString()}, Daily`;
+    dueDateString = `${nearestDueDate.toISOString().substring(0, 10)}, Daily`;
   }
   return dueDateString;
 };
-
-export const convertWeekdaysToDates = (occurence, days) => {
-  const todaysDate = new Date();
-  const todaysWeekDay = todaysDate.getDay();
-  const dates = days.map((weekday) => {
-    const differenceBetweenDays = occurence * (weekday - todaysWeekDay);
-    const date = addDays(todaysDate, differenceBetweenDays);
-    return new Date(date);
-  });
-
-  return dates;
-};
-
-/*
-// due_date (jsonb) = { frequency: 'yearly', occurence: 1, dates: ['2022-2-3'], nextDueDate: ? };
-// viewed (boolean) = if user has not viewed it, due date would be the due date that was previously calculated.
-// if user has viewed it, due date would be the next upcoming due date. Viewed boolean would then be true.
-export const updateNextDueDate = async (dueDate, subscriptionUuid) => {
-  const { frequency, occurence, dates } = dueDate;
-  const todaysDate = new Date();
-  if (frequency === 'yearly') {
-    const newDatesObject = await dates.map((day) => {
-      const date = new Date(day);
-      if (date < todaysDate) {
-        // we want to alert them that the due date is passed.
-        // we will switch our viewed boolean to true. This is because this function is called when user views their subscriptions.
-        // we want to set the nextDueDate or maybe even dates array value, to next years date.
-        // create a new date object, where the date that has passed is set to be a year from itself.
-        return DateUtils.addMonths(date, 12).toISOString();
-        // both of these last comments require a patch request to subscriptions, and changing the due_date column.
-      }
-      return day;
-      // ELSE: 
-      // todays date has not passed the due date.
-      // we want to display that their due date is coming up.
-      // we want to make sure next due date is set to this date.
-    });
-
-    const newDueDateObject = {
-      frequency,
-      occurence,
-      dates: newDatesObject
-    };
-    // set dates array to have our now updated due date.
-    try {
-      await fetch(`${window.location.pathname}/subscriptions/${subscriptionUuid}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify({
-          dueDate: newDueDateObject
-        })
-      });
-    } catch(error) {
-      console.log('Error: ', error);
-    }
-  } else if (frequency === 'monthly') {
-    const nextDueDate = await dates.map((day) => {
-      const date = new Date(day);
-      if (date < todaysDate) {
-        return DateUtils.addMonths(date, parseInt(occurence, 10)).toISOString();
-      }
-      return day;
-    });
-
-    const newDueDateObject = {
-      frequency,
-      occurence,
-      dates: nextDueDate
-    };
-
-    try {
-      await fetch(`${window.location.pathname}/subscriptions/${subscriptionUuid}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify({
-          dueDate: newDueDateObject
-        })
-      });
-    } catch(error) {
-      console.log('Error: ', error);
-    }
-  } else if (frequency === 'daily') {
-    // dates will be a one item array.
-    let newDueDate = dates[0];
-    if (newDueDate < todaysDate) {
-      // alert them that their subscription has passed.
-      if (!viewed) {
-        toast.alert('Your due date for your subscription has passed!)
-      }
-      * Set the viewed to true.
-      // set next due date.
-      newDueDate = addDays(newDueDate, occurence);
-
-      try {
-        await fetch(`${window.location.pathname}/subscriptions/${subscriptionUuid}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-type': 'application/json'
-          },
-          body: JSON.stringify({
-            dueDate: [newDueDate]
-          })
-        });
-      } catch(error) {
-        console.log('Error: ', error);
-      }
-    }
-  }
-};
-*/
