@@ -1,7 +1,7 @@
 import React from 'react';
 import { toast } from 'react-toastify';
-import ReactDayPicker from '../utils/datepicker';
-import { convertWeekdaysToDates } from '../utils/date';
+import ReactDayPicker from '../date/datepicker';
+import { convertWeekdaysToDates } from '../../utils/frontendDateUtils';
 
 function convertStringToDate(datesArray) {
   return datesArray.map((day) => new Date(day));   

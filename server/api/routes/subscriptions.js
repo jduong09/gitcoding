@@ -49,9 +49,6 @@ router.delete('/:subscriptionUuid', async (req, res) => {
   }
 });
 
-// Grabs user's user id, fetches their subscriptions in the backend. 
-// It will then iterate through their subscriptions, and hopefully, store late due dates.
-// It will then also update late due dates to the next time it is due.
 router.get('/update', async (req, res) => {
   const { user_id } = req.session.userInfo;
   const lateDueDates = [];
@@ -61,8 +58,10 @@ router.get('/update', async (req, res) => {
       const subscription = allSubscriptions[i];
       const updatedSubscription = await updateNextDueDate(subscription.dueDate, subscription.subscriptionUuid);
       const { dueDate, name } = updatedSubscription;
-      if (dueDate.lateDueDate) {
-        lateDueDates.push({ name, date: dueDate.lateDueDate });
+      if (updatedSubscription) {
+        if (dueDate.lateDueDate) {
+          lateDueDates.push({ name, date: dueDate.lateDueDate });
+        }
       }
     }
 

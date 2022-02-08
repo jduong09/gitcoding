@@ -30,9 +30,8 @@ const updateSubscriptionBySubscriptionId = async (subscriptionInfo) => {
   return data;
 }
 
-
 const updateDatesBySubscriptionId = async (requestBody) => {
-  const { rows: [data] } = await db.execute('server/sql/subscriptions/updateSubscriptionDueDate.sql', requestBody);
+  const { rows: [data] } = await db.execute('server/sql/subscriptions/patchSubscriptionDueDate.sql', requestBody);
   return data;
 }
 

@@ -32,7 +32,7 @@ class Dashboard extends React.Component {
 
       for (let i = 0; i < lateDueDates.length; i += 1) {
         const { name, date } = lateDueDates[i];
-        toast(`Your subscription ${name} was due ${new Date(date).toLocaleDateString()}`);
+        toast(`Your subscription ${name} was due ${new Date(date).toISOString().substring(0, 10)}`);
       }
     } catch(error) {
       toast.error(`Error: ${error}`);
