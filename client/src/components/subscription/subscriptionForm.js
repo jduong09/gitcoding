@@ -123,7 +123,7 @@ class SubscriptionForm extends React.Component {
         parsedDay = convertWeekdaysToDates(occurence, days);
         break;
       case 'daily':
-        parsedDay = days.map((day) => day.toISOString());
+        parsedDay = days.map((day) => day.toISOString().substring(0, 10));
         break;
       default:
         break;

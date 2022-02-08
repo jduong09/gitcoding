@@ -90,7 +90,7 @@ export const displayDueDate = (dueDate, name) => {
       ? `${addMonths(nearestDueDate, occurence)}, Monthly`
       : `${new Date(nearestDueDate).toISOString().substring(0, 10)}, Monthly`;
   } else if (frequency === 'weekly') {
-    nearestDueDate = (new Date(firstDateString) < new Date(todaysDate)) ? addDays(firstDate, 7) : new Date(firstDateString);
+    nearestDueDate = (new Date(firstDateString) < new Date(todaysDate)) ? new Date(addDays(firstDate, 7)) : new Date(firstDateString);
     for (let i = 0; i < dates.length; i += 1) {
       const dateObject = new Date(dates[i]);
       if (DateUtils.isSameDay(dateObject, new Date(todaysDate))) {
@@ -108,16 +108,18 @@ export const displayDueDate = (dueDate, name) => {
 
     dueDateString = `${new Date(nearestDueDate).toISOString().substring(0, 10)}, Weekly`;
   } else if (frequency === 'daily') {
-    if (DateUtils.isSameDay(firstDate, new Date(todaysDate))) {
-      nearestDueDate = todaysDate;
-      toast(`Your subcription ${name} is due!`);
-    } else if (firstDate > new Date(todaysDate)) {
+    if (firstDate > new Date(todaysDate)) {
       nearestDueDate = firstDate;
     } else {
       nearestDueDate = firstDate;
       while (nearestDueDate < new Date(todaysDate)) {
         nearestDueDate = new Date(addDays(nearestDueDate, parseInt(occurence, 10)));
       }
+    }
+
+    if (DateUtils.isSameDay(nearestDueDate, new Date(todaysDate))) {
+      nearestDueDate = new Date(todaysDate);
+      toast(`Your subcription ${name} is due!`);
     }
 
     dueDateString = `${nearestDueDate.toISOString().substring(0, 10)}, Daily`;

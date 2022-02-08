@@ -93,8 +93,7 @@ const updateNextDueDate = async (dueDate, subscriptionUuid) => {
       const dateObject = new Date(date);
       if (dateObject < new Date(todaysDate)) {
         lateDueDate = dateObject.toISOString().substring(0, 10);
-        console.log(addDays(dateObject, occurence * 7).toISOString().substring(0, 10));
-        return addDays(dateObject, occurence * 7).toISOString().substring(0, 10);
+        return new Date(addDays(dateObject, occurence * 7)).toISOString().substring(0, 10);
       }
       return date;
     });
