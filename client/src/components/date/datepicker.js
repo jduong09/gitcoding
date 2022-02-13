@@ -1,25 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DayPicker, { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 
-const ReactDayPicker = ({ handleUpdate, disabledDays, canChangeMonth }) => {
+const ReactDayPicker = ({ handleUpdate, disabledDays, canChangeMonth, updating }) => {
   const [days, setDate] = useState([]);
 
-  /*
   useEffect(() => {
-    if (resetDays && !updating) {
-      setDate([]);
-    };
-
-    resetDays, updating
-
     if (updating) {
-      const newArray = updating.map((day) => new Date(day));
+      console.log(updating);
+      const newArray = updating.map((day) => console.log(new Date(day.toISOString().substring(0, 10))));
       setDate(newArray);
     }
     
-  }, [resetDays, updating]);
-  */
+  }, [updating]);
   
   const handleDayClick = (day, { selected }) => {
     const selectedDays = days.concat();

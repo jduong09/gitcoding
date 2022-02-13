@@ -27,7 +27,7 @@ class SubscriptionForm extends React.Component {
       reminderDays: prevSubscription ? prevSubscription.reminderDays : 0,
       amount: prevSubscription ? prevSubscription.amount/100 : 0,
       frequency: prevSubscription ? prevSubscription.dueDate.frequency : '',
-      occurence: prevSubscription ? prevSubscription.dueDate.occurence : 1,
+      occurrence: prevSubscription ? prevSubscription.dueDate.occurrence : 1,
       days: parseDate || [],
       checkedDays: []
     };
@@ -44,7 +44,7 @@ class SubscriptionForm extends React.Component {
 
     if (key === 'frequency') {
       if (value === 'yearly') {
-        return this.setState({ [key]: value, days: [], occurence: 1 });
+        return this.setState({ [key]: value, days: [], occurrence: 1 });
       }
       return this.setState({ [key]: value, days: [] });
     }
@@ -67,7 +67,7 @@ class SubscriptionForm extends React.Component {
 
   async handleSubmit(event) {
     const { method, handleSubscriptions, showSubscriptionList, toggleLoadingState } = this.props;
-    const { name, nickname, reminderDays, amount, frequency, occurence, days }  = this.state;
+    const { name, nickname, reminderDays, amount, frequency, occurrence, days }  = this.state;
     event.preventDefault();
     toggleLoadingState();
 
@@ -77,7 +77,7 @@ class SubscriptionForm extends React.Component {
     }
 
     const dates = this.parseDueDate();
-    const dueDate = { frequency, occurence, dates };
+    const dueDate = { frequency, occurrence, dates };
 
     const subscriptionInfo = { name, nickname, reminderDays, amount, dueDate };
 
@@ -106,11 +106,12 @@ class SubscriptionForm extends React.Component {
   }
 
   handleDays(days) {
+    console.log(days);
     this.setState({ days });
   }
 
   parseDueDate() {
-    const { frequency, occurence, days } = this.state;
+    const { frequency, occurrence, days } = this.state;
     let parsedDay;
     switch (frequency) {
       case 'yearly':
@@ -120,7 +121,7 @@ class SubscriptionForm extends React.Component {
         parsedDay = days.map((day) => day.toISOString().substring(0, 10));
         break;
       case 'weekly':
-        parsedDay = convertWeekdaysToDates(occurence, days);
+        parsedDay = convertWeekdaysToDates(occurrence, days);
         break;
       case 'daily':
         parsedDay = days.map((day) => day.toISOString().substring(0, 10));
@@ -132,7 +133,7 @@ class SubscriptionForm extends React.Component {
   }
 
   renderSwitch(frequency) {
-    const { occurence, days } = this.state;
+    const { occurrence, days } = this.state;
     const weeklyCheckbox = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day, idx) => 
       <label htmlFor={day} key={day}>
         {day}:
@@ -145,26 +146,26 @@ class SubscriptionForm extends React.Component {
         return (
           <div>
             On what day do you want to be reminded?
-            <ReactDayPicker handleUpdate={this.handleDays} />
+            <ReactDayPicker handleUpdate={this.handleDays} updating={days} />
           </div>
         );
       case 'monthly':
         return (
           <div>
-             <label htmlFor="occurence">
-                Every (?) Months:
-                <input type="number" id="occurence" value={occurence} onChange={(event) => this.handleChange(event, 'occurence')} min="0" max="12" />
-              </label>
-              <div>On which day(s) do you want to be reminded?</div>
-              <ReactDayPicker handleUpdate={this.handleDays} canChangeMonth={false} />
+            <label htmlFor="occurrence">
+              Every (?) Months:
+              <input type="number" id="occurrence" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')} min="0" max="12" />
+            </label>
+            <div>On which day(s) do you want to be reminded?</div>
+            <ReactDayPicker handleUpdate={this.handleDays} canChangeMonth={false} updating={days} />
           </div>
         );
       case 'weekly':
         return (
           <div>
-            <label htmlFor="occurence">
+            <label htmlFor="occurrence">
               How many weeks in between do you want to be reminded?
-              <select id="occurence" placeholder="ex: Every 2 weeks" value={occurence} onChange={(event) => this.handleChange(event, 'occurence')}>
+              <select id="occurrence" placeholder="ex: Every 2 weeks" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')}>
                 <option value="1">Every Week</option>
                 <option value="2">Every 2 Weeks</option>
                 <option value="3">Every 3 Weeks</option>
@@ -177,10 +178,10 @@ class SubscriptionForm extends React.Component {
         );
       case 'daily':
         return (
-          <label htmlFor="occurence">
+          <label htmlFor="occurrence">
             Every:
-            <input type="number" id="occurence" value={occurence} onChange={(event) => this.handleChange(event, 'occurence')} />
-            <ReactDayPicker handleUpdate={this.handleDays} canChangeMonth={false} disabledDays={[{ before: new Date() }]} />
+            <input type="number" id="occurence" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')} />
+            <ReactDayPicker handleUpdate={this.handleDays} canChangeMonth={false} disabledDays={[{ before: new Date() }]} updating={days} />
           </label>
         );
       default:
