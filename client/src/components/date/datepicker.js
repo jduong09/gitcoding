@@ -7,8 +7,8 @@ const ReactDayPicker = ({ handleUpdate, disabledDays, canChangeMonth, updating }
 
   useEffect(() => {
     if (updating) {
-      console.log(updating);
-      const newArray = updating.map((day) => console.log(new Date(day.toISOString().substring(0, 10))));
+      const newArray = updating.map((day) => new Date(day));
+      console.log(newArray);
       setDate(newArray);
     }
     

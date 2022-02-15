@@ -45,6 +45,7 @@ class SubscriptionsList extends React.Component {
   async componentDidUpdate(prevState) {
     const { subscriptions } = this.state;
     if (prevState.subscriptions !== subscriptions) {
+      console.log('Updating subscription List');
       await fetch(`${window.location.pathname}/subscriptions/update`);
     }
   }

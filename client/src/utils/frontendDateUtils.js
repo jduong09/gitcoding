@@ -14,7 +14,7 @@ export const convertWeekdaysToDates = (occurence, days) => {
 };
 
 export const displayDueDate = (dueDate, name) => {
-  const { frequency, occurence, dates } = dueDate;
+  const { frequency, occurrence, dates } = dueDate;
   const todaysDate = new Date(new Date().setHours(0, 0, 0, 0)).toISOString().substring(0, 10);
   const firstDate = new Date(dates[0]);
   let nearestDueDate;
@@ -25,7 +25,7 @@ export const displayDueDate = (dueDate, name) => {
     } else {
       nearestDueDate = firstDate;
       while (nearestDueDate < new Date(todaysDate)) {
-        nearestDueDate = new Date(addDays(nearestDueDate, parseInt(occurence, 10)));
+        nearestDueDate = new Date(addDays(nearestDueDate, parseInt(occurrence, 10)));
       }
     }
 
@@ -38,14 +38,15 @@ export const displayDueDate = (dueDate, name) => {
   if (frequency === 'yearly') {
     nearestDueDate = firstDate < new Date(todaysDate) ? new Date(addMonths(firstDate, 12)) : firstDate;
   } else if (frequency === 'monthly') {
-    nearestDueDate = (firstDate < new Date(todaysDate)) ? new Date(addMonths(firstDate, occurence)) : firstDate;
+    nearestDueDate = (firstDate < new Date(todaysDate)) ? new Date(addMonths(firstDate, occurrence)) : firstDate;
   } else if (frequency === 'weekly') {
     nearestDueDate = (firstDate < new Date(todaysDate)) ? new Date(addDays(firstDate, 7)) : firstDate;
   }
 
   for (let i = 0; i < dates.length; i += 1) {
     const dateObject = new Date(dates[i]);
-    if (DateUtils.isSameDay(dateObject, new Date(todaysDate))) {
+    const utcDateObject = new Date(dateObject.toISOString().substring(0, 10));
+    if (DateUtils.isSameDay(utcDateObject, new Date(todaysDate))) {
       nearestDueDate = dateObject;
       toast(`Your subscription ${name} is due!`);
       break;
@@ -56,7 +57,7 @@ export const displayDueDate = (dueDate, name) => {
       if (frequency === 'yearly') {
         adjustedDate = addMonths(dateObject, 12);
       } else if (frequency === 'monthly') {
-        adjustedDate = addMonths(dateObject, occurence);
+        adjustedDate = addMonths(dateObject, occurrence);
       } else if (frequency === 'weekly') {
         adjustedDate = new Date(addDays(dateObject, 7));
       }
@@ -67,6 +68,7 @@ export const displayDueDate = (dueDate, name) => {
     }
 
     if (dateObject > new Date(todaysDate)) {
+      console.log(`Date Object is greater than todays date.`);
       if (dateObject < nearestDueDate) {
         nearestDueDate = dateObject;
       }

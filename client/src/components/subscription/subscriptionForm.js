@@ -85,6 +85,8 @@ class SubscriptionForm extends React.Component {
       const { prevSubscription } = this.props;
       subscriptionInfo.subscriptionUuid = prevSubscription.subscriptionUuid;
     }
+
+    console.log(subscriptionInfo);
     
     const subscription = await fetch(`${window.location.pathname}/subscriptions`, {
       method,
@@ -102,7 +104,18 @@ class SubscriptionForm extends React.Component {
     }
 
     showSubscriptionList();
-    handleSubscriptions(response);
+    await handleSubscriptions(response);
+
+    this.setState({ 
+      name: '', 
+      nickname: '', 
+      reminderDays: 0, 
+      amount: 0, 
+      frequency: '', 
+      occurrence: 0, 
+      days: [], 
+      checkedDays: [] 
+    });
   }
 
   handleDays(days) {
@@ -115,10 +128,10 @@ class SubscriptionForm extends React.Component {
     let parsedDay;
     switch (frequency) {
       case 'yearly':
-        parsedDay = days.map((day) => day.toISOString().substring(0, 10));
+        parsedDay = days.map((day) => day.toISOString());
         break;
       case 'monthly':
-        parsedDay = days.map((day) => day.toISOString().substring(0, 10));
+        parsedDay = days.map((day) => day.toISOString());
         break;
       case 'weekly':
         parsedDay = convertWeekdaysToDates(occurrence, days);
@@ -157,7 +170,7 @@ class SubscriptionForm extends React.Component {
               <input type="number" id="occurrence" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')} min="0" max="12" />
             </label>
             <div>On which day(s) do you want to be reminded?</div>
-            <ReactDayPicker handleUpdate={this.handleDays} canChangeMonth={false} updating={days} />
+            <ReactDayPicker handleUpdate={this.handleDays} updating={days} />
           </div>
         );
       case 'weekly':

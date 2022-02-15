@@ -19,12 +19,14 @@ const updateNextDueDate = async (dueDate, subscriptionUuid) => {
 
   const newDatesObject = await dates.map((day) => {
     const date = new Date(day);
+    console.log(date);
     if (date < new Date(todaysDate)) {
       lateDueDate = date.toISOString().substring(0, 10);
 
       if (frequency === 'yearly') {
         return addMonths(date, 12);
       } else if (frequency === 'monthly') {
+        console.log(day);
         return addMonths(date, parseInt(occurrence, 10));
       } else if (frequency === 'weekly') {
         return new Date(addDays(date, occurrence * 7)).toISOString().substring(0, 10);
