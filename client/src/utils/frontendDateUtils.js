@@ -2,14 +2,15 @@ import { DateUtils } from 'react-day-picker';
 import { toast } from 'react-toastify';
 import { addDays, addMonths } from './sharedDateUtils';
 
-export const convertWeekdaysToDates = (occurence, days) => {
+export const convertWeekdaysToDates = (occurrence, days) => {
   const todaysDate = new Date(new Date().setHours(0, 0, 0, 0)).toISOString().substring(0, 10);
   const todaysWeekDay = new Date(todaysDate).getUTCDay();
   const dates = days.map((weekday) => {
-    const differenceBetweenDays = occurence * (weekday - todaysWeekDay);
+    const differenceBetweenDays = occurrence  * (weekday - todaysWeekDay);
     const date = addDays(todaysDate, differenceBetweenDays);
-    return date;
+    return new Date(date);
   });
+  console.log(dates);
   return dates;
 };
 
@@ -68,7 +69,6 @@ export const displayDueDate = (dueDate, name) => {
     }
 
     if (dateObject > new Date(todaysDate)) {
-      console.log(`Date Object is greater than todays date.`);
       if (dateObject < nearestDueDate) {
         nearestDueDate = dateObject;
       }

@@ -15,6 +15,8 @@ router.route('/')
   .get(async (req, res) => {
     const { user_id } = req.session.userInfo;
     try {
+      // updateSubscriptions calls getSubscriptionsByUserId
+      await updateSubscriptions(req);
       const data = await getSubscriptionsByUserId(user_id);
       res.status(200).json(data);
     } catch(error) {
@@ -26,7 +28,10 @@ router.route('/')
     req.body.userId = user_id;
     try {
       const data = await createSubscription(req.body);
-      res.status(200).json(data);
+
+      const { dueDate, subscriptionUuid } = data;
+      const updatedSubscription = await updateNextDueDate(dueDate, subscriptionUuid)
+      res.status(200).json(updatedSubscription);
     } catch(error) {
       res.status(400).json({ errorMessage: 'Error creating subscription! Try again!' });
     }
@@ -49,26 +54,25 @@ router.delete('/:subscriptionUuid', async (req, res) => {
   }
 });
 
-router.get('/update', async (req, res) => {
+const updateSubscriptions = async (req) => {
   const { user_id } = req.session.userInfo;
   const lateDueDates = [];
   try {
     const allSubscriptions = await getSubscriptionsByUserId(user_id);
-    for (let i = 0; i < allSubscriptions.length; i += 1) {
-      const subscription = allSubscriptions[i];
+  
+    await allSubscriptions.map(async (subscription) => {
       const updatedSubscription = await updateNextDueDate(subscription.dueDate, subscription.subscriptionUuid);
-      const { dueDate, name } = updatedSubscription;
-      if (updatedSubscription) {
-        if (dueDate.lateDueDate) {
-          lateDueDates.push({ name, date: dueDate.lateDueDate });
-        }
-      }
-    }
+      const { name, dueDate } = updatedSubscription;
 
-    res.status(200).json({ lateDueDates });
+      if (dueDate.lateDueDate) {
+        lateDueDates.push({ name, date: dueDate.lateDueDate });
+      }
+
+      return updatedSubscription;
+    });
   } catch(error) {
     console.log('Error: ', error);
   }
-});
+};
 
 module.exports = router;

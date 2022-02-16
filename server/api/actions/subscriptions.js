@@ -31,9 +31,7 @@ const updateSubscriptionBySubscriptionId = async (subscriptionInfo) => {
 }
 
 const updateDatesBySubscriptionId = async (requestBody) => {
-  console.log(requestBody);
   const { rows: [data] } = await db.execute('server/sql/subscriptions/patchSubscriptionDueDate.sql', requestBody);
-  console.log(data);
   return data;
 }
 

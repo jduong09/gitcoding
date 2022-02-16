@@ -4,7 +4,18 @@ import ReactDayPicker from '../date/datepicker';
 import { convertWeekdaysToDates } from '../../utils/frontendDateUtils';
 
 function convertStringToDate(datesArray) {
-  return datesArray.map((day) => new Date(day));   
+  const datesObject = {
+    dates: [],
+    weekDays: []
+  };
+  datesArray.map((day) => {
+    const dateObject = new Date(day);
+
+    datesObject.dates.push(dateObject);
+    datesObject.weekDays.push(dateObject.getDay());
+    return day;
+  });
+  return datesObject;
 };
 
 class SubscriptionForm extends React.Component {
@@ -28,8 +39,9 @@ class SubscriptionForm extends React.Component {
       amount: prevSubscription ? prevSubscription.amount/100 : 0,
       frequency: prevSubscription ? prevSubscription.dueDate.frequency : '',
       occurrence: prevSubscription ? prevSubscription.dueDate.occurrence : 1,
-      days: parseDate || [],
-      checkedDays: []
+      days: prevSubscription ? parseDate.dates : [],
+      checkedDays: prevSubscription ? parseDate.weekDays : [],
+      nextDueDate: prevSubscription ? prevSubscription.dueDate.nextDueDate : '',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -86,7 +98,7 @@ class SubscriptionForm extends React.Component {
       subscriptionInfo.subscriptionUuid = prevSubscription.subscriptionUuid;
     }
 
-    console.log(subscriptionInfo);
+    // console.log(subscriptionInfo);
     
     const subscription = await fetch(`${window.location.pathname}/subscriptions`, {
       method,
@@ -103,23 +115,11 @@ class SubscriptionForm extends React.Component {
       return;
     }
 
-    showSubscriptionList();
     await handleSubscriptions(response);
-
-    this.setState({ 
-      name: '', 
-      nickname: '', 
-      reminderDays: 0, 
-      amount: 0, 
-      frequency: '', 
-      occurrence: 0, 
-      days: [], 
-      checkedDays: [] 
-    });
+    showSubscriptionList();
   }
 
   handleDays(days) {
-    console.log(days);
     this.setState({ days });
   }
 
@@ -134,7 +134,7 @@ class SubscriptionForm extends React.Component {
         parsedDay = days.map((day) => day.toISOString());
         break;
       case 'weekly':
-        parsedDay = convertWeekdaysToDates(occurrence, days);
+        parsedDay = convertWeekdaysToDates(parseInt(occurrence, 10), days);
         break;
       case 'daily':
         parsedDay = days.map((day) => day.toISOString().substring(0, 10));
@@ -146,11 +146,11 @@ class SubscriptionForm extends React.Component {
   }
 
   renderSwitch(frequency) {
-    const { occurrence, days } = this.state;
+    const { occurrence, days, nextDueDate, checkedDays } = this.state;
     const weeklyCheckbox = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day, idx) => 
       <label htmlFor={day} key={day}>
         {day}:
-        <input type="checkbox" id={day} name={days} value={idx} onChange={this.handleCheck} checked={days.includes(idx.toString())}/>
+        <input type="checkbox" id={day} name={days} value={idx} onChange={this.handleCheck} checked={checkedDays.includes(idx.toString())}/>
       </label>
     );
 
@@ -159,7 +159,7 @@ class SubscriptionForm extends React.Component {
         return (
           <div>
             On what day do you want to be reminded?
-            <ReactDayPicker handleUpdate={this.handleDays} updating={days} />
+            <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} />
           </div>
         );
       case 'monthly':
@@ -170,7 +170,7 @@ class SubscriptionForm extends React.Component {
               <input type="number" id="occurrence" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')} min="0" max="12" />
             </label>
             <div>On which day(s) do you want to be reminded?</div>
-            <ReactDayPicker handleUpdate={this.handleDays} updating={days} />
+            <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} />
           </div>
         );
       case 'weekly':
@@ -187,6 +187,7 @@ class SubscriptionForm extends React.Component {
             </label>
             <div>Day of the week:</div>
             <div>{weeklyCheckbox}</div>
+            <ReactDayPicker updating={days} nextDueDate={nextDueDate} />
           </div>
         );
       case 'daily':
