@@ -23,16 +23,21 @@ const ReactDayPicker = ({ handleUpdate, disabledDays, canChangeMonth, updating, 
     setDate(selectedDays);
     handleUpdate(selectedDays);
   };
+
+  const daysList = days.map((day) => day.toLocaleDateString());
   
   return (
-    <DayPicker 
-      onDayClick={handleDayClick}
-      selectedDays={days}
-      hideOnDayClick={false}
-      disabledDays={disabledDays}
-      canChangeMonth={canChangeMonth}
-      month={nextDueDate ? new Date(nextDueDate) : new Date()}
-    />
+    <section className="day-picker">
+      <DayPicker 
+        onDayClick={handleDayClick}
+        selectedDays={days}
+        hideOnDayClick={false}
+        disabledDays={disabledDays}
+        canChangeMonth={canChangeMonth}
+        month={nextDueDate ? new Date(nextDueDate) : new Date()}
+      />
+      <div>Days Selected: {daysList.join(', ')}</div>
+    </section>
   );
 };
 
