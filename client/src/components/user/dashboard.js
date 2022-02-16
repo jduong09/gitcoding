@@ -25,13 +25,12 @@ class Dashboard extends React.Component {
 
       const response = await dueDates.json();
 
-      const { lateDueDates } = response;
-      if (lateDueDates.length === 0) {
+      if (response.length === 0) {
         return;
       }
 
-      for (let i = 0; i < lateDueDates.length; i += 1) {
-        const { name, date } = lateDueDates[i];
+      for (let i = 0; i < response.length; i += 1) {
+        const { name, date } = response[i];
         toast(`Your subscription ${name} was due ${new Date(date).toISOString().substring(0, 10)}`);
       }
     } catch(error) {

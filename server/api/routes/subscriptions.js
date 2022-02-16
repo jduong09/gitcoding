@@ -15,8 +15,6 @@ router.route('/')
   .get(async (req, res) => {
     const { user_id } = req.session.userInfo;
     try {
-      // updateSubscriptions calls getSubscriptionsByUserId
-      await updateSubscriptions(req);
       const data = await getSubscriptionsByUserId(user_id);
       res.status(200).json(data);
     } catch(error) {
@@ -54,25 +52,25 @@ router.delete('/:subscriptionUuid', async (req, res) => {
   }
 });
 
-const updateSubscriptions = async (req) => {
+router.get('/update', async (req, res) => {
   const { user_id } = req.session.userInfo;
-  const lateDueDates = [];
   try {
     const allSubscriptions = await getSubscriptionsByUserId(user_id);
-  
-    await allSubscriptions.map(async (subscription) => {
-      const updatedSubscription = await updateNextDueDate(subscription.dueDate, subscription.subscriptionUuid);
-      const { name, dueDate } = updatedSubscription;
 
-      if (dueDate.lateDueDate) {
-        lateDueDates.push({ name, date: dueDate.lateDueDate });
-      }
+    const updatedSubscriptions = await Promise.all(allSubscriptions.map(({ dueDate, subscriptionUuid }) =>
+      updateNextDueDate(dueDate, subscriptionUuid)));
+    
+    const lateDueDates = updatedSubscriptions.reduce((lateSubs, subscription) => {
+        if (subscription?.dueDate?.lateDueDate) {
+          lateSubs.push({ name: subscription.name, date: subscription.dueDate.lateDueDate});
+        }
+        return lateSubs;
+    }, []);
 
-      return updatedSubscription;
-    });
+    res.status(200).json(lateDueDates);
   } catch(error) {
-    console.log('Error: ', error);
+    res.status(400).json({ errorMessage: 'Error updating late subscriptions.' });
   }
-};
+});
 
 module.exports = router;

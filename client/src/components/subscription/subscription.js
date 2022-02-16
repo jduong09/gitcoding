@@ -9,9 +9,9 @@ const Subscription = ({ details, handleEdit, handleDelete }) => {
 
   useEffect(() => {
     if (DateUtils.isSameDay(new Date(dueDate.nextDueDate), new Date())) {
-      toast(`Your subscription ${name} is due!`);
+      toast(`Your ${name} subscription is due!`);
     }
-    setRepeatString(`${dueDate.nextDueDate.substring(0, 10)}, ${dueDate.frequency}`);
+    setRepeatString(`${new Date(dueDate.nextDueDate).toLocaleDateString()}, ${dueDate.frequency}`);
   }, [name, dueDate]);
 
   return (
