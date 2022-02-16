@@ -12,7 +12,7 @@ const Subscription = ({ details, handleEdit, handleDelete }) => {
       toast(`Your subscription ${name} is due!`);
     }
     setRepeatString(`${dueDate.nextDueDate.substring(0, 10)}, ${dueDate.frequency}`);
-  }, [name, dueDate])
+  }, [name, dueDate]);
 
   return (
     <div className="subscription-details card d-flex flex-column align-items-start p-3">

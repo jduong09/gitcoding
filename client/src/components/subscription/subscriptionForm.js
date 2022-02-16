@@ -86,8 +86,6 @@ class SubscriptionForm extends React.Component {
       const { prevSubscription } = this.props;
       subscriptionInfo.subscriptionUuid = prevSubscription.subscriptionUuid;
     }
-
-    console.log(subscriptionInfo);
     
     const subscription = await fetch(`${window.location.pathname}/subscriptions`, {
       method,
