@@ -12,7 +12,7 @@ class SubscriptionForm extends React.Component {
     super(props);
 
     const { method, prevSubscription } = props;
-    let parseDate = prevSubscription ? prevSubscription.dueDate.dates : null;
+    let parseDate = prevSubscription?.dueDate?.dates || null;
     let updatedNickname;
 
     if (method === 'PATCH') {
