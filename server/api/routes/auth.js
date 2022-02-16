@@ -77,6 +77,7 @@ router.get('/callback', (req, res, next) => {
       // URGENT: Need to look at purpose of deleting returnTo
       delete req.session.returnTo;
       await res.redirect(`${process.env.BASE_URL}/users/${user_uuid}`);
+      res.end();
     });
   })(req, res, next);
 });

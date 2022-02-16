@@ -18,20 +18,17 @@ class Dashboard extends React.Component {
   }
 
   async componentDidMount() {
-    // When user logs in and Dashboard is loaded, we want to update their subscription due dates.
-    // We also need to know which subscriptions have passed it's due date, in order to notify them that they have late subscriptions.
     try {
       const dueDates = await fetch(`${window.location.pathname}/subscriptions/update`);
 
       const response = await dueDates.json();
 
-      const { lateDueDates } = response;
-      if (lateDueDates.length === 0) {
+      if (response.length === 0) {
         return;
       }
 
-      for (let i = 0; i < lateDueDates.length; i += 1) {
-        const { name, date } = lateDueDates[i];
+      for (let i = 0; i < response.length; i += 1) {
+        const { name, date } = response[i];
         toast(`Your subscription ${name} was due ${new Date(date).toISOString().substring(0, 10)}`);
       }
     } catch(error) {

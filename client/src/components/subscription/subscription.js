@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { displayDueDate } from '../../utils/frontendDateUtils';
+import { DateUtils } from 'react-day-picker';
+import { toast } from 'react-toastify';
 
 const Subscription = ({ details, handleEdit, handleDelete }) => {
   const { name, nickname, dueDate, reminderDays, amount } = details;
@@ -7,10 +8,11 @@ const Subscription = ({ details, handleEdit, handleDelete }) => {
   const [repeatString, setRepeatString] = useState('');
 
   useEffect(() => {
-    const string = displayDueDate(dueDate, name);
-    setRepeatString(string);
-  }, [dueDate, name]);
-
+    if (DateUtils.isSameDay(new Date(dueDate.nextDueDate), new Date())) {
+      toast(`Your ${name} subscription is due!`, { autoClose:false });
+    }
+    setRepeatString(`${new Date(dueDate.nextDueDate).toLocaleDateString()}, ${dueDate.frequency}`);
+  }, [name, dueDate]);
 
   return (
     <div className="subscription-details card d-flex flex-column align-items-start p-3">

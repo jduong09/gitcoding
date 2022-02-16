@@ -9,7 +9,7 @@ const createSubscription = async (requestBody) => {
   const { rows: [data] } = await db.execute('server/sql/subscriptions/putSubscription.sql', 
     {
       ...requestBody,
-      occurence: parseInt(requestBody.occurence),
+      occurrence: parseInt(requestBody.occurrence),
       reminderDays: parseInt(requestBody.reminderDays),
       amount: Math.round((requestBody.amount * 100) * 100) / 100
     }
@@ -21,7 +21,7 @@ const updateSubscriptionBySubscriptionId = async (subscriptionInfo) => {
   const { rows: [data] } = await db.execute('server/sql/subscriptions/patchSubscription.sql', 
     {
       ...subscriptionInfo, 
-      occurence: parseInt(subscriptionInfo.occurence),
+      occurrence: parseInt(subscriptionInfo.occurrence),
       removedAt: subscriptionInfo.removedAt || null,
       reminderDays: parseInt(subscriptionInfo.reminderDays),
       amount: Math.round((subscriptionInfo.amount * 100) * 100) / 100

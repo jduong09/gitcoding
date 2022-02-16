@@ -1,25 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DayPicker, { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 
-const ReactDayPicker = ({ handleUpdate, disabledDays, canChangeMonth }) => {
+const ReactDayPicker = ({ handleUpdate, disabledDays, canChangeMonth, updating, nextDueDate }) => {
   const [days, setDate] = useState([]);
 
-  /*
   useEffect(() => {
-    if (resetDays && !updating) {
-      setDate([]);
-    };
-
-    resetDays, updating
-
-    if (updating) {
+    if (updating) {     
       const newArray = updating.map((day) => new Date(day));
       setDate(newArray);
     }
-    
-  }, [resetDays, updating]);
-  */
+  }, [updating, nextDueDate]);
   
   const handleDayClick = (day, { selected }) => {
     const selectedDays = days.concat();
@@ -32,9 +23,16 @@ const ReactDayPicker = ({ handleUpdate, disabledDays, canChangeMonth }) => {
     setDate(selectedDays);
     handleUpdate(selectedDays);
   };
-
+  
   return (
-    <DayPicker onDayClick={handleDayClick} selectedDays={days} hideOnDayClick={false} disabledDays={disabledDays} canChangeMonth={canChangeMonth} />
+    <DayPicker 
+      onDayClick={handleDayClick}
+      selectedDays={days}
+      hideOnDayClick={false}
+      disabledDays={disabledDays}
+      canChangeMonth={canChangeMonth}
+      month={nextDueDate ? new Date(nextDueDate) : new Date()}
+    />
   );
 };
 
