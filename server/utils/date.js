@@ -16,13 +16,6 @@ const displayDueDate = (dueDate) => {
         nearestDueDate = new Date(addDays(nearestDueDate, parseInt(occurrence, 10)));
       }
     }
-
-    /*
-    if (DateUtils.isSameDay(nearestDueDate, new Date(todaysDate))) {
-      nearestDueDate = new Date(todaysDate);
-      toast(`Your subcription ${name} is due!`);
-    }
-    */
   }
 
   if (frequency === 'yearly') {
@@ -35,14 +28,6 @@ const displayDueDate = (dueDate) => {
 
   for (let i = 0; i < dates.length; i += 1) {
     const dateObject = new Date(dates[i]);
-    /*
-    const utcDateObject = new Date(dateObject.toISOString().substring(0, 10));
-    if (DateUtils.isSameDay(utcDateObject, new Date(todaysDate))) {
-      nearestDueDate = dateObject;
-      toast(`Your subscription ${name} is due!`);
-      break;
-    }
-    */
 
     if (dateObject < new Date(todaysDate)) {
       let adjustedDate;
@@ -51,7 +36,7 @@ const displayDueDate = (dueDate) => {
       } else if (frequency === 'monthly') {
         adjustedDate = addMonths(dateObject, parseInt(occurrence, 10));
       } else if (frequency === 'weekly') {
-        adjustedDate = new Date(addDays(dateObject, 7));
+        adjustedDate = addDays(dateObject, 7);
       }
 
       if (adjustedDate < nearestDueDate) {
@@ -65,9 +50,6 @@ const displayDueDate = (dueDate) => {
       }
     }
   }
-
-  const dueDateString = `${nearestDueDate.toISOString()}`;
-  console.log(dueDateString);
 
   return nearestDueDate.toISOString();
 };
@@ -105,12 +87,12 @@ const updateNextDueDate = async (dueDate, subscriptionUuid) => {
   });
 
   const nextDueDate = displayDueDate({ frequency, occurrence, dates: newDatesObject });
-  
+
   const body = {
     dueDate: {
       frequency, 
       occurrence,
-      dates: (frequency === 'daily') ? [newDueDate.toISOString().substring(0, 10)] : newDatesObject,
+      dates: (frequency === 'daily') ? [newDueDate.toISOString()] : newDatesObject,
       nextDueDate
     },
     subscriptionUuid

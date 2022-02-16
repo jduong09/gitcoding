@@ -1,7 +1,7 @@
 const addDays = (date, days) => {
   const result = new Date(date);
-  result.setDate(result.getDate() + days);
-  return result.toISOString().substring(0, 10);
+  const newDate = result.setDate(result.getDate() + days);
+  return new Date(newDate).toISOString();
 };
 
 const addMonths = (date, numberOfMonths) => {

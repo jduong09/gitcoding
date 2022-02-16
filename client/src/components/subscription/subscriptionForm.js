@@ -1,21 +1,10 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 import ReactDayPicker from '../date/datepicker';
-import { convertWeekdaysToDates } from '../../utils/frontendDateUtils';
+import convertWeekdaysToDates from '../../utils/frontendDateUtils';
 
 function convertStringToDate(datesArray) {
-  const datesObject = {
-    dates: [],
-    weekDays: []
-  };
-  datesArray.map((day) => {
-    const dateObject = new Date(day);
-
-    datesObject.dates.push(dateObject);
-    datesObject.weekDays.push(dateObject.getDay());
-    return day;
-  });
-  return datesObject;
+  return datesArray.map((date) => new Date(date));
 };
 
 class SubscriptionForm extends React.Component {
@@ -39,8 +28,8 @@ class SubscriptionForm extends React.Component {
       amount: prevSubscription ? prevSubscription.amount/100 : 0,
       frequency: prevSubscription ? prevSubscription.dueDate.frequency : '',
       occurrence: prevSubscription ? prevSubscription.dueDate.occurrence : 1,
-      days: prevSubscription ? parseDate.dates : [],
-      checkedDays: prevSubscription ? parseDate.weekDays : [],
+      days: prevSubscription ? parseDate : [],
+      checkedDays: [],
       nextDueDate: prevSubscription ? prevSubscription.dueDate.nextDueDate : '',
     };
 
@@ -98,7 +87,7 @@ class SubscriptionForm extends React.Component {
       subscriptionInfo.subscriptionUuid = prevSubscription.subscriptionUuid;
     }
 
-    // console.log(subscriptionInfo);
+    console.log(subscriptionInfo);
     
     const subscription = await fetch(`${window.location.pathname}/subscriptions`, {
       method,
@@ -124,7 +113,7 @@ class SubscriptionForm extends React.Component {
   }
 
   parseDueDate() {
-    const { frequency, occurrence, days } = this.state;
+    const { frequency, days } = this.state;
     let parsedDay;
     switch (frequency) {
       case 'yearly':
@@ -134,10 +123,10 @@ class SubscriptionForm extends React.Component {
         parsedDay = days.map((day) => day.toISOString());
         break;
       case 'weekly':
-        parsedDay = convertWeekdaysToDates(parseInt(occurrence, 10), days);
+        parsedDay = convertWeekdaysToDates(days);
         break;
       case 'daily':
-        parsedDay = days.map((day) => day.toISOString().substring(0, 10));
+        parsedDay = days.map((day) => day.toISOString());
         break;
       default:
         break;
@@ -146,11 +135,11 @@ class SubscriptionForm extends React.Component {
   }
 
   renderSwitch(frequency) {
-    const { occurrence, days, nextDueDate, checkedDays } = this.state;
+    const { occurrence, days, nextDueDate } = this.state;
     const weeklyCheckbox = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day, idx) => 
       <label htmlFor={day} key={day}>
         {day}:
-        <input type="checkbox" id={day} name={days} value={idx} onChange={this.handleCheck} checked={checkedDays.includes(idx.toString())}/>
+        <input type="checkbox" id={day} name={days} value={idx} onChange={this.handleCheck} checked={days.includes(idx.toString())}/>
       </label>
     );
 
