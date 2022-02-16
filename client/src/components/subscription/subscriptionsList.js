@@ -35,31 +35,11 @@ class SubscriptionsList extends React.Component {
       toast.error('Error: Error getting your subscriptions!');
       return;
     }
-    // Here we gather all the user's subscriptions.
     const response = await allSubscriptions.json();
     setTimeout(() => {
       this.setState({ subscriptions: response, loading: false });
     }, 1000); // This is probably not necessary but in local provides perceived loading since the DB calls are instant
   }
-
-  /*
-  async componentDidUpdate(prevProps, prevState) {
-    // Here we have to update the subscriptions in the backend, and then fetch them on the frontend. 
-    // This componentdidUpdate gets called multiple times after creating and updating a subscription.
-    // How can we make it to it gets called once? 
-    const { subscriptions } = this.state;
-    if (prevState.subscriptions !== subscriptions) {
-      console.log(subscriptions);
-      try {
-        const data = await fetch(`${window.location.pathname}/subscriptions/update`);
-        const response = await data.json();
-        console.log(response);
-      } catch(error) {
-        toast.error('Error: ', error);
-      }
-    }
-  }
-  */
 
   handleUpdate = async (newSubscriptionsList) => {
     await this.setState({ subscriptions: newSubscriptionsList });

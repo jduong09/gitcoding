@@ -22,15 +22,15 @@ class SubscriptionForm extends React.Component {
     }
 
     this.state = {
-      name: prevSubscription ? prevSubscription.name : '',
+      name: prevSubscription?.name || '',
       nickname: prevSubscription ? updatedNickname : '',
-      reminderDays: prevSubscription ? prevSubscription.reminderDays : 0,
+      reminderDays: prevSubscription?.reminderDays || 0,
       amount: prevSubscription ? prevSubscription.amount/100 : 0,
-      frequency: prevSubscription ? prevSubscription.dueDate.frequency : '',
-      occurrence: prevSubscription ? prevSubscription.dueDate.occurrence : 1,
+      frequency: prevSubscription?.dueDate?.frequency || '',
+      occurrence: prevSubscription?.dueDate?.occurrence || 1,
       days: prevSubscription ? parseDate : [],
       checkedDays: [],
-      nextDueDate: prevSubscription ? prevSubscription.dueDate.nextDueDate : '',
+      nextDueDate: prevSubscription?.dueDate?.nextDueDate || '',
     };
 
     this.handleChange = this.handleChange.bind(this);
