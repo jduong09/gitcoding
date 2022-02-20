@@ -6,4 +6,5 @@ SELECT
   amount, 
   subscription_uuid AS "subscriptionUuid"
 FROM subscriptions 
-WHERE(user_id = ${userId});
+WHERE(user_id = ${userId})
+ORDER BY id;
