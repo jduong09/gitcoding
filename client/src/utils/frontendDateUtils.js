@@ -1,6 +1,6 @@
 import { addDays } from './sharedDateUtils';
 
-const convertWeekdaysToDates = (days) => {
+export const convertWeekdaysToDates = (days) => {
   const todaysDate = new Date();
   const todaysWeekDay = new Date(todaysDate).getUTCDay();
   const dates = days.map((weekday) => {
@@ -11,4 +11,6 @@ const convertWeekdaysToDates = (days) => {
   return dates;
 };
 
-export default convertWeekdaysToDates;
+export const convertStringToDate = (datesArray) => datesArray.map((date) => new Date(date));
+
+export const convertDatesToWeekdays = (days) => days.map((date) => date.getUTCDay());

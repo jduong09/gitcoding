@@ -1,21 +1,25 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 import ReactDayPicker from '../date/datepicker';
-import convertWeekdaysToDates from '../../utils/frontendDateUtils';
-
-const convertStringToDate = (datesArray) => datesArray.map((date) => new Date(date));
+import { convertStringToDate, convertDatesToWeekdays, convertWeekdaysToDates } from "../../utils/frontendDateUtils";
 
 class SubscriptionForm extends React.Component {
   constructor(props) {
-    super(props);
+    super(props);  
 
     const { method, prevSubscription } = props;
     let parseDate = prevSubscription?.dueDate?.dates || null;
     let updatedNickname;
+    let weekDays = [];
 
     if (method === 'PATCH') {
       const { dueDate, nickname } = prevSubscription;
       parseDate = convertStringToDate(dueDate.dates);
+      
+      if (dueDate.frequency === 'weekly') {
+        weekDays = convertDatesToWeekdays(parseDate);
+      }
+
       updatedNickname = nickname || '';
     }
 
@@ -27,7 +31,7 @@ class SubscriptionForm extends React.Component {
       frequency: prevSubscription?.dueDate?.frequency || '',
       occurrence: prevSubscription?.dueDate?.occurrence || 1,
       days: prevSubscription ? parseDate : [],
-      checkedDays: [],
+      checkedDays: prevSubscription ? weekDays : [],
       nextDueDate: prevSubscription?.dueDate?.nextDueDate || '',
     };
 
@@ -56,9 +60,9 @@ class SubscriptionForm extends React.Component {
     const { checked, value } = event.target;
     let updatedList = checkedDays;
     if (checked) {
-      updatedList = [...checkedDays, value];
+      updatedList = [...checkedDays, parseInt(value, 10)];
     } else {
-      updatedList.splice(checkedDays.indexOf(value), 1);
+      updatedList.splice(checkedDays.indexOf(parseInt(value, 10)), 1);
     }
 
     const datesList = convertWeekdaysToDates(updatedList);
@@ -122,7 +126,7 @@ class SubscriptionForm extends React.Component {
     const weeklyCheckbox = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day, idx) => 
       <label htmlFor={day} key={day}>
         {day}:
-        <input type="checkbox" id={day} name='days' value={idx} onChange={this.handleCheck} checked={checkedDays.includes(idx.toString())}/>
+        <input type="checkbox" id={day} name='days' value={idx} onChange={this.handleCheck} checked={checkedDays.includes(idx)}/>
       </label>
     );
 
