@@ -6,7 +6,7 @@ const convertWeekdaysToDates = (days) => {
   const dates = days.map((weekday) => {
     const differenceBetweenDays = weekday - todaysWeekDay;
     const date = addDays(todaysDate, differenceBetweenDays);
-    return date;
+    return new Date(date);
   });
   return dates;
 };

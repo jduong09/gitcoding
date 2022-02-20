@@ -29,7 +29,11 @@ class Dashboard extends React.Component {
 
       for (let i = 0; i < response.length; i += 1) {
         const { name, date } = response[i];
-        toast(`Your subscription ${name} was due ${new Date(date).toISOString().substring(0, 10)}`);
+
+        toast.error(`Your subscription ${name} was due ${new Date(date).toISOString().substring(0, 10)}`, {
+          autoClose: false,
+          style: { backgroundColor: 'red', color: '#000000' }
+        });
       }
     } catch(error) {
       toast.error(`Error: ${error}`);

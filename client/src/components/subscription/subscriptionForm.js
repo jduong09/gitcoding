@@ -60,20 +60,23 @@ class SubscriptionForm extends React.Component {
     } else {
       updatedList.splice(checkedDays.indexOf(value), 1);
     }
+
+    const datesList = convertWeekdaysToDates(updatedList);
     
-    this.setState({ days: updatedList, checkedDays: updatedList });
+    this.setState({ days: datesList, checkedDays: updatedList });
   }
 
   async handleSubmit(event) {
     const { method, handleSubscriptions, showSubscriptionList, toggleLoadingState } = this.props;
     const { name, nickname, reminderDays, amount, frequency, occurrence, days }  = this.state;
     event.preventDefault();
-    toggleLoadingState();
 
-    if (frequency !== 'daily' && days.length === 0) {
+    if (days.length === 0) {
       toast.error('Failed to Submit: Dates not selected for reminder.');
       return;
     }
+
+    toggleLoadingState();
 
     const dates = this.parseDueDate();
     const dueDate = { frequency, occurrence, dates };
@@ -97,6 +100,7 @@ class SubscriptionForm extends React.Component {
     if (status === 400) {
       const { errorMessage } = response;
       toast.error(errorMessage);
+      showSubscriptionList();
       return;
     }
 
@@ -109,33 +113,16 @@ class SubscriptionForm extends React.Component {
   }
 
   parseDueDate() {
-    const { frequency, days } = this.state;
-    let parsedDay;
-    switch (frequency) {
-      case 'yearly':
-        parsedDay = days.map((day) => day.toISOString());
-        break;
-      case 'monthly':
-        parsedDay = days.map((day) => day.toISOString());
-        break;
-      case 'weekly':
-        parsedDay = convertWeekdaysToDates(days);
-        break;
-      case 'daily':
-        parsedDay = days.map((day) => day.toISOString());
-        break;
-      default:
-        break;
-    }
-    return parsedDay;
+    const { days } = this.state;
+    return days.map((day) => day.toISOString());
   }
 
   renderSwitch(frequency) {
-    const { occurrence, days, nextDueDate } = this.state;
+    const { occurrence, days, nextDueDate, checkedDays } = this.state;
     const weeklyCheckbox = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day, idx) => 
       <label htmlFor={day} key={day}>
         {day}:
-        <input type="checkbox" id={day} name={days} value={idx} onChange={this.handleCheck} checked={days.includes(idx.toString())}/>
+        <input type="checkbox" id={day} name='days' value={idx} onChange={this.handleCheck} checked={checkedDays.includes(idx.toString())}/>
       </label>
     );
 
@@ -180,7 +167,7 @@ class SubscriptionForm extends React.Component {
           <label htmlFor="occurrence">
             Every:
             <input type="number" id="occurence" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')} />
-            <ReactDayPicker handleUpdate={this.handleDays} canChangeMonth={false} disabledDays={[{ before: new Date() }]} updating={days} frequency='daily' />
+            <ReactDayPicker handleUpdate={this.handleDays} updating={days} frequency='daily' />
           </label>
         );
       default:

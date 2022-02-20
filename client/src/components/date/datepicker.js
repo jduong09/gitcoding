@@ -3,7 +3,7 @@ import DayPicker, { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { toast } from 'react-toastify';
 
-const ReactDayPicker = ({ handleUpdate, canChangeMonth, updating, nextDueDate, frequency }) => {
+const ReactDayPicker = ({ handleUpdate, updating, nextDueDate, frequency }) => {
   const [days, setDate] = useState([]);
   const [disabledDay, setDisabledDay] = useState('');
 
@@ -12,14 +12,18 @@ const ReactDayPicker = ({ handleUpdate, canChangeMonth, updating, nextDueDate, f
       const newArray = updating.map((day) => new Date(day));
       setDate(newArray);
 
-      if (frequency !== 'monthly') {
-        const dateObject = new Date(updating[0]);
-        setDisabledDay({ before: dateObject, after: dateObject });
+    
+      if (frequency === 'yearly' || frequency === 'daily') {
+        setDisabledDay({ before: updating[0], after: updating[0] });
       }
     }
   }, [updating, nextDueDate, frequency]);
   
   const handleDayClick = (day, { selected }) => {
+    if (frequency === 'weekly') {
+      return;
+    }
+
     const selectedDays = days.concat();
     if (selected) {
       const selectedIndex = selectedDays.findIndex(selectedDay => DateUtils.isSameDay(selectedDay, day));
@@ -30,7 +34,7 @@ const ReactDayPicker = ({ handleUpdate, canChangeMonth, updating, nextDueDate, f
     } else {
       selectedDays.push(day);
 
-      if (frequency !== 'monthly') {
+      if (frequency === 'yearly' || frequency === 'daily') {
         setDisabledDay({ before: day, after: day });
       }
     }
@@ -47,8 +51,8 @@ const ReactDayPicker = ({ handleUpdate, canChangeMonth, updating, nextDueDate, f
         onDayClick={handleDayClick}
         selectedDays={days}
         disabledDays={disabledDay}
-        canChangeMonth={canChangeMonth}
         month={nextDueDate ? new Date(nextDueDate) : new Date()}
+        todayButton="Jump To Today"
       />
       <div>Days Selected: {daysList.join(', ')}</div>
     </section>
