@@ -3,9 +3,7 @@ import { toast } from 'react-toastify';
 import ReactDayPicker from '../date/datepicker';
 import convertWeekdaysToDates from '../../utils/frontendDateUtils';
 
-function convertStringToDate(datesArray) {
-  return datesArray.map((date) => new Date(date));
-};
+const convertStringToDate = (datesArray) => datesArray.map((date) => new Date(date));
 
 class SubscriptionForm extends React.Component {
   constructor(props) {
@@ -58,7 +56,7 @@ class SubscriptionForm extends React.Component {
     const { checked, value } = event.target;
     let updatedList = checkedDays;
     if (checked) {
-      updatedList = [ ...checkedDays, value];
+      updatedList = [...checkedDays, value];
     } else {
       updatedList.splice(checkedDays.indexOf(value), 1);
     }
