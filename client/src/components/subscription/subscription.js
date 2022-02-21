@@ -22,8 +22,7 @@ const Subscription = ({ details, handleEdit, handleDelete }) => {
 
   return (
     <div className="subscription-details card d-flex flex-column align-items-start p-3">
-      <p><strong>Name:</strong> {name}</p>
-      <p><strong>Nickname:</strong> {nickname}</p>
+      <p><strong>Name:</strong> {nickname || name}</p>
       <p><strong>Due Date:</strong> {repeatString}</p>
       <p><strong>Reminder Days:</strong> {reminderDays}</p>
       <p><strong>Amount:</strong> ${amount/100}</p>

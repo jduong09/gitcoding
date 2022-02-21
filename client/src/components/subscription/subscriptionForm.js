@@ -5,7 +5,7 @@ import { convertStringToDate, convertDatesToWeekdays, convertWeekdaysToDates } f
 
 class SubscriptionForm extends React.Component {
   constructor(props) {
-    super(props);  
+    super(props);
 
     const { method, prevSubscription } = props;
     let parseDate = prevSubscription?.dueDate?.dates || null;

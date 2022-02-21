@@ -29,7 +29,7 @@ const ReactDayPicker = ({ handleUpdate, updating, nextDueDate, frequency }) => {
       const selectedIndex = selectedDays.findIndex(selectedDay => DateUtils.isSameDay(selectedDay, day));
       selectedDays.splice(selectedIndex, 1);
       setDisabledDay(false);
-    } else  if ((frequency === 'yearly' || frequency === 'daily') && (days.length !== 0)) {
+    } else if ((frequency === 'yearly' || frequency === 'daily') && days.length) {
       toast.error(`Invalid Choice: Can't select multiple days for ${frequency} subscription.`);
     } else {
       selectedDays.push(day);
