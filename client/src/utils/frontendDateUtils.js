@@ -7,7 +7,7 @@ export const convertWeekdaysToDates = (days) => {
     const differenceBetweenDays = weekday - todaysWeekDay;
     const date = addDays(todaysDate, differenceBetweenDays);
     const adjustedDate = new Date(new Date(date).setUTCHours(17, 0, 0, 0));
-    return adjustedDate.toISOString();
+    return adjustedDate;
   });
   return dates;
 };
