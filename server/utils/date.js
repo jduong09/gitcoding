@@ -63,7 +63,7 @@ const updateNextDueDate = async (dueDate, subscriptionUuid) => {
     if (frequency === 'daily') {
       newDueDate = new Date(dates[0]);
       if (newDueDate < new Date(todaysDate)) {
-        lateDueDate = newDueDate;
+        lateDueDate = newDueDate.toISOString();
 
         while (newDueDate < new Date(todaysDate)) {
           newDueDate = new Date(addDays(newDueDate, parseInt(occurrence, 10)));
@@ -74,7 +74,7 @@ const updateNextDueDate = async (dueDate, subscriptionUuid) => {
       const newDatesObject = dates.map((day) => {
         const date = new Date(day);
         if (date < new Date(todaysDate)) {
-          lateDueDate = date.toISOString().substring(0, 10);
+          lateDueDate = date.toISOString();
 
           if (frequency === 'yearly') {
             return addMonths(date, 12);
