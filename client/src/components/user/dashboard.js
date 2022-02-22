@@ -1,8 +1,8 @@
 import React from 'react';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import { DateUtils } from 'react-day-picker';
+// import { DateUtils } from 'react-day-picker';
 import SubscriptionsList from '../subscription/subscriptionsList';
 
 const href = process && process.env && process.env.NODE_ENV === 'production'
@@ -18,6 +18,7 @@ class Dashboard extends React.Component {
     };
   }
 
+  /*
   async componentDidMount() {
     try {
       await fetch(`${window.location.pathname}/subscriptions/update`);
@@ -61,11 +62,11 @@ class Dashboard extends React.Component {
           style: { backgroundColor: 'red', color: '#000000' }
         });
       }
-      */
     } catch(error) {
       toast.error(`Error: ${error}`);
     }
   }
+  */
 
   render() {
     const { successMessage } = this.state;

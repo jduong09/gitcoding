@@ -5,7 +5,7 @@ import SubscriptionForm from './subscriptionForm';
 const UpdateSubscription = ({ updateSubscription, prevSubscription, showSubscriptionList, toggleLoadingState }) => {
   const handleSubscriptions = async () => {
     toggleLoadingState();
-    await fetch(`${window.location.pathname}/subscriptions/update`); 
+    // await fetch(`${window.location.pathname}/subscriptions/update`); 
     const newSubscriptionList = await fetch(`${window.location.pathname}/subscriptions`); 
     const { status } = newSubscriptionList;
     const response = await newSubscriptionList.json();
