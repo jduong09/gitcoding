@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { parseWeeklyDates, parseMonthlyDates } from '../../utils/frontendDateUtils';
 /*
 import { DateUtils } from 'react-day-picker';
 import { toast } from 'react-toastify';
@@ -21,7 +22,25 @@ const Subscription = ({ details, handleEdit, handleDelete }) => {
       });
     }
     */
-    setRepeatString(`${new Date(dueDate.nextDueDate).toLocaleDateString()}, ${dueDate.frequency}`);
+    let string;
+
+    if (dueDate.frequency === 'weekly') {
+      string = (dueDate.occurrence > 1)
+        ? `Every ${dueDate.occurrence} weeks on ${parseWeeklyDates(dueDate.dates)}.`
+        : `Every week on ${parseWeeklyDates(dueDate.dates)}.`;
+    } else if (dueDate.frequency === 'monthly') {
+      string = (dueDate.occurrence > 1)
+        ? `Every ${dueDate.occurrence} months on ${parseMonthlyDates(dueDate.dates)}.`
+        : `Every month on ${parseMonthlyDates(dueDate.dates)}.`;
+    } else if (dueDate.frequency === 'daily') {
+      string = (dueDate.occurrence > 1)
+        ? `Every ${dueDate.occurrence} days.`
+        : 'Every day.';
+    } else {
+      string = 'yearly.';
+    }
+
+    setRepeatString(`${new Date(dueDate.nextDueDate).toLocaleDateString()}, ${string}`);
   }, [name, dueDate]);
 
   return (

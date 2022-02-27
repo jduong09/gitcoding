@@ -43,12 +43,12 @@ class SubscriptionsList extends React.Component {
       const { dueDate, name } = subscription;
 
       if (dueDate.lateDueDate) {
-        toast.error(`Your subscription ${name} was due ${new Date(dueDate.lateDueDate).toLocaleDateString()}`, {
+        toast.error(`Your subscription ${name} was due on ${new Date(dueDate.lateDueDate).toLocaleDateString()}`, {
           autoClose: false,
           style: { backgroundColor: 'red', color: '#000000' }
         });
       } else if (DateUtils.isSameDay(new Date(dueDate.nextDueDate), new Date()) && !dueDate.lateDueDate) {
-        toast(`Your ${name} subscription is due!`, {
+        toast(`Your ${name} subscription is due today!`, {
           autoClose:false,
           style: {
             backgroundColor: '#8C7AE6',
