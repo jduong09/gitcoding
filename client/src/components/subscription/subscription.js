@@ -11,36 +11,25 @@ const Subscription = ({ details, handleEdit, handleDelete }) => {
   const [repeatString, setRepeatString] = useState('');
 
   useEffect(() => {
-    /*
-    if (DateUtils.isSameDay(new Date(dueDate.nextDueDate), new Date())) {
-      toast(`Your ${name} subscription is due!`, { 
-        autoClose:false,
-        style: {
-          backgroundColor: '#8C7AE6',
-          color: '#000000'
-        }
-      });
-    }
-    */
-    let string;
+    let parsedRepeatString;
 
     if (dueDate.frequency === 'weekly') {
-      string = (dueDate.occurrence > 1)
+      parsedRepeatString = (dueDate.occurrence > 1)
         ? `Every ${dueDate.occurrence} weeks on ${parseWeeklyDates(dueDate.dates)}.`
         : `Every week on ${parseWeeklyDates(dueDate.dates)}.`;
     } else if (dueDate.frequency === 'monthly') {
-      string = (dueDate.occurrence > 1)
+      parsedRepeatString = (dueDate.occurrence > 1)
         ? `Every ${dueDate.occurrence} months on ${parseMonthlyDates(dueDate.dates)}.`
         : `Every month on ${parseMonthlyDates(dueDate.dates)}.`;
     } else if (dueDate.frequency === 'daily') {
-      string = (dueDate.occurrence > 1)
+      parsedRepeatString = (dueDate.occurrence > 1)
         ? `Every ${dueDate.occurrence} days.`
         : 'Every day.';
     } else {
-      string = 'yearly.';
+      parsedRepeatString = 'Every year.';
     }
 
-    setRepeatString(`${new Date(dueDate.nextDueDate).toLocaleDateString()}, ${string}`);
+    setRepeatString(`${new Date(dueDate.nextDueDate).toLocaleDateString()}, ${parsedRepeatString}`);
   }, [name, dueDate]);
 
   return (

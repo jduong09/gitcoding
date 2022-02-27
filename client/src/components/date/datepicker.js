@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 const ReactDayPicker = ({ handleUpdate, updating, nextDueDate, frequency }) => {
   const [days, setDate] = useState([]);
   const [disabledDay, setDisabledDay] = useState('');
+  const [canChangeMonth, setCanChangeMonth] = useState(true);
 
   useEffect(() => {
     if (updating) {   
@@ -15,6 +16,10 @@ const ReactDayPicker = ({ handleUpdate, updating, nextDueDate, frequency }) => {
     
       if (frequency === 'yearly' || frequency === 'daily') {
         setDisabledDay({ before: updating[0], after: updating[0] });
+      }
+
+      if (frequency === 'monthly' && updating.length) {
+        setCanChangeMonth(false);
       }
     }
   }, [updating, nextDueDate, frequency]);
@@ -40,6 +45,7 @@ const ReactDayPicker = ({ handleUpdate, updating, nextDueDate, frequency }) => {
     }
     
     setDate(selectedDays);
+    setCanChangeMonth(true);
     handleUpdate(selectedDays);
   };
 
@@ -53,6 +59,7 @@ const ReactDayPicker = ({ handleUpdate, updating, nextDueDate, frequency }) => {
         disabledDays={disabledDay}
         month={nextDueDate ? new Date(nextDueDate) : new Date()}
         todayButton="Jump To Today"
+        canChangeMonth={canChangeMonth}
       />
       <div>Days Selected: {daysList.join(', ')}</div>
     </section>
