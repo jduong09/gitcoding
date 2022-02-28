@@ -122,7 +122,6 @@ class SubscriptionForm extends React.Component {
   }
 
   renderSwitch(frequency) {
-    const { method } = this.props;
     const { occurrence, days, nextDueDate, checkedDays } = this.state;
     const weeklyCheckbox = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day, idx) => 
       <label htmlFor={day} key={day}>
@@ -147,7 +146,7 @@ class SubscriptionForm extends React.Component {
               <input type="number" id="occurrence" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')} min="0" max="12" />
             </label>
             <div>On which day(s) do you want to be reminded?</div>
-            <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='monthly' method={method} />
+            <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='monthly' />
           </div>
         );
       case 'weekly':
