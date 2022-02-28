@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { parseWeeklyDates, parseMonthlyDates } from '../../utils/frontendDateUtils';
-/*
-import { DateUtils } from 'react-day-picker';
-import { toast } from 'react-toastify';
-*/
 
 const Subscription = ({ details, handleEdit, handleDelete }) => {
   const { name, nickname, dueDate, reminderDays, amount } = details;

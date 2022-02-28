@@ -53,29 +53,6 @@ router.delete('/:subscriptionUuid', async (req, res) => {
   }
 });
 
-/*
-router.get('/update', async (req, res) => {
-  const { user_id } = req.session.userInfo;
-  try {
-    const allSubscriptions = await getSubscriptionsByUserId(user_id);
-
-    const updatedSubscriptions = await Promise.all(allSubscriptions.map(({ dueDate, subscriptionUuid }) =>
-      updateNextDueDate(dueDate, subscriptionUuid)));
-    
-    const lateDueDates = updatedSubscriptions.reduce((lateSubs, subscription) => {
-        if (subscription?.dueDate?.lateDueDate) {
-          lateSubs.push({ name: subscription.name, date: subscription.dueDate.lateDueDate});
-        }
-        return lateSubs;
-    }, []);
-
-    res.status(200).json(lateDueDates);
-  } catch(error) {
-    res.status(400).json({ errorMessage: 'Error updating late subscriptions.' });
-  }
-});
-*/
-
 const updateAllUsersSubscriptions = async (req) => {
   const { user_id } = req.session.userInfo;
 
