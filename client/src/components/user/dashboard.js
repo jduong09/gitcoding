@@ -12,7 +12,7 @@ class Dashboard extends React.Component {
     super();
 
     this.state = { 
-      successMessage: ''
+      successMessage: '',
     };
   }
 

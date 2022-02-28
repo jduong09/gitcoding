@@ -1,5 +1,6 @@
 import React from 'react';
 import { toast } from 'react-toastify';
+import { DateUtils } from 'react-day-picker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import Subscription from './subscription';
@@ -7,8 +8,8 @@ import UpdateSubscription from './updateSubscription';
 import CreateSubscription from './createSubscription';
 
 class SubscriptionsList extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       loading: true,
@@ -17,14 +18,15 @@ class SubscriptionsList extends React.Component {
       editingSubscription: null,
     };
 
+    this.handleUpdate = this.handleUpdate.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.showSubscriptionList = this.showSubscriptionList.bind(this);
     this.toggleLoadingState = this.toggleLoadingState.bind(this);
   }
 
   async componentDidMount() {
-    const allSubscriptions = await fetch(`${window.location.pathname}/subscriptions`);
-    const { status } = allSubscriptions;
+    const data = await fetch(`${window.location.pathname}/subscriptions`);
+    const { status } = data;
 
     if (status === 404) {
       window.location = '/not-found';
@@ -34,15 +36,37 @@ class SubscriptionsList extends React.Component {
       toast.error('Error: Error getting your subscriptions!');
       return;
     }
+    const subscriptions = await data.json();
 
-    const response = await allSubscriptions.json();
+    for (let i = 0; i < subscriptions.length; i += 1) {
+      const subscription = subscriptions[i];
+      const { dueDate, name } = subscription;
+
+      if (dueDate.lateDueDate) {
+        toast.error(`Your ${name} subscription was due on ${new Date(dueDate.lateDueDate).toLocaleDateString()}`, {
+          autoClose: false,
+          style: { backgroundColor: 'red', color: '#000000' }
+        });
+      } else if (DateUtils.isSameDay(new Date(dueDate.nextDueDate), new Date()) && !dueDate.lateDueDate) {
+        toast(`Your ${name} subscription is due today!`, {
+          autoClose:false,
+          style: {
+            backgroundColor: '#8C7AE6',
+            color: '#000000'
+          }
+        });
+      }
+    }
+
+
+
     setTimeout(() => {
-      this.setState({ subscriptions: response, loading: false });
+      this.setState({ subscriptions, loading: false });
     }, 1000); // This is probably not necessary but in local provides perceived loading since the DB calls are instant
   }
 
-  handleUpdate = (newSubscriptionsList) => {
-    this.setState({ subscriptions: newSubscriptionsList });
+  handleUpdate = async (newSubscriptionsList) => {
+    await this.setState({ subscriptions: newSubscriptionsList });
   }
 
   handleDelete = async (subscriptionUuid) => {
@@ -106,7 +130,6 @@ class SubscriptionsList extends React.Component {
                 updateSubscription={this.handleUpdate}
                 showSubscriptionList={this.showSubscriptionList}
                 toggleLoadingState={this.toggleLoadingState}
-                currentSubscriptions={subscriptions}
                 prevSubscription={subscription} />
               <button onClick={() => this.setState({ editingSubscription: null })} className="btn btn-link my-2" type="button">Cancel</button>
             </div>

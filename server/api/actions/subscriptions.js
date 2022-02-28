@@ -2,16 +2,16 @@ const db = require('../../db/db');
 
 const getSubscriptionsByUserId = async (userId) => {
   const { rows: data } = await db.execute('server/sql/subscriptions/getSubscriptionsByUserId.sql', {userId});
-  // returns all user's subscriptions (array containing objects of subscription)
   return data;
 };
 
 const createSubscription = async (requestBody) => {
   const { rows: [data] } = await db.execute('server/sql/subscriptions/putSubscription.sql', 
     {
-      ...requestBody, 
+      ...requestBody,
+      occurrence: parseInt(requestBody.occurrence),
       reminderDays: parseInt(requestBody.reminderDays),
-      amount: requestBody.amount * 100
+      amount: Math.round((requestBody.amount * 100) * 100) / 100
     }
   );
   return data;
@@ -21,11 +21,17 @@ const updateSubscriptionBySubscriptionId = async (subscriptionInfo) => {
   const { rows: [data] } = await db.execute('server/sql/subscriptions/patchSubscription.sql', 
     {
       ...subscriptionInfo, 
+      occurrence: parseInt(subscriptionInfo.occurrence),
       removedAt: subscriptionInfo.removedAt || null,
       reminderDays: parseInt(subscriptionInfo.reminderDays),
-      amount: subscriptionInfo.amount * 100
+      amount: Math.round((subscriptionInfo.amount * 100) * 100) / 100
     }
   );
+  return data;
+}
+
+const updateDatesBySubscriptionId = async (requestBody) => {
+  const { rows: [data] } = await db.execute('server/sql/subscriptions/patchSubscriptionDueDate.sql', requestBody);
   return data;
 }
 
@@ -38,5 +44,6 @@ module.exports = {
   getSubscriptionsByUserId,
   createSubscription,
   updateSubscriptionBySubscriptionId,
-  deleteSubscriptionBySubscriptionId
+  deleteSubscriptionBySubscriptionId,
+  updateDatesBySubscriptionId
 };
