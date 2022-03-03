@@ -25,6 +25,7 @@ class SubscriptionsList extends React.Component {
   }
 
   async componentDidMount() {
+    const { updateDueDates } = this.props;
     const data = await fetch(`${window.location.pathname}/subscriptions`);
     const { status } = data;
 
@@ -37,6 +38,7 @@ class SubscriptionsList extends React.Component {
       return;
     }
     const subscriptions = await data.json();
+    const dueDates = [];
 
     for (let i = 0; i < subscriptions.length; i += 1) {
       const subscription = subscriptions[i];
@@ -56,9 +58,10 @@ class SubscriptionsList extends React.Component {
           }
         });
       }
+      dueDates.push(new Date(dueDate.nextDueDate));
     }
 
-
+    updateDueDates(dueDates);
 
     setTimeout(() => {
       this.setState({ subscriptions, loading: false });

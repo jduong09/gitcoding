@@ -1,4 +1,5 @@
 import React from 'react';
+import DayPicker from 'react-day-picker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import SubscriptionsList from '../subscription/subscriptionsList';
@@ -13,40 +14,54 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { 
-      successMessage: '',
+    this.state = {
+      dueDates: [],
     };
-  }
+
+    this.updateDueDates = this.updateDueDates.bind(this);
+  };
+
+  updateDueDates(dueDates) {
+    this.setState({ dueDates });
+  };
 
   render() {
-    const { successMessage } = this.state;
     const { name, pfp } = this.props;
+    const { dueDates } = this.state;
     return (
       <div>
         <header>
-          <nav className="navbar navbar-light bg-light">
-            <div className="d-flex">
+          <nav className="navbar navbar-light bg-light text-primary">
+            <a className="navbar-brand text-primary" href="#changeThis">
               <img src={logo} alt="wateringCanIcon" height="36" />
-              <h2>Water Your Subs</h2>
-            </div>
+              Water Your Subs
+            </a>
             <h1>{`${new Date().toDateString()}`}</h1>
-            <div>
+            <div className="d-flex dropdown">
               <img src={pfp} alt="user-pfp" height="36" />
-              {name}
+              <a className="nav-link dropdown-toggle" href="#dashboard" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {name}
+              </a>
+              <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <li>
+                  <a className="dropdown-item text-primary" href={href}>
+                    Sign Out
+                    <FontAwesomeIcon icon={faSignOutAlt} />
+                  </a>
+                </li>
+              </ul>
             </div>
           </nav>
         </header>
-        <section className="subscription-list">
-          <SubscriptionsList />
-        </section>
-        {successMessage}
-        <a href={href}>
-          Sign Out!
-          <FontAwesomeIcon icon={faSignOutAlt} />
-        </a>
+        <main className="d-flex">
+          <section className="subscription-list">
+            <SubscriptionsList updateDueDates={this.updateDueDates} />
+          </section>
+          <DayPicker selectedDays={dueDates} />
+        </main>
       </div>
     );
-  }
+  };
 };
 
 export default Dashboard;

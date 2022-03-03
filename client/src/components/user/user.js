@@ -1,5 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Dashboard from './dashboard';
 
 class User extends React.Component {
@@ -19,11 +20,10 @@ class User extends React.Component {
 
       const userInfo = await response.json();
       const { name, pfp } = userInfo;
-      console.log(name, pfp);
 
       this.setState({ name, pfp });
     } catch(error) {
-      console.log('Error: ', error);
+      toast.error(`Error fetching user info: ${error}`);
     } 
   }
   
