@@ -71,7 +71,8 @@ router.get('/callback', (req, res, next) => {
 
       const { user_uuid, id } = data;
       req.session.userInfo = {
-        user_id: id
+        user_id: id,
+        picture: user.picture
       };
       
       // URGENT: Need to look at purpose of deleting returnTo
