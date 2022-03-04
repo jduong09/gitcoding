@@ -1,8 +1,9 @@
 import React from 'react';
 import DayPicker from 'react-day-picker';
+import 'react-day-picker/lib/style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import SubscriptionsList from '../subscription/subscriptionsList';
+import NewSubscriptionsList from '../subscription/newSubscriptionsList';
 import logo from '../../assets/watering-can.png';
 
 const href = process && process.env && process.env.NODE_ENV === 'production'
@@ -53,11 +54,15 @@ class Dashboard extends React.Component {
             </div>
           </nav>
         </header>
-        <main className="d-flex">
-          <section className="subscription-list">
-            <SubscriptionsList updateDueDates={this.updateDueDates} />
+        <main className="d-flex container">
+          <section className="col-3">
+            <NewSubscriptionsList updateDueDates={this.updateDueDates} />
           </section>
-          <DayPicker selectedDays={dueDates} />
+          <div className="col-8 offset-sm-1 border-start border-primary" >
+            <section>
+              <DayPicker selectedDays={dueDates}  />
+            </section>
+          </div>
         </main>
       </div>
     );
