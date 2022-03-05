@@ -16,10 +16,12 @@ const NewSubscriptionsList = ({ subscriptions, setEditingSubscription, setAdding
   });
 
   return (
-    <ul className="list-group">
-      {subscriptionsList}
-      <li><button type="button" onClick={() => setAddingSubscription(true)}>+Create</button></li>
-    </ul>
+    <div>
+      <ul className="list-group">
+        {subscriptionsList}
+      </ul>
+      <button className="btn col-12 border-dashed border-primary text-primary" type="button" onClick={() => setAddingSubscription(true)}>+Create</button>
+    </div>
   );
 };
 
