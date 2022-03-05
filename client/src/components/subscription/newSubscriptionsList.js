@@ -20,7 +20,7 @@ const NewSubscriptionsList = ({ subscriptions, setEditingSubscription, setAdding
       <ul className="list-group">
         {subscriptionsList}
       </ul>
-      <button className="btn col-12 border-dashed border-primary text-primary" type="button" onClick={() => setAddingSubscription(true)}>+Create</button>
+      <button className="col-12 btn border-dashed border-primary text-primary" type="button" onClick={() => setAddingSubscription(true)}>+Create</button>
     </div>
   );
 };
