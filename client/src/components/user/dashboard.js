@@ -6,9 +6,9 @@ import { faSignOutAlt, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 import NewSubscriptionsList from '../subscription/newSubscriptionsList';
 import DashboardCalendar from '../date/dashboardCalendar';
-import logo from '../../assets/watering-can.png';
 import UpdateSubscription from '../subscription/updateSubscription';
 import CreateSubscription from '../subscription/createSubscription';
+import logo from '../../assets/watering-can.png';
 
 const href = process && process.env && process.env.NODE_ENV === 'production'
   ? '/auth/logout'
@@ -27,6 +27,7 @@ class Dashboard extends React.Component {
     };
 
     this.setEditingSubscription = this.setEditingSubscription.bind(this);
+    this.setAddingSubscription = this.setAddingSubscription.bind(this);
     this.toggleLoadingState = this.toggleLoadingState.bind(this);
     this.showSubscriptionList = this.showSubscriptionList.bind(this);
   };
@@ -72,11 +73,14 @@ class Dashboard extends React.Component {
     await this.setState({ editingSubscription });
   }
 
+  setAddingSubscription = async (addingSubscription) => {
+    await this.setState({ addingSubscription });
+  }
+
   handleUpdate = async (newSubscriptionsList) => {
     await this.setState({ subscriptions: newSubscriptionsList });
   }
 
-  /*
   handleDelete = async (subscriptionUuid) => {
     this.toggleLoadingState();
     const deleteSubscription = await fetch(`${window.location.pathname}/subscriptions/${subscriptionUuid}`, {
@@ -99,7 +103,6 @@ class Dashboard extends React.Component {
 
     this.setState({ subscriptions: updatedSubscriptionsList });
   }
-  */
 
   showSubscriptionList() {
     this.setState({ addingSubscription: false, editingSubscription: null });
@@ -165,7 +168,12 @@ class Dashboard extends React.Component {
         </header>
         <main className="d-flex container">
           <section className="col-3">
-            <NewSubscriptionsList subscriptions={subscriptions} setEditingSubscription={this.setEditingSubscription} />
+            <NewSubscriptionsList
+              subscriptions={subscriptions}
+              setEditingSubscription={this.setEditingSubscription}
+              setAddingSubscription={this.setAddingSubscription}
+              handleDelete={this.handleDelete}
+            />
           </section>
           <div className="col-8 offset-sm-1 border-start border-primary" >
             {loading 
