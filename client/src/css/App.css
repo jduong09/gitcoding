@@ -33,3 +33,18 @@ ul, ol {
 .subscription-details > li {
   padding: 3px;
 }
+
+/* TODO: Move these classes to a more sensible place maybe...? */
+.text-underline-color {
+  box-shadow: inset 0 -0.4em #af74fc;
+}
+
+.btn-primary {
+  background-color: #af74fc;
+  border-color: #af74fc;
+}
+
+.btn-primary:hover {
+  background-color: #8862b9;
+  border-color: #8862b9;
+}
