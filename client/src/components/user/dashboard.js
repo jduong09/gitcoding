@@ -1,9 +1,11 @@
 import React from 'react';
-import DayPicker from 'react-day-picker';
+import { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { toast } from 'react-toastify';
 import NewSubscriptionsList from '../subscription/newSubscriptionsList';
+import DashboardCalendar from '../date/dashboardCalendar';
 import logo from '../../assets/watering-can.png';
 import UpdateSubscription from '../subscription/updateSubscription';
 import CreateSubscription from '../subscription/createSubscription';
@@ -18,14 +20,57 @@ class Dashboard extends React.Component {
     super(props);
 
     this.state = {
-      dueDates: [],
+      subscriptions: [],
       loading: false,
       addingSubscription: false,
       editingSubscription: null,
     };
 
-    this.updateDueDates = this.updateDueDates.bind(this);
+    this.setEditingSubscription = this.setEditingSubscription.bind(this);
+    this.toggleLoadingState = this.toggleLoadingState.bind(this);
+    this.showSubscriptionList = this.showSubscriptionList.bind(this);
   };
+  
+  async componentDidMount() {
+    const data = await fetch(`${window.location.pathname}/subscriptions`);
+    const { status } = data;
+
+    if (status === 404) {
+      window.location = '/not-found';
+    }
+
+    if (status === 400) {
+      toast.error('Error: Error getting your subscriptions!');
+      return;
+    }
+    const subscriptions = await data.json();
+
+    for (let i = 0; i < subscriptions.length; i += 1) {
+      const subscription = subscriptions[i];
+      const { dueDate, name } = subscription;
+
+      if (dueDate.lateDueDate) {
+        toast.error(`Your ${name} subscription was due on ${new Date(dueDate.lateDueDate).toLocaleDateString()}`, {
+          autoClose: false,
+          style: { backgroundColor: 'red', color: '#000000' }
+        });
+      } else if (DateUtils.isSameDay(new Date(dueDate.nextDueDate), new Date()) && !dueDate.lateDueDate) {
+        toast(`Your ${name} subscription is due today!`, {
+          autoClose:false,
+          style: {
+            backgroundColor: '#8C7AE6',
+            color: '#000000'
+          }
+        });
+      }
+    };
+
+    this.setState({ subscriptions });
+  };
+
+  setEditingSubscription = async (editingSubscription) => {
+    await this.setState({ editingSubscription });
+  }
 
   handleUpdate = async (newSubscriptionsList) => {
     await this.setState({ subscriptions: newSubscriptionsList });
@@ -56,10 +101,6 @@ class Dashboard extends React.Component {
   }
   */
 
-  updateDueDates(dueDates) {
-    this.setState({ dueDates });
-  };
-
   showSubscriptionList() {
     this.setState({ addingSubscription: false, editingSubscription: null });
   }
@@ -77,7 +118,7 @@ class Dashboard extends React.Component {
 
   render() {
     const { name, pfp } = this.props;
-    const { dueDates, loading, subscriptions, addingSubscription, editingSubscription } = this.state;
+    const { loading, subscriptions, addingSubscription, editingSubscription } = this.state;
 
     const subscriptionForm = addingSubscription
       ? <div className="card p-3 m-2 d-flex flex-column">
@@ -93,9 +134,10 @@ class Dashboard extends React.Component {
           updateSubscription={this.handleUpdate}
           showSubscriptionList={this.showSubscriptionList}
           toggleLoadingState={this.toggleLoadingState}
+          prevSubscription={editingSubscription}
           />
           <button onClick={() => this.setState({ editingSubscription: null })} className="btn btn-link my-2" type="button">Cancel</button>
-        </div>
+        </div>;
     return (
       <div>
         <header>
@@ -123,7 +165,7 @@ class Dashboard extends React.Component {
         </header>
         <main className="d-flex container">
           <section className="col-3">
-            <NewSubscriptionsList updateDueDates={this.updateDueDates} />
+            <NewSubscriptionsList subscriptions={subscriptions} setEditingSubscription={this.setEditingSubscription} />
           </section>
           <div className="col-8 offset-sm-1 border-start border-primary" >
             {loading 
@@ -133,7 +175,7 @@ class Dashboard extends React.Component {
                 </div> 
               : <div>
                 {!addingSubscription && !editingSubscription
-                  ? <DayPicker selectedDays={dueDates}  />
+                  ? <DashboardCalendar subscriptions={subscriptions} />
                   : subscriptionForm
                 }
                 </div>
