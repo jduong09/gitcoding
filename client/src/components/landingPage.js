@@ -1,5 +1,6 @@
 import React from 'react';
-import logo from '../assets/watering_can.jpg';
+import logo from '../assets/watering-can.png';
+
 
 const href = process && process.env && process.env.NODE_ENV === 'production'
   ? '/auth/login'
@@ -9,17 +10,17 @@ const header = 'Keep Your Subscriptions Healthy';
 
 const LandingPage = () => (
   <div>
-    <header className="d-flex justify-content-around align-items-center border-bottom shadow-sm">
-      <img src={logo} alt="watering can logo" width="100px" />
+    <header className="d-flex justify-content-around align-items-center border-bottom shadow-sm py-2">
+      <img src={logo} alt="watering can logo" width="60px" />
       <h1 className="display-4">Water Your Subs</h1>
       <div />
     </header>
-    <div className="container p-4 d-flex flex-column flex-lg-row justify-content-around align-items-center" style={{'min-height': '85vh'}}>
+    <div className="container p-4 d-flex flex-column flex-lg-row justify-content-around align-items-center" style={{'minHeight': '85vh'}}>
       <div className="col-12 col-lg-6 order-1 order-lg-0">
         <div className="d-flex flex-column align-items-start">
           <h1 className="text-start display-3 fw-bold">
             {/* The CSS underlines each line and thus needs to be applied to each word as an individual element */}
-            {header.split(' ').map((word) => <span className="text-underline-color">{word} </span>)}
+            {header.split(' ').map((word) => <span key={word} className="text-underline-color">{word} </span>)}
           </h1>
           <p className="text-start py-3">Water Yours Subs keeps track of your subscriptions, providing you reminders to ensure you never have a late payment.</p>
           <a href={href} className="btn btn-primary rounded-pill px-4 fw-bold">Sign In</a>
