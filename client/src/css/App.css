@@ -33,3 +33,8 @@ ul, ol {
 .subscription-details > li {
   padding: 3px;
 }
+
+/* TODO: Move these classes to a more sensible place maybe...? */
+.text-underline-color {
+  box-shadow: inset 0 -0.4em #7866D3;
+}
