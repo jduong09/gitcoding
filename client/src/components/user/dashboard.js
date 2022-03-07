@@ -120,7 +120,7 @@ class Dashboard extends React.Component {
   };
 
   render() {
-    const { name, pfp } = this.props;
+    const { pfp } = this.props;
     const { loading, subscriptions, addingSubscription, editingSubscription } = this.state;
 
     const subscriptionForm = addingSubscription
@@ -141,23 +141,23 @@ class Dashboard extends React.Component {
           />
           <button onClick={() => this.setState({ editingSubscription: null })} className="btn btn-link my-2" type="button">Cancel</button>
         </div>;
+
     return (
       <div>
         <header>
-          <nav className="navbar navbar-light bg-light text-primary">
-            <a className="navbar-brand text-primary" href="#changeThis">
+          <nav className="navbar d-flex justify-content-around bg-primary text-dark border-bottom border-dark">
+            <a className="navbar-brand d-flex text-primary" href="#changeThis">
               <img src={logo} alt="wateringCanIcon" height="36" />
-              Water Your Subs
+              <div className="d-none d-md-block text-dark">Water Your  Subs</div>
             </a>
             <h1>{`${new Date().toDateString()}`}</h1>
             <div className="d-flex dropdown">
-              <img src={pfp} alt="user-pfp" height="36" />
-              <a className="nav-link dropdown-toggle" href="#dashboard" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                {name}
+              <a className="dropdown-toggle" href="#dashboard" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src={pfp} alt="user-pfp" height="36" />
               </a>
-              <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                 <li>
-                  <a className="dropdown-item text-primary" href={href}>
+                  <a className="dropdown-item" href={href}>
                     Sign Out
                     <FontAwesomeIcon icon={faSignOutAlt} />
                   </a>
@@ -166,8 +166,8 @@ class Dashboard extends React.Component {
             </div>
           </nav>
         </header>
-        <main className="d-flex container">
-          <section className="col-3">
+        <main className="d-flex flex-column-reverse flex-md-row">
+          <section className="col col-3-lg">
             <NewSubscriptionsList
               subscriptions={subscriptions}
               setEditingSubscription={this.setEditingSubscription}
@@ -175,7 +175,7 @@ class Dashboard extends React.Component {
               handleDelete={this.handleDelete}
             />
           </section>
-          <div className="col-8 offset-sm-1 border-start border-primary" >
+          <div className="col col-8-lg offset-1-lg" >
             {loading 
               ? <div className="d-flex flex-column justify-content-center align-items-center fs-1">
                 <FontAwesomeIcon icon={faSpinner} className="mb-2 spin" />
