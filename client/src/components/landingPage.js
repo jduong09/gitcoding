@@ -1,7 +1,6 @@
 import React from 'react';
 import logo from '../assets/watering-can.png';
 
-
 const href = process && process.env && process.env.NODE_ENV === 'production'
   ? '/auth/login'
   : 'http://localhost:5000/auth/login';
