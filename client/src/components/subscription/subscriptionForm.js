@@ -109,6 +109,7 @@ class SubscriptionForm extends React.Component {
     }
 
     await handleSubscriptions(response);
+    toggleLoadingState();
     showSubscriptionList();
   }
 
@@ -220,7 +221,7 @@ class SubscriptionForm extends React.Component {
             <input type="number" name="subscription-amount" min="0" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} required />
           </label>
 
-          <input type="submit" value="Submit" />
+          <input type="submit" data-bs-dismiss="offcanvas" aria-label="Close" value="Submit" />
         </form>
       </section>
     );

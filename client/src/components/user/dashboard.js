@@ -8,6 +8,7 @@ import NewSubscriptionsList from '../subscription/newSubscriptionsList';
 import DashboardCalendar from '../date/dashboardCalendar';
 import UpdateSubscription from '../subscription/updateSubscription';
 import CreateSubscription from '../subscription/createSubscription';
+import OffCanvasSubscriptionDetail from '../subscription/offCanvasSubscriptionDetail';
 import logo from '../../assets/watering-can.png';
 
 const href = process && process.env && process.env.NODE_ENV === 'production'
@@ -24,10 +25,12 @@ class Dashboard extends React.Component {
       loading: false,
       addingSubscription: false,
       editingSubscription: null,
+      activeSubscription: false
     };
 
     this.setEditingSubscription = this.setEditingSubscription.bind(this);
     this.setAddingSubscription = this.setAddingSubscription.bind(this);
+    this.setActiveSubscription = this.setActiveSubscription.bind(this);
     this.toggleLoadingState = this.toggleLoadingState.bind(this);
     this.showSubscriptionList = this.showSubscriptionList.bind(this);
   };
@@ -77,8 +80,12 @@ class Dashboard extends React.Component {
     await this.setState({ addingSubscription });
   }
 
+  setActiveSubscription = async (subscription) => {
+    await this.setState({ activeSubscription: subscription });
+  }
+
   handleUpdate = async (newSubscriptionsList) => {
-    await this.setState({ subscriptions: newSubscriptionsList });
+    await this.setState({ subscriptions: newSubscriptionsList, activeSubscription: false });
   }
 
   handleDelete = async (subscriptionUuid) => {
@@ -101,7 +108,7 @@ class Dashboard extends React.Component {
     const { subscriptions } = this.state;
     const updatedSubscriptionsList = await subscriptions.filter(subscription => subscription.subscriptionUuid !== subscriptionUuid);
 
-    this.setState({ subscriptions: updatedSubscriptionsList });
+    this.setState({ subscriptions: updatedSubscriptionsList, activeSubscription: false });
   }
 
   showSubscriptionList() {
@@ -121,7 +128,7 @@ class Dashboard extends React.Component {
 
   render() {
     const { pfp } = this.props;
-    const { loading, subscriptions, addingSubscription, editingSubscription } = this.state;
+    const { loading, subscriptions, addingSubscription, editingSubscription, activeSubscription } = this.state;
 
     const subscriptionForm = addingSubscription
       ? <div className="card p-3 m-2 d-flex flex-column">
@@ -130,7 +137,7 @@ class Dashboard extends React.Component {
           toggleLoadingState={this.toggleLoadingState}
           showSubscriptionList={this.showSubscriptionList}
           currentSubscriptions={subscriptions} />
-          <button onClick={() => this.setState({ addingSubscription: !addingSubscription })} className="btn btn-link my-2" type="button">Cancel</button>
+          <button data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ addingSubscription: !addingSubscription })} className="btn btn-link my-2" type="button">Cancel</button>
         </div>
       : <div className="card p-3 m-2 d-flex flex-wrap">
           <UpdateSubscription
@@ -139,9 +146,8 @@ class Dashboard extends React.Component {
           toggleLoadingState={this.toggleLoadingState}
           prevSubscription={editingSubscription}
           />
-          <button onClick={() => this.setState({ editingSubscription: null })} className="btn btn-link my-2" type="button">Cancel</button>
+          <button data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ editingSubscription: !editingSubscription, activeSubscription: false })} className="btn btn-link my-2" type="button">Cancel</button>
         </div>;
-
     return (
       <div>
         <header>
@@ -166,15 +172,7 @@ class Dashboard extends React.Component {
             </div>
           </nav>
         </header>
-        <main className="d-flex flex-column-reverse flex-md-row">
-          <section className="col col-3-lg">
-            <NewSubscriptionsList
-              subscriptions={subscriptions}
-              setEditingSubscription={this.setEditingSubscription}
-              setAddingSubscription={this.setAddingSubscription}
-              handleDelete={this.handleDelete}
-            />
-          </section>
+        <main className="d-flex flex-column flex-md-row">
           <div className="col col-8-lg offset-1-lg" >
             {loading 
               ? <div className="d-flex flex-column justify-content-center align-items-center fs-1">
@@ -182,12 +180,33 @@ class Dashboard extends React.Component {
                 Loading...
                 </div> 
               : <div>
-                {!addingSubscription && !editingSubscription
-                  ? <DashboardCalendar subscriptions={subscriptions} />
-                  : subscriptionForm
+                {activeSubscription
+                  ? <OffCanvasSubscriptionDetail details={activeSubscription}/>
+                  : <DashboardCalendar subscriptions={subscriptions} />
                 }
                 </div>
             }
+          </div>
+          <NewSubscriptionsList
+            subscriptions={subscriptions}
+            setEditingSubscription={this.setEditingSubscription}
+            setActiveSubscription={this.setActiveSubscription}
+            handleDelete={this.handleDelete}
+          />
+          <div className="col p-3">
+            <button
+              className="col-12 p-4 btn border-dashed border-primary text-primary"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasExample"
+              aria-controls="offcanvasExample"
+              onClick={() => this.setAddingSubscription(true)}
+            >
+              +Create
+            </button>
+          </div>
+          <div className="offcanvas offcanvas-bottom" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            {addingSubscription || editingSubscription ? subscriptionForm : ''}
           </div>
         </main>
       </div>
