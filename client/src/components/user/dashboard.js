@@ -8,7 +8,7 @@ import NewSubscriptionsList from '../subscription/newSubscriptionsList';
 import DashboardCalendar from '../date/dashboardCalendar';
 import UpdateSubscription from '../subscription/updateSubscription';
 import CreateSubscription from '../subscription/createSubscription';
-import OffCanvasSubscriptionDetail from '../subscription/offCanvasSubscriptionDetail';
+import SubscriptionDetail from '../subscription/subscriptionDetail';
 import logo from '../../assets/watering-can.png';
 
 const href = process && process.env && process.env.NODE_ENV === 'production'
@@ -25,7 +25,7 @@ class Dashboard extends React.Component {
       loading: false,
       addingSubscription: false,
       editingSubscription: null,
-      activeSubscription: false
+      activeSubscription: false,
     };
 
     this.setEditingSubscription = this.setEditingSubscription.bind(this);
@@ -163,6 +163,17 @@ class Dashboard extends React.Component {
               </a>
               <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                 <li>
+                  <a
+                    className="btn dropdown-item"
+                    data-bs-toggle="offcanvas"
+                    href="#offcanvasNotifications"
+                    role="button"
+                    aria-controls="offcanvasNotifications"
+                  >
+                    Notifications
+                  </a>
+                </li>
+                <li>
                   <a className="dropdown-item" href={href}>
                     Sign Out
                     <FontAwesomeIcon icon={faSignOutAlt} />
@@ -181,7 +192,7 @@ class Dashboard extends React.Component {
                 </div> 
               : <div>
                 {activeSubscription
-                  ? <OffCanvasSubscriptionDetail details={activeSubscription}/>
+                  ? <SubscriptionDetail details={activeSubscription}/>
                   : <DashboardCalendar subscriptions={subscriptions} />
                 }
                 </div>

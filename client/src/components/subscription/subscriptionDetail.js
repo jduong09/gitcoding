@@ -1,6 +1,6 @@
 import React from 'react';
 
-const OffCanvasSubscriptionDetail = ({ details }) => {
+const SubscriptionDetail = ({ details }) => {
   const { name, nickname, dueDate, reminderDays, amount } = details;
 
   return (
@@ -15,4 +15,4 @@ const OffCanvasSubscriptionDetail = ({ details }) => {
   );
 };
 
-export default OffCanvasSubscriptionDetail;
+export default SubscriptionDetail;
