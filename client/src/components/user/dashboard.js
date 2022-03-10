@@ -2,7 +2,7 @@ import React from 'react';
 import { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 import NewSubscriptionsList from '../subscription/newSubscriptionsList';
 import DashboardCalendar from '../date/dashboardCalendar';
@@ -131,22 +131,32 @@ class Dashboard extends React.Component {
     const { loading, subscriptions, addingSubscription, editingSubscription, activeSubscription } = this.state;
 
     const subscriptionForm = addingSubscription
-      ? <div className="card p-3 m-2 d-flex flex-column align-items-start">
+      ? <div className="card p-3 m-2 d-flex flex-wrap">
+          <div className="d-flex justify-content-between align-items-center">
+            <h2 className="text-start">Create Subscription</h2>
+            <button data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ addingSubscription: !addingSubscription })} className="btn btn-link my-2" type="button">
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+          </div>
           <CreateSubscription 
           addSubscription={this.handleUpdate}
           toggleLoadingState={this.toggleLoadingState}
           showSubscriptionList={this.showSubscriptionList}
           currentSubscriptions={subscriptions} />
-          <button data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ addingSubscription: !addingSubscription })} className="btn btn-link my-2" type="button">Cancel</button>
         </div>
       : <div className="card p-3 m-2 d-flex flex-wrap">
+          <div className="d-flex justify-content-between align-items-center">
+            <h2 className="text-start">Update Subscription</h2>
+            <button data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ editingSubscription: !editingSubscription, activeSubscription: false })} className="btn btn-link my-2" type="button">
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+          </div>
           <UpdateSubscription
           updateSubscription={this.handleUpdate}
           showSubscriptionList={this.showSubscriptionList}
           toggleLoadingState={this.toggleLoadingState}
           prevSubscription={editingSubscription}
           />
-          <button data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ editingSubscription: !editingSubscription, activeSubscription: false })} className="btn btn-link my-2" type="button">Cancel</button>
         </div>;
     return (
       <div>

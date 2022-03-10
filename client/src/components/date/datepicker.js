@@ -53,14 +53,16 @@ const ReactDayPicker = ({ handleUpdate, updating, nextDueDate, frequency }) => {
   
   return (
     <section className="day-picker">
-      <DayPicker 
-        onDayClick={handleDayClick}
-        selectedDays={days}
-        disabledDays={disabledDay}
-        month={nextDueDate ? new Date(nextDueDate) : new Date()}
-        todayButton="Jump To Today"
-        canChangeMonth={canChangeMonth}
-      />
+      <div id="dayPickerForm">
+        <DayPicker 
+          onDayClick={handleDayClick}
+          selectedDays={days}
+          disabledDays={disabledDay}
+          month={nextDueDate ? new Date(nextDueDate) : new Date()}
+          todayButton="Jump To Today"
+          canChangeMonth={canChangeMonth}
+        />
+      </div>
       <div>Days Selected: {daysList.join(', ')}</div>
     </section>
   );

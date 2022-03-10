@@ -1,5 +1,13 @@
 .DayPicker {
-  font-size: 1.5rem;
+  font-size: 1.0rem;
+}
+
+#dayPickerForm .DayPicker {
+  font-size: .75rem;
+}
+
+.DayPicker-Day {
+  padding: .7em;
 }
 
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
@@ -14,5 +22,16 @@
   .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
     background-color: #ddd6ff !important;
 }
+
+@media(min-width: 577px) {
+  .DayPicker {
+    font-size: 1.5rem;
+  }
+
+  .DayPicker-Day {
+    padding: .5em;
+  }
+}
+
 
 @import "~react-day-picker/lib/style.css";
