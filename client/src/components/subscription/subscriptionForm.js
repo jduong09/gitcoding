@@ -134,14 +134,14 @@ class SubscriptionForm extends React.Component {
     switch (frequency) {
       case 'yearly':
         return (
-          <div>
+          <div className="col-12 p-3 d-flex flex-column align-items-center">
             On what day do you want to be reminded?
             <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='yearly' />
           </div>
         );
       case 'monthly':
         return (
-          <div>
+          <div className="col-12 p-3 d-flex flex-column align-items-center">
             <label htmlFor="occurrence">
               Every (?) Months:
               <input type="number" id="occurrence" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')} min="0" max="12" />
@@ -152,7 +152,7 @@ class SubscriptionForm extends React.Component {
         );
       case 'weekly':
         return (
-          <div>
+          <div className="col-12 p-3 d-flex flex-column align-items-center">
             <label htmlFor="occurrence">
               How many weeks in between do you want to be reminded?
               <select id="occurrence" placeholder="ex: Every 2 weeks" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')}>
@@ -169,11 +169,13 @@ class SubscriptionForm extends React.Component {
         );
       case 'daily':
         return (
-          <label htmlFor="occurrence">
-            Every:
-            <input type="number" id="occurence" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')} />
-            <ReactDayPicker handleUpdate={this.handleDays} updating={days} frequency='daily' />
-          </label>
+          <div className="col-12 p-3 d-flex flex-column align-items-center">
+            <label htmlFor="occurrence">
+              Every:
+              <input type="number" id="occurence" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')} />
+              <ReactDayPicker handleUpdate={this.handleDays} updating={days} frequency='daily' />
+            </label>
+          </div>
         );
       default:
         return ('');
@@ -185,43 +187,55 @@ class SubscriptionForm extends React.Component {
     const { name, nickname, reminderDays, amount, frequency } = this.state;
 
     return (
-      <section>
-        <h2>{method === 'PUT' ? 'Create Subscription' : 'Update Subscription'}</h2>
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor="subscription-name">
-            Name:
-            <input type="text" placeholder="e.g. Crunchyroll" name="subscription-name" value={name} onChange={(event) => this.handleChange(event, 'name')} required />
+      <section className="col-12">
+        <h2 className="text-start">{method === 'PUT' ? 'Create Subscription' : 'Update Subscription'}</h2>
+        <form className="text-start" onSubmit={this.handleSubmit}>
+          <label className="d-flex form-label align-items-center" htmlFor="subscription-name">
+            <div className="col-4">Name:</div>
+            <div className="col-8">
+              <input className="form-control" id="subscription-name" type="text" placeholder="e.g. Crunchyroll" name="subscription-name" value={name} onChange={(event) => this.handleChange(event, 'name')} required />
+            </div>
           </label>
 
-          <label htmlFor="subscription-nickname">
-            Nickname:
-            <input type="text" placeholder="e.g. My favorite streaming site"name="subscription-nickname" value={nickname} onChange={(event) => this.handleChange(event, 'nickname')}  /> 
+          <label className="col d-flex form-label align-items-center" htmlFor="subscription-nickname">
+            <div className="col-4">Nickname:</div>
+            <div className="col-8">
+              <input className="form-control" type="text" placeholder="e.g. My favorite streaming site"name="subscription-nickname" value={nickname} onChange={(event) => this.handleChange(event, 'nickname')}  /> 
+            </div>
           </label>
 
-          <label htmlFor="subscription-reminder-days">
-            Reminder Days: 
-            <input type="number" name="subscription-reminder-days" min="0" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} required />
+          <label className="col d-flex form-label align-items-center" htmlFor="subscription-reminder-days">
+            <div className="col-4">Reminder Days:</div>
+            <div className="col-8">
+              <input className="form-control" type="number" name="subscription-reminder-days" min="0" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} required />
+            </div>
           </label>
 
-          <label htmlFor="due-date-select">
-            Repeat:
-            <select id="due-date-select" value={frequency} onChange={(event) => this.handleChange(event, 'frequency')} required >
-              <option value="" defaultValue>--Please Choose an Option--</option>
-              <option value="yearly">Yearly</option>
-              <option value="monthly">Monthly</option>
-              <option value="weekly">Weekly</option>
-              <option value="daily">Daily</option>
-            </select>  
+          <label className="col d-flex form-label align-items-center" htmlFor="subscription-amount">
+            <div className="col-4">Amount:</div>
+            <div className="col-8">
+              <input className="form-control" type="number" name="subscription-amount" min="0" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} required />
+            </div>
+          </label>
+
+          <label className="col d-flex form-label align-items-center" htmlFor="due-date-select">
+            <div className="col-4">Repeat:</div>
+            <div className="col-8">
+              <select className="form-control" id="due-date-select" value={frequency} onChange={(event) => this.handleChange(event, 'frequency')} required >
+                <option value="" defaultValue>--Please Choose an Option--</option>
+                <option value="yearly">Yearly</option>
+                <option value="monthly">Monthly</option>
+                <option value="weekly">Weekly</option>
+                <option value="daily">Daily</option>
+              </select>  
+            </div>
           </label>
 
           {this.renderSwitch(frequency)}
-          
-          <label htmlFor="subscription-amount">
-            Amount: 
-            <input type="number" name="subscription-amount" min="0" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} required />
-          </label>
 
-          <input type="submit" data-bs-dismiss="offcanvas" aria-label="Close" value="Submit" />
+          <div className="col form-label text-center">
+            <input className="btn btn-primary form-control" type="submit" data-bs-dismiss="offcanvas" aria-label="Close" value="Submit" />
+          </div>
         </form>
       </section>
     );

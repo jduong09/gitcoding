@@ -131,7 +131,7 @@ class Dashboard extends React.Component {
     const { loading, subscriptions, addingSubscription, editingSubscription, activeSubscription } = this.state;
 
     const subscriptionForm = addingSubscription
-      ? <div className="card p-3 m-2 d-flex flex-column">
+      ? <div className="card p-3 m-2 d-flex flex-column align-items-start">
           <CreateSubscription 
           addSubscription={this.handleUpdate}
           toggleLoadingState={this.toggleLoadingState}
