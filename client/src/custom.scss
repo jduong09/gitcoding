@@ -6,6 +6,22 @@ $offcanvas-vertical-height: 90vh;
   border-style: dashed !important;
 }
 
+@media(min-width: 767px) {
+  #mainContainer {
+    position: relative;
+  }
+  
+  #mainContainer:before {
+    content : "";
+    position: absolute;
+    left    : 0;
+    bottom  : 50;
+    height  : 90%;
+    width   : 1px;  /* or 100px */
+    border-left: 3px solid black;
+  }
+}
+
 // Import Bootstrap and its default variables
 
 @import '~bootstrap/scss/bootstrap.scss';

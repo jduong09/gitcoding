@@ -6,6 +6,10 @@ ul, ol {
   list-style: none;
 }
 
+html, body, #root {
+  height: 100%;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .spin {
     animation: spin infinite 2s linear;

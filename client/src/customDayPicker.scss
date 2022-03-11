@@ -1,17 +1,32 @@
+// Default font-size: 1rem;
 .DayPicker {
-  font-size: 1.0rem;
+  font-size: calc(16px + 0.4vw) !important;
 }
 
 #dayPickerForm .DayPicker {
   font-size: .75rem;
 }
 
+// Padding for each day in the month.
 .DayPicker-Day {
   padding: .7em;
 }
 
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
   background-color: #7866D3 !important;
+}
+
+// Text for the Month.
+// Default: font-size: 1.15em;
+.DayPicker-Caption > div {
+
+}
+
+// Weekday row
+// Default: font-size: 0.875em;
+// Default: padding: 0.5em;
+.DayPicker-Weekday {
+
 }
 
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover {
@@ -25,7 +40,6 @@
 
 @media(min-width: 577px) {
   .DayPicker {
-    font-size: 1.5rem;
   }
 
   .DayPicker-Day {
@@ -33,5 +47,31 @@
   }
 }
 
+@media(min-width: 767px) {
+  .DayPicker {
+  }
+
+  .DayPicker-Day {
+    padding: .7em;
+  }
+}
+
+@media(min-width: 992px) {
+  .DayPicker {
+  }
+
+  .DayPicker-Day {
+    padding: .8em;
+  }
+}
+
+@media(min-width: 1200px) {
+  .DayPicker {
+  }
+
+  .DayPicker-Day {
+    padding: 1.0em;
+  }
+}
 
 @import "~react-day-picker/lib/style.css";

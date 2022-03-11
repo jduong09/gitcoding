@@ -10,7 +10,7 @@ const NewSubscriptionsList = ({ subscriptions, setEditingSubscription, setActive
         key={subscriptionUuid}
       >
         <SubscriptionListCard 
-          details={subscription} 
+          details={subscription}
           setEditingSubscription={setEditingSubscription}
           setActiveSubscription={setActiveSubscription}
           handleDelete={handleDelete}
@@ -20,7 +20,7 @@ const NewSubscriptionsList = ({ subscriptions, setEditingSubscription, setActive
   });
 
   return (
-    <div className="col col-3-lg p-3">
+    <div>
       <h2 className="text-start">Subscriptions</h2>
       <ul className="list-group border-bottom-0 border-dark">
         {subscriptionsList}

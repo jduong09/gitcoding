@@ -126,15 +126,49 @@ class Dashboard extends React.Component {
     }
   };
 
+  
+  renderMainComponent(subscriptionForm) {
+    const { activeSubscription, addingSubscription, editingSubscription, loading, subscriptions } = this.state;
+
+    if (loading) {
+      return (
+        <div className="d-flex flex-column justify-content-center align-items-center fs-1">
+          <FontAwesomeIcon icon={faSpinner} className="mb-2 spin" />
+          Loading...
+        </div> 
+      );
+    }
+
+    let display;
+    if (activeSubscription) {
+     display = <SubscriptionDetail setActiveSubscription={this.setActiveSubscription} details={activeSubscription} />;
+    } else if (editingSubscription || addingSubscription) {
+      display = (
+        <div>
+          <div className="d-none d-md-block">
+            {subscriptionForm}
+          </div>
+          <div className="d-md-none">
+            <DashboardCalendar subscriptions={subscriptions}/>
+          </div>
+        </div>
+      );
+    } else {
+      display = <DashboardCalendar subscriptions={subscriptions} />;
+    }
+
+    return display;
+  }
+
   render() {
     const { pfp } = this.props;
-    const { loading, subscriptions, addingSubscription, editingSubscription, activeSubscription } = this.state;
+    const { subscriptions, addingSubscription, editingSubscription } = this.state;
 
     const subscriptionForm = addingSubscription
       ? <div className="card p-3 m-2 d-flex flex-wrap">
           <div className="d-flex justify-content-between align-items-center">
             <h2 className="text-start">Create Subscription</h2>
-            <button data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ addingSubscription: !addingSubscription })} className="btn btn-link my-2" type="button">
+            <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ addingSubscription: !addingSubscription })}>
               <FontAwesomeIcon icon={faTimes} />
             </button>
           </div>
@@ -143,11 +177,12 @@ class Dashboard extends React.Component {
           toggleLoadingState={this.toggleLoadingState}
           showSubscriptionList={this.showSubscriptionList}
           currentSubscriptions={subscriptions} />
+          <button className="d-none d-md-block" type="button" onClick={() => this.setState({ addingSubscription: !addingSubscription })}>Cancel</button>
         </div>
       : <div className="card p-3 m-2 d-flex flex-wrap">
           <div className="d-flex justify-content-between align-items-center">
             <h2 className="text-start">Update Subscription</h2>
-            <button data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ editingSubscription: !editingSubscription, activeSubscription: false })} className="btn btn-link my-2" type="button">
+            <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ editingSubscription: !editingSubscription, activeSubscription: false })} >
               <FontAwesomeIcon icon={faTimes} />
             </button>
           </div>
@@ -157,77 +192,78 @@ class Dashboard extends React.Component {
           toggleLoadingState={this.toggleLoadingState}
           prevSubscription={editingSubscription}
           />
+          <button className="d-none d-md-block" type="button" onClick={() => this.setState({ editingSubscription: !editingSubscription, activeSubscription: false })}>Cancel</button>
         </div>;
     return (
-      <div>
-        <header>
-          <nav className="navbar d-flex justify-content-around bg-primary text-dark border-bottom border-dark">
-            <a className="navbar-brand d-flex text-primary" href="#changeThis">
-              <img src={logo} alt="wateringCanIcon" height="36" />
-              <div className="d-none d-md-block text-dark">Water Your  Subs</div>
+      <div className="h-100 d-flex flex-column">
+        <nav className="navbar d-flex justify-content-around justify-content-md-between bg-primary text-dark border-bottom border-dark">
+          <a className="navbar-brand d-flex text-primary" href="#changeThis">
+            <img src={logo} alt="wateringCanIcon" height="36" />
+            <div className="d-none d-md-block text-dark">Water Your  Subs</div>
+          </a>
+          <h1>{`${new Date().toDateString()}`}</h1>
+          <div className="d-flex dropdown">
+            <a className="dropdown-toggle" href="#dashboard" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src={pfp} alt="user-pfp" height="36" />
             </a>
-            <h1>{`${new Date().toDateString()}`}</h1>
-            <div className="d-flex dropdown">
-              <a className="dropdown-toggle" href="#dashboard" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src={pfp} alt="user-pfp" height="36" />
-              </a>
-              <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                <li>
-                  <a
-                    className="btn dropdown-item"
-                    data-bs-toggle="offcanvas"
-                    href="#offcanvasNotifications"
-                    role="button"
-                    aria-controls="offcanvasNotifications"
-                  >
-                    Notifications
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href={href}>
-                    Sign Out
-                    <FontAwesomeIcon icon={faSignOutAlt} />
-                  </a>
-                </li>
-              </ul>
+            <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+              <li>
+                <a
+                  className="btn dropdown-item"
+                  data-bs-toggle="offcanvas"
+                  href="#offcanvasNotifications"
+                  role="button"
+                  aria-controls="offcanvasNotifications"
+                >
+                  Notifications
+                </a>
+              </li>
+              <li>
+                <a className="dropdown-item" href={href}>
+                  Sign Out
+                  <FontAwesomeIcon icon={faSignOutAlt} />
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        <main className="d-flex flex-fill flex-column flex-md-row justify-content-between">
+          <div className="col-8-md flex-fill h-100 d-flex align-items-center justify-content-center" id="mainContainer" >
+            {this.renderMainComponent(subscriptionForm)}
+          </div>
+          <div className="col-4-md p-3 order-md-first flex-fill">
+            <NewSubscriptionsList
+              subscriptions={subscriptions}
+              setEditingSubscription={this.setEditingSubscription}
+              setActiveSubscription={this.setActiveSubscription}
+              handleDelete={this.handleDelete}
+            />
+            <div className="col">
+              <div className="d-none d-sm-none d-md-block">
+                <button
+                  className="col-12 p-4 btn border-dashed border-primary text-primary"
+                  type="button"
+                  onClick={() => this.setAddingSubscription(true)}
+                >
+                  +Create
+                </button>
+              </div>
+              <div className="d-md-none">
+                <button
+                  className="col-12 p-4 btn border-dashed border-primary text-primary"
+                  type="button"
+                  data-bs-toggle="offcanvas"
+                  data-bs-target="#offcanvasExample"
+                  aria-controls="offcanvasExample"
+                  onClick={() => this.setAddingSubscription(true)}
+                >
+                  +Create
+                </button>
+              </div>
             </div>
-          </nav>
-        </header>
-        <main className="d-flex flex-column flex-md-row">
-          <div className="col col-8-lg offset-1-lg" >
-            {loading 
-              ? <div className="d-flex flex-column justify-content-center align-items-center fs-1">
-                <FontAwesomeIcon icon={faSpinner} className="mb-2 spin" />
-                Loading...
-                </div> 
-              : <div>
-                {activeSubscription
-                  ? <SubscriptionDetail details={activeSubscription}/>
-                  : <DashboardCalendar subscriptions={subscriptions} />
-                }
-                </div>
-            }
-          </div>
-          <NewSubscriptionsList
-            subscriptions={subscriptions}
-            setEditingSubscription={this.setEditingSubscription}
-            setActiveSubscription={this.setActiveSubscription}
-            handleDelete={this.handleDelete}
-          />
-          <div className="col p-3">
-            <button
-              className="col-12 p-4 btn border-dashed border-primary text-primary"
-              type="button"
-              data-bs-toggle="offcanvas"
-              data-bs-target="#offcanvasExample"
-              aria-controls="offcanvasExample"
-              onClick={() => this.setAddingSubscription(true)}
-            >
-              +Create
-            </button>
-          </div>
-          <div className="offcanvas offcanvas-bottom" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-            {addingSubscription || editingSubscription ? subscriptionForm : ''}
+            <div className="offcanvas offcanvas-bottom d-md-none" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+              {addingSubscription || editingSubscription ? subscriptionForm : ''}
+            </div>
           </div>
         </main>
       </div>
