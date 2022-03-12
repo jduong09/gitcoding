@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DayPicker from 'react-day-picker';
 
 const DashboardCalendar = ({ subscriptions }) => {
-  const dueDates = [];
-  subscriptions.map((subscription) => {
-    dueDates.push(new Date(subscription.dueDate.nextDueDate));
-    return 'hi';
-  });
+  const [dueDates, setDueDates] = useState([]);
+
+  useEffect(() => {
+    const dates = subscriptions.map((subscription) => new Date(subscription.dueDate.nextDueDate));
+    setDueDates(dates);
+  }, [dueDates, subscriptions]);
 
   return (
     <DayPicker selectedDays={dueDates} />
