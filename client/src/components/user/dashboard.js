@@ -132,7 +132,7 @@ class Dashboard extends React.Component {
 
     if (loading) {
       return (
-        <div className="d-flex flex-column justify-content-center align-items-center fs-1">
+        <div className="col-12 d-flex flex-column justify-content-center align-items-center fs-1">
           <FontAwesomeIcon icon={faSpinner} className="mb-2 spin" />
           Loading...
         </div> 
@@ -165,11 +165,14 @@ class Dashboard extends React.Component {
     const { subscriptions, addingSubscription, editingSubscription } = this.state;
 
     const subscriptionForm = addingSubscription
-      ? <div className="p-3 m-2 d-flex flex-wrap  borderSubscriptionForm">
+      ? <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm">
           <div className="col d-flex justify-content-between align-items-center">
             <div />
             <h2 className="text-start">Create Subscription</h2>
-            <button className="btn btn-link my-2" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ addingSubscription: !addingSubscription })}>
+            <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ addingSubscription: !addingSubscription })}>
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+            <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.setState({ addingSubscription: !addingSubscription })}>
               <FontAwesomeIcon icon={faTimes} />
             </button>
           </div>
@@ -178,12 +181,15 @@ class Dashboard extends React.Component {
           toggleLoadingState={this.toggleLoadingState}
           showSubscriptionList={this.showSubscriptionList}
           currentSubscriptions={subscriptions} />
-          <button className="d-none" type="button" onClick={() => this.setState({ addingSubscription: !addingSubscription })}>Cancel</button>
         </div>
-      : <div className="card p-3 m-2 d-flex flex-wrap  borderSubscriptionForm">
-          <div className="d-flex justify-content-between align-items-center">
+      : <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm">
+          <div className="col d-flex justify-content-between align-items-center">
+            <div />
             <h2 className="text-start">Update Subscription</h2>
             <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ editingSubscription: !editingSubscription, activeSubscription: false })} >
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+            <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.setState({ editingSubscription: !editingSubscription, activeSubscription: false })}>
               <FontAwesomeIcon icon={faTimes} />
             </button>
           </div>
@@ -193,7 +199,6 @@ class Dashboard extends React.Component {
           toggleLoadingState={this.toggleLoadingState}
           prevSubscription={editingSubscription}
           />
-          <button className="d-none d-md-block" type="button" onClick={() => this.setState({ editingSubscription: !editingSubscription, activeSubscription: false })}>Cancel</button>
         </div>;
     return (
       <div className="h-100 d-flex flex-column">
@@ -262,7 +267,7 @@ class Dashboard extends React.Component {
                 </button>
               </div>
             </div>
-            <div className="offcanvas offcanvas-bottom d-md-none" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div className="offcanvas offcanvas-bottom d-md-none offcanvasBorder" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
               {addingSubscription || editingSubscription ? subscriptionForm : ''}
             </div>
           </div>

@@ -135,8 +135,8 @@ class SubscriptionForm extends React.Component {
     switch (frequency) {
       case 'yearly':
         return (
-          <div className="col-12 p-3 d-flex flex-column align-items-center">
-            <div className="text-center">On which day(s) do you want to be reminded?</div>
+          <div className="col-12 p-1 d-flex flex-column align-items-center">
+            <div className="text-center d-none d-md-block">On which day(s) do you want to be reminded?</div>
             <div className="col mx-auto">
               <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='yearly' />
             </div>
@@ -153,9 +153,9 @@ class SubscriptionForm extends React.Component {
                 </div>
               </label>
             </div>
-            <div className="col-md-6">
-              <div className="text-center">On which day(s) do you want to be reminded?</div>
-              <div className="col-8 mx-auto text-center" id="dayPickerForm">
+            <div className="col-md-6 mx-auto">
+              <div className="text-center d-none d-md-block">On which day(s) do you want to be reminded?</div>
+              <div id="dayPickerForm">
                 <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='monthly' />
               </div>
             </div>
@@ -197,7 +197,7 @@ class SubscriptionForm extends React.Component {
               </label>
             </div>
             <div className="col-md-6">
-              <div className="text-center">On which day(s) do you want to be reminded?</div>
+              <div className="text-center d-none d-md-block">On which day(s) do you want to be reminded?</div>
               <div className="col-8 mx-auto text-center" id="dayPickerForm">
                 <ReactDayPicker handleUpdate={this.handleDays} updating={days} frequency='daily' />
               </div>
@@ -260,7 +260,7 @@ class SubscriptionForm extends React.Component {
 
           <div className="col form-label text-center">
             <input className="btn btn-primary form-control d-none d-sm-none d-md-block" type="submit" value="Submit" />
-            <input className="btn btn-primary form-control d-md-none" type="submit" data-bs-dismiss="offcanvas" aria-label="Close" value="Submit" />
+            <input className="btn btn-primary form-control-sm d-md-none" type="submit" data-bs-dismiss="offcanvas" aria-label="Close" value="Submit" />
           </div>
         </form>
       </section>

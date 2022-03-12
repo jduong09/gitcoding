@@ -11,7 +11,7 @@ const SubscriptionListCard = ({ details, setEditingSubscription, setActiveSubscr
         <ul className="text-start">
           <li><strong>Name: </strong>{nickname || name}</li>
           <li><strong>Due Date: </strong>{new Date(dueDate.nextDueDate).toLocaleDateString()}</li>
-          <li><strong>Amount: </strong>{amount}</li>
+          <li><strong>Amount: </strong>${amount/100}</li>
         </ul>
       </button>
       <div>

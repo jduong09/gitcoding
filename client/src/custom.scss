@@ -1,9 +1,15 @@
 // Override default variables before the import
 $primary: #7866D3;
-$offcanvas-vertical-height: 90vh;
+$offcanvas-vertical-height: 95vh;
 
 .border-dashed {
   border-style: dashed !important;
+}
+
+.offcanvasBorder {
+  border-top: 10px solid #7866D3 !important;
+  border-top-left-radius: 3rem !important;
+  border-top-right-radius: 3rem !important;
 }
 
 @media(min-width: 767px) {
