@@ -4,7 +4,7 @@ import 'react-day-picker/lib/style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
-import NewSubscriptionsList from '../subscription/newSubscriptionsList';
+import SubscriptionsList from '../subscription/subscriptionsList';
 import DashboardCalendar from '../date/dashboardCalendar';
 import UpdateSubscription from '../subscription/updateSubscription';
 import CreateSubscription from '../subscription/createSubscription';
@@ -238,7 +238,7 @@ class Dashboard extends React.Component {
             {this.renderMainComponent(subscriptionForm)}
           </div>
           <div className="col-md-4 p-3 order-md-first flex-fill">
-            <NewSubscriptionsList
+            <SubscriptionsList
               subscriptions={subscriptions}
               setEditingSubscription={this.setEditingSubscription}
               setActiveSubscription={this.setActiveSubscription}
