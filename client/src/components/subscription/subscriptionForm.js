@@ -144,16 +144,20 @@ class SubscriptionForm extends React.Component {
         );
       case 'monthly':
         return (
-          <div className="col-12 d-flex flex-column">
-            <label className="col d-flex form-label align-items-center" htmlFor="occurrence">
-              <div className="col-4">Every (?) Months:</div>
-              <div className="col-8">
-                <input className="form-control" type="number" id="occurrence" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')} min="0" max="12" />
+          <div className="col-12 d-flex">
+            <div className="col-md-6 align-self-center">
+              <label className="col d-flex form-label" htmlFor="occurrence">
+                <div className="col-4 col-md-3">Every (?) Months:</div>
+                <div className="col-8 col-md-7">
+                  <input className="form-control" type="number" id="occurrence" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')} min="0" max="12" />
+                </div>
+              </label>
+            </div>
+            <div className="col-md-6">
+              <div className="text-center">On which day(s) do you want to be reminded?</div>
+              <div className="col-8 mx-auto text-center" id="dayPickerForm">
+                <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='monthly' />
               </div>
-            </label>
-            <div>On which day(s) do you want to be reminded?</div>
-            <div className="col mx-auto">
-              <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='monthly' />
             </div>
           </div>
         );
@@ -200,39 +204,39 @@ class SubscriptionForm extends React.Component {
     const { name, nickname, reminderDays, amount, frequency } = this.state;
 
     return (
-      <section className="col-12">
-        <form className="text-start" onSubmit={this.handleSubmit}>
-          <label className="d-flex form-label align-items-center" htmlFor="subscription-name">
-            <div className="col-4">Name:</div>
-            <div className="col-8">
+      <section className="col col-12">
+        <form className="text-start d-md-flex flex-wrap" onSubmit={this.handleSubmit}>
+          <label className="d-flex form-label align-items-center col-md-6" htmlFor="subscription-name">
+            <div className="col-4 col-md-3">Name:</div>
+            <div className="col-8 col-md-7">
               <input className="form-control" id="subscription-name" type="text" placeholder="e.g. Crunchyroll" name="subscription-name" value={name} onChange={(event) => this.handleChange(event, 'name')} required />
             </div>
           </label>
 
-          <label className="col d-flex form-label align-items-center" htmlFor="subscription-nickname">
-            <div className="col-4">Nickname:</div>
-            <div className="col-8">
+          <label className="col d-flex form-label align-items-center col-md-6" htmlFor="subscription-nickname">
+            <div className="col-4 col-md-3">Nickname:</div>
+            <div className="col-8 col-md-7">
               <input className="form-control" type="text" placeholder="e.g. My favorite streaming site"name="subscription-nickname" value={nickname} onChange={(event) => this.handleChange(event, 'nickname')}  /> 
             </div>
           </label>
 
-          <label className="col d-flex form-label align-items-center" htmlFor="subscription-reminder-days">
-            <div className="col-4">Reminder Days:</div>
-            <div className="col-8">
+          <label className="col d-flex form-label align-items-center col-md-6" htmlFor="subscription-reminder-days">
+            <div className="col-4 col-md-3">Reminder Days:</div>
+            <div className="col-8 col-md-7">
               <input className="form-control" type="number" name="subscription-reminder-days" min="0" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} required />
             </div>
           </label>
 
-          <label className="col d-flex form-label align-items-center" htmlFor="subscription-amount">
-            <div className="col-4">Amount:</div>
-            <div className="col-8">
+          <label className="col d-flex form-label align-items-center col-md-6" htmlFor="subscription-amount">
+            <div className="col-4 col-md-3">Amount:</div>
+            <div className="col-8 col-md-7">
               <input className="form-control" type="number" name="subscription-amount" min="0" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} required />
             </div>
           </label>
 
-          <label className="col d-flex form-label align-items-center" htmlFor="due-date-select">
-            <div className="col-4">Repeat:</div>
-            <div className="col-8">
+          <label className="col d-flex form-label align-items-center col-md-6" htmlFor="due-date-select">
+            <div className="col-4 col-md-3">Repeat:</div>
+            <div className="col-8 col-md-7">
               <select className="form-control" id="due-date-select" value={frequency} onChange={(event) => this.handleChange(event, 'frequency')} required >
                 <option value="" defaultValue>--Please Choose an Option--</option>
                 <option value="yearly">Yearly</option>

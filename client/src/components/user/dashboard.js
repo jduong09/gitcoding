@@ -144,7 +144,7 @@ class Dashboard extends React.Component {
      display = <SubscriptionDetail setActiveSubscription={this.setActiveSubscription} details={activeSubscription} />;
     } else if (editingSubscription || addingSubscription) {
       display = (
-        <div>
+        <div className="col-12">
           <div className="d-none d-md-block">
             {subscriptionForm}
           </div>
@@ -165,7 +165,7 @@ class Dashboard extends React.Component {
     const { subscriptions, addingSubscription, editingSubscription } = this.state;
 
     const subscriptionForm = addingSubscription
-      ? <div className="card p-3 m-2 d-flex flex-wrap">
+      ? <div className="p-3 m-2 d-flex flex-wrap  borderSubscriptionForm">
           <div className="d-flex justify-content-between align-items-center">
             <h2 className="text-start">Create Subscription</h2>
             <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ addingSubscription: !addingSubscription })}>
@@ -179,7 +179,7 @@ class Dashboard extends React.Component {
           currentSubscriptions={subscriptions} />
           <button className="d-none d-md-block" type="button" onClick={() => this.setState({ addingSubscription: !addingSubscription })}>Cancel</button>
         </div>
-      : <div className="card p-3 m-2 d-flex flex-wrap">
+      : <div className="card p-3 m-2 d-flex flex-wrap  borderSubscriptionForm">
           <div className="d-flex justify-content-between align-items-center">
             <h2 className="text-start">Update Subscription</h2>
             <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ editingSubscription: !editingSubscription, activeSubscription: false })} >
@@ -196,15 +196,15 @@ class Dashboard extends React.Component {
         </div>;
     return (
       <div className="h-100 d-flex flex-column">
-        <nav className="navbar d-flex justify-content-around justify-content-md-between bg-primary text-dark border-bottom border-dark">
+        <nav className="navbar p-2 d-flex justify-content-around justify-content-md-between text-primary">
           <a className="navbar-brand d-flex text-primary" href="#changeThis">
-            <img src={logo} alt="wateringCanIcon" height="36" />
-            <div className="d-none d-md-block text-dark">Water Your  Subs</div>
+            <img src={logo} alt="wateringCanIcon" height="40" />
+            <div className="d-none d-md-block">Water Your  Subs</div>
           </a>
           <h1>{`${new Date().toDateString()}`}</h1>
           <div className="d-flex dropdown">
             <a className="dropdown-toggle" href="#dashboard" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src={pfp} alt="user-pfp" height="36" />
+              <img src={pfp} alt="user-pfp" height="40" />
             </a>
             <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
               <li>

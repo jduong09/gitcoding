@@ -20,6 +20,11 @@ $offcanvas-vertical-height: 90vh;
     width   : 1px;  /* or 100px */
     border-left: 3px solid black;
   }
+
+  .borderSubscriptionForm {
+    border: 3px solid #7866D3;
+    border-radius: 8px;
+  }
 }
 
 // Import Bootstrap and its default variables
