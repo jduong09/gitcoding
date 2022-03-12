@@ -166,9 +166,10 @@ class Dashboard extends React.Component {
 
     const subscriptionForm = addingSubscription
       ? <div className="p-3 m-2 d-flex flex-wrap  borderSubscriptionForm">
-          <div className="d-flex justify-content-between align-items-center">
+          <div className="col d-flex justify-content-between align-items-center">
+            <div />
             <h2 className="text-start">Create Subscription</h2>
-            <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ addingSubscription: !addingSubscription })}>
+            <button className="btn btn-link my-2" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ addingSubscription: !addingSubscription })}>
               <FontAwesomeIcon icon={faTimes} />
             </button>
           </div>
@@ -177,7 +178,7 @@ class Dashboard extends React.Component {
           toggleLoadingState={this.toggleLoadingState}
           showSubscriptionList={this.showSubscriptionList}
           currentSubscriptions={subscriptions} />
-          <button className="d-none d-md-block" type="button" onClick={() => this.setState({ addingSubscription: !addingSubscription })}>Cancel</button>
+          <button className="d-none" type="button" onClick={() => this.setState({ addingSubscription: !addingSubscription })}>Cancel</button>
         </div>
       : <div className="card p-3 m-2 d-flex flex-wrap  borderSubscriptionForm">
           <div className="d-flex justify-content-between align-items-center">
@@ -228,10 +229,10 @@ class Dashboard extends React.Component {
           </div>
         </nav>
         <main className="d-flex flex-fill flex-column flex-md-row justify-content-between">
-          <div className="col-8-md flex-fill h-100 d-flex align-items-center justify-content-center" id="mainContainer" >
+          <div className="col-md-8 flex-fill h-100 d-flex align-items-center justify-content-center" id="mainContainer" >
             {this.renderMainComponent(subscriptionForm)}
           </div>
-          <div className="col-4-md p-3 order-md-first flex-fill">
+          <div className="col-md-4 p-3 order-md-first flex-fill">
             <NewSubscriptionsList
               subscriptions={subscriptions}
               setEditingSubscription={this.setEditingSubscription}

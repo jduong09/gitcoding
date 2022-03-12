@@ -126,9 +126,9 @@ class SubscriptionForm extends React.Component {
   renderSwitch(frequency) {
     const { occurrence, days, nextDueDate, checkedDays } = this.state;
     const weeklyCheckbox = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day, idx) => 
-      <label htmlFor={day} key={day}>
-        {day}:
-        <input type="checkbox" id={day} name='days' value={idx} onChange={this.handleCheck} checked={checkedDays.includes(idx)}/>
+      <label className="d-flex" htmlFor={day} key={day}>
+        <div className="col-md-3 form-check-label">{day}:</div>
+        <input className="col-md-1 mx-3 form-check-input" type="checkbox" id={day} name='days' value={idx} onChange={this.handleCheck} checked={checkedDays.includes(idx)}/>
       </label>
     );
 
@@ -136,7 +136,7 @@ class SubscriptionForm extends React.Component {
       case 'yearly':
         return (
           <div className="col-12 p-3 d-flex flex-column align-items-center">
-            <div>On which day(s) do you want to be reminded?</div>
+            <div className="text-center">On which day(s) do you want to be reminded?</div>
             <div className="col mx-auto">
               <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='yearly' />
             </div>
@@ -145,7 +145,7 @@ class SubscriptionForm extends React.Component {
       case 'monthly':
         return (
           <div className="col-12 d-flex">
-            <div className="col-md-6 align-self-center">
+            <div className="col-md-6">
               <label className="col d-flex form-label" htmlFor="occurrence">
                 <div className="col-4 col-md-3">Every (?) Months:</div>
                 <div className="col-8 col-md-7">
@@ -163,35 +163,44 @@ class SubscriptionForm extends React.Component {
         );
       case 'weekly':
         return (
-          <div className="col-12 d-flex flex-column">
-            <label className="col d-flex form-label align-items-center" htmlFor="occurrence">
-              <div className="col-4">Every (?) Weeks:</div>
-              <div className="col-8">
-              <select className="form-control" id="occurrence" placeholder="ex: Every 2 weeks" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')}>
-                <option value="1">Every Week</option>
-                <option value="2">Every 2 Weeks</option>
-                <option value="3">Every 3 Weeks</option>
-                <option value="4">Every 4 Weeks</option>
-              </select>
+          <div className="col-12 d-flex">
+            <div className="col-md-6">
+              <label className="col d-flex form-label" htmlFor="occurrence">
+                <div className="col-4 col-md-3">Every (?) Weeks:</div>
+                <div className="col-8 col-md-7">
+                <select className="form-control" id="occurrence" placeholder="ex: Every 2 weeks" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')}>
+                  <option value="1">Every Week</option>
+                  <option value="2">Every 2 Weeks</option>
+                  <option value="3">Every 3 Weeks</option>
+                  <option value="4">Every 4 Weeks</option>
+                </select>
+                </div>
+              </label>
+              <div className="d-flex flex-column" >{weeklyCheckbox}</div>
+            </div>
+            <div className="col-md-6">
+              <div className="col-8 mx-auto text-center" id="dayPickerForm">
+                <ReactDayPicker updating={days} nextDueDate={nextDueDate} frequency='weekly' />
               </div>
-            </label>
-            <div className="col d-flex">
-              <div>{weeklyCheckbox}</div>
-              <ReactDayPicker updating={days} nextDueDate={nextDueDate} frequency='weekly' />
             </div>
           </div>
         );
       case 'daily':
         return (
-          <div className="col-12 d-flex flex-column">
-            <label className="col d-flex form-label align-items-center" htmlFor="occurrence">
-              <div className="col-4">Every (?) Days:</div>
-              <div className="col-8">
-                <input className="form-control" type="number" id="occurence" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')} />
+          <div className="col-12 d-flex">
+            <div className="col-md-6">
+              <label className="col d-flex form-label" htmlFor="occurrence">
+                <div className="col-4 col-md-3">Every (?) Days:</div>
+                <div className="col-8 col-md-7">
+                  <input className="form-control" type="number" id="occurence" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')} />
+                </div>
+              </label>
+            </div>
+            <div className="col-md-6">
+              <div className="text-center">On which day(s) do you want to be reminded?</div>
+              <div className="col-8 mx-auto text-center" id="dayPickerForm">
+                <ReactDayPicker handleUpdate={this.handleDays} updating={days} frequency='daily' />
               </div>
-            </label>
-            <div className="col mx-auto">
-             <ReactDayPicker handleUpdate={this.handleDays} updating={days} frequency='daily' />
             </div>
           </div>
         );
@@ -204,7 +213,7 @@ class SubscriptionForm extends React.Component {
     const { name, nickname, reminderDays, amount, frequency } = this.state;
 
     return (
-      <section className="col col-12">
+      <section className="col-12">
         <form className="text-start d-md-flex flex-wrap" onSubmit={this.handleSubmit}>
           <label className="d-flex form-label align-items-center col-md-6" htmlFor="subscription-name">
             <div className="col-4 col-md-3">Name:</div>
@@ -250,7 +259,8 @@ class SubscriptionForm extends React.Component {
           {this.renderSwitch(frequency)}
 
           <div className="col form-label text-center">
-            <input className="btn btn-primary form-control" type="submit" data-bs-dismiss="offcanvas" aria-label="Close" value="Submit" />
+            <input className="btn btn-primary form-control d-none d-sm-none d-md-block" type="submit" value="Submit" />
+            <input className="btn btn-primary form-control d-md-none" type="submit" data-bs-dismiss="offcanvas" aria-label="Close" value="Submit" />
           </div>
         </form>
       </section>
