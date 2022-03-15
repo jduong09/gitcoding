@@ -7,13 +7,15 @@ const SubscriptionListCard = ({ details, setEditingSubscription, setActiveSubscr
 
   const handleEdit = useCallback((e) => {
     e.stopPropagation();
+    setActiveSubscription(false);
     setEditingSubscription(details);
-  }, [setEditingSubscription, details]);
+  }, [setActiveSubscription, setEditingSubscription, details]);
 
   const clickDelete = useCallback((e) => {
     e.stopPropagation();
+    setActiveSubscription(false);
     handleDelete(subscriptionUuid);
-  }, [handleDelete, subscriptionUuid]);
+  }, [setActiveSubscription, handleDelete, subscriptionUuid]);
 
   return (
     <div className="w-100 subscriptionListCard d-flex justify-content-between align-items-center">

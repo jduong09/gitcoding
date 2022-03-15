@@ -16,19 +16,6 @@
   background-color: #7866D3 !important;
 }
 
-// Text for the Month.
-// Default: font-size: 1.15em;
-.DayPicker-Caption > div {
-
-}
-
-// Weekday row
-// Default: font-size: 0.875em;
-// Default: padding: 0.5em;
-.DayPicker-Weekday {
-
-}
-
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover {
   background-color: #9984ff !important;
 }
@@ -39,9 +26,6 @@
 }
 
 @media(min-width: 577px) {
-  .DayPicker {
-  }
-
   .DayPicker-Day {
     padding: .5em;
   }
@@ -49,10 +33,7 @@
 
 @media(min-width: 767px) {
   #dayPickerForm .DayPicker {
-    font-size: .75rem !important;
-  }
-  
-  .DayPicker {
+    font-size: .8rem !important;
   }
 
   .DayPicker-Day {
@@ -61,18 +42,12 @@
 }
 
 @media(min-width: 992px) {
-  .DayPicker {
-  }
-
   .DayPicker-Day {
     padding: .8em;
   }
 }
 
 @media(min-width: 1200px) {
-  .DayPicker {
-  }
-
   .DayPicker-Day {
     padding: 1.0em;
   }

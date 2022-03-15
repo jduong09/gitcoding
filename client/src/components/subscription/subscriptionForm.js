@@ -137,7 +137,7 @@ class SubscriptionForm extends React.Component {
         return (
           <div className="col-12 p-1 d-flex flex-column align-items-center">
             <div className="text-center d-none d-md-block">On which day(s) do you want to be reminded?</div>
-            <div className="col mx-auto">
+            <div className="col mx-auto text-center">
               <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='yearly' />
             </div>
           </div>
@@ -155,7 +155,7 @@ class SubscriptionForm extends React.Component {
             </div>
             <div className="col-md-6 mx-auto">
               <div className="text-center d-none d-md-block">On which day(s) do you want to be reminded?</div>
-              <div id="dayPickerForm">
+              <div className="col mx-auto text-center" id="dayPickerForm">
                 <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='monthly' />
               </div>
             </div>
@@ -179,7 +179,7 @@ class SubscriptionForm extends React.Component {
               <div className="d-flex flex-column" >{weeklyCheckbox}</div>
             </div>
             <div className="col-md-6">
-              <div className="col-8 mx-auto text-center" id="dayPickerForm">
+              <div className="col mx-auto text-center" id="dayPickerForm">
                 <ReactDayPicker updating={days} nextDueDate={nextDueDate} frequency='weekly' />
               </div>
             </div>
@@ -198,7 +198,7 @@ class SubscriptionForm extends React.Component {
             </div>
             <div className="col-md-6">
               <div className="text-center d-none d-md-block">On which day(s) do you want to be reminded?</div>
-              <div className="col-8 mx-auto text-center" id="dayPickerForm">
+              <div className="col mx-auto text-center" id="dayPickerForm">
                 <ReactDayPicker handleUpdate={this.handleDays} updating={days} frequency='daily' />
               </div>
             </div>
