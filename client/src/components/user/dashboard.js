@@ -214,19 +214,8 @@ class Dashboard extends React.Component {
             </a>
             <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
               <li>
-                <a
-                  className="btn dropdown-item"
-                  data-bs-toggle="offcanvas"
-                  href="#offcanvasNotifications"
-                  role="button"
-                  aria-controls="offcanvasNotifications"
-                >
-                  Notifications
-                </a>
-              </li>
-              <li>
-                <a className="dropdown-item" href={href}>
-                  Sign Out
+                <a className="dropdown-item d-flex align-items-center" href={href}>
+                  <div className="p-2">Sign Out</div>
                   <FontAwesomeIcon icon={faSignOutAlt} />
                 </a>
               </li>

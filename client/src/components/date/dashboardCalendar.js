@@ -7,7 +7,8 @@ const DashboardCalendar = ({ subscriptions }) => {
   useEffect(() => {
     const dates = subscriptions.map((subscription) => new Date(subscription.dueDate.nextDueDate));
     setDueDates(dates);
-  }, [dueDates, subscriptions]);
+  }, [subscriptions]);
+
 
   return (
     <DayPicker selectedDays={dueDates} />

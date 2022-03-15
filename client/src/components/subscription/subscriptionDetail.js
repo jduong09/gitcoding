@@ -1,5 +1,5 @@
 import React from 'react';
-import DashboardCalendar from '../date/dashboardCalendar';
+import DetailCalendar from '../date/detailCalendar';
 
 const SubscriptionDetail = ({ setActiveSubscription, details }) => {
   const { name, nickname, dueDate, reminderDays, amount } = details;
@@ -13,7 +13,7 @@ const SubscriptionDetail = ({ setActiveSubscription, details }) => {
           <li><strong>Reminder Days: </strong>{reminderDays}</li>
         </ul>
         <div className="col-6" id="dayPickerForm">
-          <DashboardCalendar subscriptions={[details]}/>
+          <DetailCalendar dueDate={dueDate}/>
         </div>
       </div>
       <button className="col-8 btn btn-primary mx-auto" type="button" onClick={() => setActiveSubscription(false)}>Home</button>

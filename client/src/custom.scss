@@ -6,6 +6,22 @@ $offcanvas-vertical-height: 95vh;
   border-style: dashed !important;
 }
 
+.subscriptionListCard {
+  position: relative !important;
+}
+
+.innerButtonEdit {
+  position: absolute !important;
+  right: 0 !important;
+  top: 0 !important;
+}
+
+.innerButtonDelete {
+  position: absolute !important;
+  right: 0 !important;
+  bottom: 0 !important;
+}
+
 .offcanvasBorder {
   border-top: 10px solid #7866D3 !important;
   border-top-left-radius: 3rem !important;
