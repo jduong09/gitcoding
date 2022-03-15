@@ -141,7 +141,7 @@ class Dashboard extends React.Component {
 
     let display;
     if (activeSubscription) {
-     display = <SubscriptionDetail setActiveSubscription={this.setActiveSubscription} details={activeSubscription} />;
+     display = <SubscriptionDetail setActiveSubscription={this.setActiveSubscription} setEditingSubscription={this.setEditingSubscription} handleDelete={this.handleDelete} details={activeSubscription} />;
     } else if (editingSubscription || addingSubscription) {
       display = (
         <div className="col-12">

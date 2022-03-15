@@ -63,7 +63,7 @@ const ReactDayPicker = ({ handleUpdate, updating, nextDueDate, frequency }) => {
           canChangeMonth={canChangeMonth}
         />
       </div>
-      <div className="d-none d-md-block">Days Selected: {daysList.join(', ')}</div>
+      <div className="d-none d-md-block">{daysList.length ? `Days Selected: ${daysList.join(', ')}` : ''}</div>
     </section>
   );
 };
