@@ -233,7 +233,7 @@ class Dashboard extends React.Component {
               setActiveSubscription={this.setActiveSubscription}
               handleDelete={this.handleDelete}
             />
-            <div className="col">
+            <div className="col mt-2">
               <div className="d-none d-sm-none d-md-block">
                 <button
                   className="col-12 p-4 btn border-dashed border-primary text-primary"

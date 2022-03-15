@@ -168,7 +168,7 @@ class SubscriptionForm extends React.Component {
               <label className="col d-flex form-label" htmlFor="occurrence">
                 <div className="col-4 col-md-3">Every (?) Weeks:</div>
                 <div className="col-8 col-md-7">
-                <select className="form-control" id="occurrence" placeholder="ex: Every 2 weeks" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')}>
+                <select className="form-select" id="occurrence" placeholder="ex: Every 2 weeks" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')}>
                   <option value="1">Every Week</option>
                   <option value="2">Every 2 Weeks</option>
                   <option value="3">Every 3 Weeks</option>
@@ -246,8 +246,8 @@ class SubscriptionForm extends React.Component {
           <label className="col d-flex form-label align-items-center col-md-6" htmlFor="due-date-select">
             <div className="col-4 col-md-3">Repeat:</div>
             <div className="col-8 col-md-7">
-              <select className="form-control" id="due-date-select" value={frequency} onChange={(event) => this.handleChange(event, 'frequency')} required >
-                <option value="" defaultValue>--Please Choose an Option--</option>
+              <select className="form-select" id="due-date-select" value={frequency} onChange={(event) => this.handleChange(event, 'frequency')} required >
+                <option value="" defaultValue disabled>--Select--</option>
                 <option value="yearly">Yearly</option>
                 <option value="monthly">Monthly</option>
                 <option value="weekly">Weekly</option>

@@ -19,8 +19,8 @@ const SubscriptionListCard = ({ details, setEditingSubscription, setActiveSubscr
 
   return (
     <div className="w-100 subscriptionListCard d-flex justify-content-between align-items-center">
-      <button className="btn w-100 text-start" type="button" onClick={() => setActiveSubscription(details)}>
-        <ul>
+      <button className="btn w-100" type="button" onClick={() => setActiveSubscription(details)}>
+        <ul className="text-start px-0">
           <li><strong>Name: </strong>{nickname || name}</li>
           <li><strong>Due Date: </strong>{new Date(dueDate.nextDueDate).toLocaleDateString()}</li>
           <li><strong>Amount: </strong>${amount/100}</li>
