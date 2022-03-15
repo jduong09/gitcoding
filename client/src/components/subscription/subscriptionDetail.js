@@ -55,7 +55,19 @@ const SubscriptionDetail = ({ setActiveSubscription, details, setEditingSubscrip
         </div>
       </div>
       <div className="col-10 d-flex justify-content-between mx-auto">
-        <button className="col-3 btn btn-primary" type="button" onClick={handleEdit}>Edit</button>
+        <div className="col-3">
+          <button
+            className="btn btn-primary d-md-none"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasExample"
+            aria-controls="offcanvasExample"
+            onClick={handleEdit}
+          >
+            Edit
+          </button>
+          <button className="btn btn-primary d-none d-md-block" type="button" onClick={handleEdit}>Edit</button>
+        </div>
         <button className="col-3 btn btn-primary" type="button" onClick={() => setActiveSubscription(false)}>Close</button>
         <button className="col-3 btn btn-primary" type="button" onClick={clickDelete}>Delete</button>
       </div>

@@ -77,7 +77,7 @@ class Dashboard extends React.Component {
   }
 
   setAddingSubscription = async (addingSubscription) => {
-    await this.setState({ addingSubscription });
+    await this.setState({ addingSubscription, activeSubscription: false });
   }
 
   setActiveSubscription = async (subscription) => {
@@ -240,7 +240,7 @@ class Dashboard extends React.Component {
                   type="button"
                   onClick={() => this.setAddingSubscription(true)}
                 >
-                  +Create
+                  + Create
                 </button>
               </div>
               <div className="d-md-none">
@@ -252,7 +252,7 @@ class Dashboard extends React.Component {
                   aria-controls="offcanvasExample"
                   onClick={() => this.setAddingSubscription(true)}
                 >
-                  +Create
+                  + Create
                 </button>
               </div>
             </div>
