@@ -1,7 +1,6 @@
 import React  from 'react';
 
 const DashboardModal = () => (
-  /* Modal */
   <div className="modal fade" id="myModal" tabIndex="-1" aria-labelledby="myModal" aria-hidden="true">
     <div className="modal-dialog">
       <div className="modal-content">
@@ -12,7 +11,7 @@ const DashboardModal = () => (
           Are you sure you want to navigate away from your current page? 
         </div>
         <div className="modal-footer">
-          <button type="button" className="btn btn-secondary" id="closeBtn" value="close" data-bs-dismiss="modal">Stay On Page</button>
+          <button type="button" className="btn btn-primary" id="closeBtn" value="close" data-bs-dismiss="modal">Stay On Page</button>
           <button type="button" className="btn btn-primary" id="continueBtn" value="next">Discard Changes</button>
         </div>
       </div>

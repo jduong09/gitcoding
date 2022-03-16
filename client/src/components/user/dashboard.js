@@ -10,7 +10,7 @@ import DashboardCalendar from '../date/dashboardCalendar';
 import UpdateSubscription from '../subscription/updateSubscription';
 import CreateSubscription from '../subscription/createSubscription';
 import SubscriptionDetail from '../subscription/subscriptionDetail';
-import DashboardModal from '../date/dashboardModal';
+import DashboardModal from '../dashboardModal';
 import logo from '../../assets/watering-can.png';
 
 const href = process && process.env && process.env.NODE_ENV === 'production'
