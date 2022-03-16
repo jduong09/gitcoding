@@ -37,9 +37,8 @@ const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, h
 
   const clickDelete = useCallback((e) => {
     e.stopPropagation();
-    setActiveSubscription(false);
     handleDelete(subscriptionUuid);
-  }, [setActiveSubscription, handleDelete, subscriptionUuid]);
+  }, [handleDelete, subscriptionUuid]);
 
   return (
     <div className="col-11 p-1 d-flex flex-column borderSubscriptionForm">
@@ -68,7 +67,7 @@ const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, h
           </button>
           <button className="btn w-100 btn-primary d-none d-md-block" type="button" onClick={handleEdit}>Edit</button>
         </div>
-        <button className="col-3 btn btn-primary" type="button" onClick={() => setActiveSubscription(false)}>Close</button>
+        <button className="col-3 btn btn-primary" type="button" onClick={() => handleDashboard('dashboardCalendar')}>Close</button>
         <button className="col-3 btn btn-primary" type="button" onClick={clickDelete}>Delete</button>
       </div>
     </div>

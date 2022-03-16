@@ -20,12 +20,14 @@ const href = process && process.env && process.env.NODE_ENV === 'production'
 const waitUserClick = () => (
   new Promise((resolve, ) => {
     const button = document.getElementById('continueBtn');
+    const closeBtn = document.getElementById('closeBtn');
     const listener = e => {
       const input = e.target.value;
-      button.removeEventListener('click', listener);
+      e.target.removeEventListener('click', listener);
       resolve(input);
     };
     button.addEventListener('click', listener);
+    closeBtn.addEventListener('click', listener);
   })
 );
 
@@ -95,13 +97,14 @@ class Dashboard extends React.Component {
     }
 
     const modal = new Modal(document.getElementById('myModal'));
-    modal.toggle();
+    modal.show();
 
     const userInput = await waitUserClick();
-
     if (userInput === 'next') {
       await this.setState({ mainComponentView: newView });
-    };
+    } else if (userInput === 'close') {
+      await this.setState({ mainComponentView });
+    }
     return modal.hide();
   }
 
@@ -118,7 +121,7 @@ class Dashboard extends React.Component {
   }
 
   handleUpdate = async (newSubscriptionsList) => {
-    await this.setState({ subscriptions: newSubscriptionsList, activeSubscription: false });
+    await this.setState({ subscriptions: newSubscriptionsList, mainComponentView: 'dashboardCalendar' });
   }
 
   handleDelete = async (subscriptionUuid) => {
@@ -138,10 +141,14 @@ class Dashboard extends React.Component {
 
     toast.success(response);
     
-    const { subscriptions } = this.state;
+    const { subscriptions, activeSubscription } = this.state;
     const updatedSubscriptionsList = await subscriptions.filter(subscription => subscription.subscriptionUuid !== subscriptionUuid);
 
-    this.setState({ subscriptions: updatedSubscriptionsList, activeSubscription: false });
+    const newState = (subscriptionUuid === activeSubscription.subscriptionUuid)
+      ? { subscriptions: updatedSubscriptionsList, activeSubscription: false, mainComponentView: 'dashboardCalendar' }
+      : { subscriptions: updatedSubscriptionsList };
+
+    this.setState(newState);
   }
 
   showSubscriptionList() {
@@ -160,7 +167,7 @@ class Dashboard extends React.Component {
   };
 
   renderMainComponent() {
-    const { activeSubscription, addingSubscription, loading, subscriptions, mainComponentView } = this.state;
+    const { activeSubscription, loading, subscriptions, mainComponentView } = this.state;
 
     if (loading) {
       return (
@@ -176,43 +183,53 @@ class Dashboard extends React.Component {
         return <SubscriptionDetail setActiveSubscription={this.setActiveSubscription} handleDashboard={this.handleDashboardChange} handleDelete={this.handleDelete} details={activeSubscription} />;
       case 'createSubscription':
         return (
-          <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm">
-            <div className="col d-flex justify-content-between align-items-center">
-              <div />
-              <h2 className="text-start">Create Subscription</h2>
-              <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ addingSubscription: !addingSubscription })}>
-                <FontAwesomeIcon icon={faTimes} />
-              </button>
-              <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.setState({ addingSubscription: !addingSubscription })}>
-                <FontAwesomeIcon icon={faTimes} />
-              </button>
+          <div>
+            <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm d-none d-md-block">
+              <div className="col d-flex justify-content-between align-items-center">
+                <div />
+                <h2 className="text-start">Create Subscription</h2>
+                <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.handleDashboardChange('dashboardCalendar')}>
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+                <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.handleDashboardChange('dashboardCalendar')}>
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+              </div>
+              <CreateSubscription 
+                addSubscription={this.handleUpdate}
+                toggleLoadingState={this.toggleLoadingState}
+                showSubscriptionList={this.showSubscriptionList}
+                currentSubscriptions={subscriptions} />
             </div>
-            <CreateSubscription 
-              addSubscription={this.handleUpdate}
-              toggleLoadingState={this.toggleLoadingState}
-              showSubscriptionList={this.showSubscriptionList}
-              currentSubscriptions={subscriptions} />
+            <div className="d-md-none">
+              <DashboardCalendar subscriptions={subscriptions} />
+            </div>
           </div>
         );
       case 'updateSubscription': 
         return (
-          <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm">
-            <div className="col d-flex justify-content-between align-items-center">
-              <div />
-              <h2 className="text-start">Update Subscription</h2>
-              <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ activeSubscription: false })} >
-                <FontAwesomeIcon icon={faTimes} />
-              </button>
-              <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.setState({ activeSubscription: false })}>
-                <FontAwesomeIcon icon={faTimes} />
-              </button>
+          <div>
+            <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm d-none d-md-block">
+              <div className="col d-flex justify-content-between align-items-center">
+                <div />
+                <h2 className="text-start">Update Subscription</h2>
+                <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.handleDashboardChange('subscriptionDetail')} >
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+                <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.handleDashboardChange('subscriptionDetail')}>
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+              </div>
+              <UpdateSubscription
+                updateSubscription={this.handleUpdate}
+                showSubscriptionList={this.showSubscriptionList}
+                toggleLoadingState={this.toggleLoadingState}
+                prevSubscription={activeSubscription}
+              />
+          </div>
+            <div className="d-md-none">
+              <DashboardCalendar subscriptions={subscriptions} />
             </div>
-            <UpdateSubscription
-              updateSubscription={this.handleUpdate}
-              showSubscriptionList={this.showSubscriptionList}
-              toggleLoadingState={this.toggleLoadingState}
-              prevSubscription={activeSubscription}
-            />
           </div>
         );
       default: 
@@ -223,7 +240,6 @@ class Dashboard extends React.Component {
   render() {
     const { pfp } = this.props;
     const { subscriptions, addingSubscription, activeSubscription } = this.state;
-
     const subscriptionForm = addingSubscription
       ? <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm">
           <div className="col d-flex justify-content-between align-items-center">
@@ -310,7 +326,7 @@ class Dashboard extends React.Component {
                   data-bs-toggle="offcanvas"
                   data-bs-target="#offcanvasExample"
                   aria-controls="offcanvasExample"
-                  onClick={() => this.setAddingSubscription(true)}
+                  onClick={() => this.setState({ addingSubscription: true })}
                 >
                   + Create
                 </button>
