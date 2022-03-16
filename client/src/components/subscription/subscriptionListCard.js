@@ -2,24 +2,26 @@ import React, { useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-const SubscriptionListCard = ({ details, setEditingSubscription, setActiveSubscription, handleDelete }) => {
+const SubscriptionListCard = ({ details, setActiveSubscription, handleDashboard, handleDelete }) => {
   const { name, nickname, dueDate, amount, subscriptionUuid } = details;
 
   const handleEdit = useCallback((e) => {
     e.stopPropagation();
-    setActiveSubscription(false);
-    setEditingSubscription(details);
-  }, [setActiveSubscription, setEditingSubscription, details]);
+    setActiveSubscription(details);
+    handleDashboard('updateSubscription');
+  }, [setActiveSubscription, details, handleDashboard]);
 
   const clickDelete = useCallback((e) => {
     e.stopPropagation();
-    setActiveSubscription(false);
     handleDelete(subscriptionUuid);
-  }, [setActiveSubscription, handleDelete, subscriptionUuid]);
+  }, [handleDelete, subscriptionUuid]);
 
   return (
     <div className="w-100 subscriptionListCard d-flex justify-content-between align-items-center">
-      <button className="btn w-100" type="button" onClick={() => setActiveSubscription(details)}>
+      <button className="btn w-100" type="button" onClick={() => {
+        setActiveSubscription(details);
+        handleDashboard('subscriptionDetail');
+      }}>
         <ul className="text-start px-0">
           <li><strong>Name: </strong>{nickname || name}</li>
           <li><strong>Due Date: </strong>{new Date(dueDate.nextDueDate).toLocaleDateString()}</li>
