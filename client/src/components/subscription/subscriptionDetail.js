@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { parseWeeklyDates, parseMonthlyDates } from '../../utils/frontendDateUtils';
 import DetailCalendar from '../date/detailCalendar';
 
-const SubscriptionDetail = ({ setActiveSubscription, details, setEditingSubscription, handleDelete }) => {
+const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, handleDelete }) => {
   const { name, nickname, dueDate, reminderDays, amount, subscriptionUuid } = details;
 
   const [repeatString, setRepeatString] = useState('');
@@ -31,9 +31,9 @@ const SubscriptionDetail = ({ setActiveSubscription, details, setEditingSubscrip
 
   const handleEdit = useCallback((e) => {
     e.stopPropagation();
-    setActiveSubscription(false);
-    setEditingSubscription(details);
-  }, [setActiveSubscription, setEditingSubscription, details]);
+    setActiveSubscription(details);
+    handleDashboard('updateSubscription');
+  }, [setActiveSubscription, details, handleDashboard]);
 
   const clickDelete = useCallback((e) => {
     e.stopPropagation();

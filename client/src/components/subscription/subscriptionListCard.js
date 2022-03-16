@@ -41,7 +41,7 @@ const SubscriptionListCard = ({ details, setActiveSubscription, handleDashboard,
           data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasExample"
           aria-controls="offcanvasExample"
-          onClick={handleEdit}
+          onClick={() => setActiveSubscription(details)}
           type="button"
           aria-label="Edit">
             <FontAwesomeIcon icon={faPen} />

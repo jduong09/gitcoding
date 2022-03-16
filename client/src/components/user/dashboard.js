@@ -38,12 +38,10 @@ class Dashboard extends React.Component {
       subscriptions: [],
       loading: false,
       addingSubscription: false,
-      editingSubscription: null,
       activeSubscription: false,
       mainComponentView: 'dashboardCalendar'
     };
 
-    this.setEditingSubscription = this.setEditingSubscription.bind(this);
     this.setAddingSubscription = this.setAddingSubscription.bind(this);
     this.setActiveSubscription = this.setActiveSubscription.bind(this);
     this.toggleLoadingState = this.toggleLoadingState.bind(this);
@@ -111,10 +109,6 @@ class Dashboard extends React.Component {
     await this.setState({ mainComponentView: newView });
   };
 
-  setEditingSubscription = async (editingSubscription) => {
-    await this.setState({ editingSubscription });
-  }
-
   setAddingSubscription = async (addingSubscription) => {
     await this.setState({ addingSubscription, activeSubscription: false });
   }
@@ -151,7 +145,7 @@ class Dashboard extends React.Component {
   }
 
   showSubscriptionList() {
-    this.setState({ addingSubscription: false, editingSubscription: null });
+    this.setState({ addingSubscription: false });
   }
 
   toggleLoadingState() {
@@ -165,24 +159,8 @@ class Dashboard extends React.Component {
     }
   };
 
-    /**
-     * this.state (booleans) : activeSubscription, editingSubscription, addingSubscription
-     * if (activeSubscription)
-     *  if (editingSubscription || addingSubscription)
-     *    toggleModal() to give user choice to leave current editing/addingSubscription and move to looking at subscription
-     * Do the same thing for editingSubscription and addingSubscription.
-     * 
-     * Add state: mainComponentView. String of either 'subscriptionView', 'createSubscription', 'updateSubscription', 'dashboardCalendar'
-     * dependent on value of mainComponentView, render accordingly.
-     * switch (mainComponentView)
-     * case 'subscriptionDetail'
-     *  return <SubscriptionDetail />
-     * case 'createSubscription'
-     *  return <CreateSubscription />
-    */
-
   renderMainComponent() {
-    const { activeSubscription, addingSubscription, editingSubscription, loading, subscriptions, mainComponentView } = this.state;
+    const { activeSubscription, addingSubscription, loading, subscriptions, mainComponentView } = this.state;
 
     if (loading) {
       return (
@@ -195,7 +173,7 @@ class Dashboard extends React.Component {
 
     switch (mainComponentView) {
       case 'subscriptionDetail':
-        return <SubscriptionDetail setActiveSubscription={this.setActiveSubscription} setEditingSubscription={this.setEditingSubscription} handleDelete={this.handleDelete} details={activeSubscription} />;
+        return <SubscriptionDetail setActiveSubscription={this.setActiveSubscription} handleDashboard={this.handleDashboardChange} handleDelete={this.handleDelete} details={activeSubscription} />;
       case 'createSubscription':
         return (
           <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm">
@@ -222,10 +200,10 @@ class Dashboard extends React.Component {
             <div className="col d-flex justify-content-between align-items-center">
               <div />
               <h2 className="text-start">Update Subscription</h2>
-              <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ editingSubscription: !editingSubscription, activeSubscription: false })} >
+              <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ activeSubscription: false })} >
                 <FontAwesomeIcon icon={faTimes} />
               </button>
-              <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.setState({ editingSubscription: !editingSubscription, activeSubscription: false })}>
+              <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.setState({ activeSubscription: false })}>
                 <FontAwesomeIcon icon={faTimes} />
               </button>
             </div>
@@ -238,45 +216,23 @@ class Dashboard extends React.Component {
           </div>
         );
       default: 
-          return <DashboardCalendar subscriptions={subscriptions} />;
+        return <DashboardCalendar subscriptions={subscriptions} />;
     }
-
-    /*
-    let display;
-    if (activeSubscription) {
-     display = <SubscriptionDetail setActiveSubscription={this.setActiveSubscription} setEditingSubscription={this.setEditingSubscription} handleDelete={this.handleDelete} details={activeSubscription} />;
-    } else if (editingSubscription || addingSubscription) {
-      display = (
-        <div className="col-12">
-          <div className="d-none d-md-block">
-            {subscriptionForm}
-          </div>
-          <div className="d-md-none">
-            <DashboardCalendar subscriptions={subscriptions}/>
-          </div>
-        </div>
-      );
-    } else {
-      display = <DashboardCalendar subscriptions={subscriptions} />;
-    }
-
-    return display;
-    */
   }
 
   render() {
     const { pfp } = this.props;
-    const { subscriptions, addingSubscription, editingSubscription, activeSubscription } = this.state;
+    const { subscriptions, addingSubscription, activeSubscription } = this.state;
 
     const subscriptionForm = addingSubscription
       ? <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm">
           <div className="col d-flex justify-content-between align-items-center">
             <div />
             <h2 className="text-start">Create Subscription</h2>
-            <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ addingSubscription: !addingSubscription })}>
+            <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ addingSubscription: !addingSubscription, mainComponentView: 'dashboardCalendar' })}>
               <FontAwesomeIcon icon={faTimes} />
             </button>
-            <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.setState({ addingSubscription: !addingSubscription })}>
+            <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.setState({ addingSubscription: !addingSubscription, mainComponentView: 'dashboardCalendar' })}>
               <FontAwesomeIcon icon={faTimes} />
             </button>
           </div>
@@ -290,10 +246,10 @@ class Dashboard extends React.Component {
           <div className="col d-flex justify-content-between align-items-center">
             <div />
             <h2 className="text-start">Update Subscription</h2>
-            <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ editingSubscription: !editingSubscription, activeSubscription: false })} >
+            <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ activeSubscription: false, mainComponentView: 'dashboardCalendar' })} >
               <FontAwesomeIcon icon={faTimes} />
             </button>
-            <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.setState({ editingSubscription: !editingSubscription, activeSubscription: false })}>
+            <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.setState({ activeSubscription: false, mainComponentView: 'dashboardCalendar' })}>
               <FontAwesomeIcon icon={faTimes} />
             </button>
           </div>
@@ -328,7 +284,7 @@ class Dashboard extends React.Component {
         </nav>
         <main className="d-flex flex-fill flex-column flex-md-row justify-content-between">
           <div className="col-md-8 flex-fill h-100 d-flex align-items-center justify-content-center" id="mainContainer" >
-            {this.renderMainComponent(subscriptionForm)}
+            {this.renderMainComponent()}
           </div>
           <div className="col-md-4 p-3 order-md-first flex-fill">
             <SubscriptionsList
@@ -354,14 +310,14 @@ class Dashboard extends React.Component {
                   data-bs-toggle="offcanvas"
                   data-bs-target="#offcanvasExample"
                   aria-controls="offcanvasExample"
-                  onClick={() => this.handleDashboardChange('createSubscription')}
+                  onClick={() => this.setAddingSubscription(true)}
                 >
                   + Create
                 </button>
               </div>
             </div>
             <div className="offcanvas offcanvas-bottom d-md-none offcanvasBorder" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-              {addingSubscription || editingSubscription ? subscriptionForm : ''}
+              {addingSubscription || activeSubscription ? subscriptionForm : ''}
             </div>
             <DashboardModal setMainComponentView={this.setMainComponentView} />
           </div>
