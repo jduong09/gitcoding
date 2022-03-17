@@ -15,12 +15,18 @@
 /**
  * @type {Cypress.PluginConfig}
  */
+const dotenv = require('dotenv');
+
+dotenv.config()
+
 // eslint-disable-next-line no-unused-vars
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
   config.env.auth0_client_id = process.env.CLIENT_ID
   config.env.auth0_client_secret = process.env.CLIENT_SECRET
-  config.env.auth0_database_url = process.env.DATABASE_URL
   config.env.auth0_issuer = process.env.ISSUER
+  config.env.auth0_callback_url = process.env.CALLBACK_URL
+
+  return config
 }
