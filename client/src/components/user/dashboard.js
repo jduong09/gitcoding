@@ -202,7 +202,7 @@ class Dashboard extends React.Component {
         </div>;
     return (
       <div className="h-100 d-flex flex-column">
-        <nav className="navbar p-2 d-flex justify-content-between align-items-center text-dark border-bottom shadow-sm">
+        <header className="navbar p-2 d-flex justify-content-between align-items-center text-dark border-bottom shadow-sm">
           <a className="navbar-brand d-flex text-dark" href="#changeThis">
             <img src={logo} alt="wateringCanIcon" height="60" />
             <div className="align-self-center d-none d-md-block">Water Your  Subs</div>
@@ -221,7 +221,7 @@ class Dashboard extends React.Component {
               </li>
             </ul>
           </div>
-        </nav>
+        </header>
         <main className="d-flex flex-fill flex-column flex-md-row justify-content-between">
           <div className="col-md-8 flex-fill h-100 d-flex align-items-center justify-content-center" id="mainContainer" >
             {this.renderMainComponent(subscriptionForm)}
