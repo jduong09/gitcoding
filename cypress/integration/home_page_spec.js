@@ -1,6 +1,6 @@
 describe('The Home Page', () => {
   it('successfully loads', () => {
-    cy.visit('/', { timeout: 30000 });
+    cy.visit('/');
   });
 
   it('allows you to sign in', () => {
