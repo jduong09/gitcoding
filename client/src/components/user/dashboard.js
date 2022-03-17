@@ -202,15 +202,15 @@ class Dashboard extends React.Component {
         </div>;
     return (
       <div className="h-100 d-flex flex-column">
-        <nav className="navbar p-2 d-flex justify-content-between text-dark border-bottom border-primary bg-primary">
+        <nav className="navbar p-2 d-flex justify-content-between align-items-center text-dark border-bottom shadow-sm">
           <a className="navbar-brand d-flex text-dark" href="#changeThis">
-            <img src={logo} alt="wateringCanIcon" height="40" />
-            <div className="d-none d-md-block">Water Your  Subs</div>
+            <img src={logo} alt="wateringCanIcon" height="60" />
+            <div className="align-self-center d-none d-md-block">Water Your  Subs</div>
           </a>
-          <h1>{`${new Date().toDateString()}`}</h1>
+          <h1 className="display-4">{`${new Date().toDateString()}`}</h1>
           <div className="d-flex dropdown">
             <a className="" href="#dashboard" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img className="border rounded-2 border-primary" src={pfp} alt="user-pfp" height="40" />
+              <img className="border rounded-2 border-primary" src={pfp} alt="user-pfp" height="60" />
             </a>
             <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
               <li>
