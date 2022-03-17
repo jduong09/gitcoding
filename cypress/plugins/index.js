@@ -19,4 +19,8 @@
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
+  config.env.auth0_client_id = process.env.CLIENT_ID
+  config.env.auth0_client_secret = process.env.CLIENT_SECRET
+  config.env.auth0_database_url = process.env.DATABASE_URL
+  config.env.auth0_issuer = process.env.ISSUER
 }
