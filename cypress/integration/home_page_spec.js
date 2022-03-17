@@ -1,6 +1,6 @@
 describe('The Home Page', () => {
   it('successfully loads', () => {
-    cy.visit('/', { headers: { "Accept-Encoding": "gzip, deflate" } });
+    cy.visit('/', { timeout: 30000 });
   });
 
   it('allows you to sign in', () => {
