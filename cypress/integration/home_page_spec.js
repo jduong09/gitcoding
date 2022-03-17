@@ -1,6 +1,6 @@
 describe('The Home Page', () => {
   it('successfully loads', () => {
-    cy.visit('http://localhost:3000/');
+    cy.visit('/', { headers: { "Accept-Encoding": "gzip, deflate" } });
   });
 
   it('allows you to sign in', () => {
