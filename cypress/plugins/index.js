@@ -23,10 +23,10 @@ dotenv.config()
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
-  config.env.auth0_client_id = process.env.CLIENT_ID
-  config.env.auth0_client_secret = process.env.CLIENT_SECRET
-  config.env.auth0_issuer = process.env.ISSUER
-  config.env.auth0_callback_url = process.env.CALLBACK_URL
+  config.env.clientId = process.env.CLIENT_ID
+  config.env.clientSecret = process.env.CLIENT_SECRET
+  config.env.domain = process.env.ISSUER
+  config.env.callbackUrl = process.env.CALLBACK_URL
 
   return config
 }
