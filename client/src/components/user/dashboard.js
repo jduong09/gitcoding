@@ -202,15 +202,15 @@ class Dashboard extends React.Component {
         </div>;
     return (
       <div className="h-100 d-flex flex-column">
-        <nav className="navbar p-2 d-flex justify-content-around justify-content-md-between text-primary">
-          <a className="navbar-brand d-flex text-primary" href="#changeThis">
+        <nav className="navbar p-2 d-flex justify-content-between text-dark border-bottom border-primary bg-primary">
+          <a className="navbar-brand d-flex text-dark" href="#changeThis">
             <img src={logo} alt="wateringCanIcon" height="40" />
             <div className="d-none d-md-block">Water Your  Subs</div>
           </a>
           <h1>{`${new Date().toDateString()}`}</h1>
           <div className="d-flex dropdown">
-            <a className="dropdown-toggle" href="#dashboard" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src={pfp} alt="user-pfp" height="40" />
+            <a className="" href="#dashboard" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img className="border rounded-2 border-primary" src={pfp} alt="user-pfp" height="40" />
             </a>
             <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
               <li>
@@ -236,7 +236,7 @@ class Dashboard extends React.Component {
             <div className="col mt-2">
               <div className="d-none d-sm-none d-md-block">
                 <button
-                  className="col-12 p-4 btn border-dashed border-primary text-primary"
+                  className="col-12 p-4 btn border-dashed border-primary btn-outline-primary"
                   type="button"
                   onClick={() => this.setAddingSubscription(true)}
                 >
@@ -245,7 +245,7 @@ class Dashboard extends React.Component {
               </div>
               <div className="d-md-none">
                 <button
-                  className="col-12 p-4 btn border-dashed border-primary text-primary"
+                  className="col-12 p-4 btn border-dashed border-primary btn-outline-primary"
                   type="button"
                   data-bs-toggle="offcanvas"
                   data-bs-target="#offcanvasExample"

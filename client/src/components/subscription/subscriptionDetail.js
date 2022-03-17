@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { parseWeeklyDates, parseMonthlyDates } from '../../utils/frontendDateUtils';
 import DetailCalendar from '../date/detailCalendar';
 
@@ -43,7 +45,13 @@ const SubscriptionDetail = ({ setActiveSubscription, details, setEditingSubscrip
 
   return (
     <div className="col-11 p-1 d-flex flex-column borderSubscriptionForm">
-      <h2 className="col-12 text-center">{nickname || name}</h2>
+      <div className="col-12 d-flex justify-content-between">
+        <div />
+        <h2>{nickname || name}</h2>
+        <button className="btn" type="button" onClick={() => setActiveSubscription(false)}>
+          <FontAwesomeIcon icon={faTimes} />
+        </button>
+      </div>
       <div className="col-12 d-flex">
         <ul className="col-6 text-start align-self-center">
           <li><strong>Amount: </strong>${amount/100}</li>
@@ -54,7 +62,7 @@ const SubscriptionDetail = ({ setActiveSubscription, details, setEditingSubscrip
           <DetailCalendar dueDate={dueDate}/>
         </div>
       </div>
-      <div className="col-10 d-flex justify-content-between mx-auto">
+      <div className="col-10 d-flex justify-content-around mx-auto">
         <div className="col-3">
           <button
             className="btn w-100 btn-primary d-md-none"
@@ -68,7 +76,6 @@ const SubscriptionDetail = ({ setActiveSubscription, details, setEditingSubscrip
           </button>
           <button className="btn w-100 btn-primary d-none d-md-block" type="button" onClick={handleEdit}>Edit</button>
         </div>
-        <button className="col-3 btn btn-primary" type="button" onClick={() => setActiveSubscription(false)}>Close</button>
         <button className="col-3 btn btn-primary" type="button" onClick={clickDelete}>Delete</button>
       </div>
     </div>

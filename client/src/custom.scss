@@ -27,11 +27,26 @@ $offcanvas-vertical-height: 75vh;
   border-top-right-radius: 1rem !important;
 }
 
-@media(min-width: 767px) {
-  #mainContainer {
-    position: relative;
+.list-group-item-action:hover {
+  background-color: #7866D3 !important;
+}
+
+#mainContainer {
+  position: relative !important;
+}
+
+@media(max-width: 766px) {
+  #mainContainer::after {
+    content : "";
+    position: absolute;
+    bottom  : 10%;
+    height  : 4px;
+    width   : 90%;
+    border-bottom: 3px solid black;
   }
-  
+}
+
+@media(min-width: 767px) {  
   #mainContainer:before {
     content : "";
     position: absolute;
