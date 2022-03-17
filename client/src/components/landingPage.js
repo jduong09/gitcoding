@@ -9,6 +9,7 @@ const header = 'Keep Your Subscriptions Healthy';
 
 const LandingPage = () => (
   <div>
+    Sign In
     <header className="d-flex justify-content-between align-items-center border-bottom shadow-sm p-2">
       <img src={logo} alt="watering can logo" width="60px" />
       <h1 className="display-4">Water Your Subs</h1>
