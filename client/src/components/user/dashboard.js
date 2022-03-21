@@ -281,15 +281,15 @@ class Dashboard extends React.Component {
         </div>;
     return (
       <div className="h-100 d-flex flex-column">
-        <nav className="navbar p-2 d-flex justify-content-around justify-content-md-between text-primary">
-          <a className="navbar-brand d-flex text-primary" href="#changeThis">
-            <img src={logo} alt="wateringCanIcon" height="40" />
-            <div className="d-none d-md-block">Water Your  Subs</div>
+        <header className="navbar p-2 d-flex justify-content-between align-items-center text-dark border-bottom shadow-sm">
+          <a className="navbar-brand d-flex text-dark" href="#changeThis">
+            <img src={logo} alt="wateringCanIcon" height="60" />
+            <div className="align-self-center d-none d-md-block">Water Your  Subs</div>
           </a>
-          <h1>{`${new Date().toDateString()}`}</h1>
+          <h1 className="display-4">{`${new Date().toDateString()}`}</h1>
           <div className="d-flex dropdown">
-            <a className="dropdown-toggle" href="#dashboard" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src={pfp} alt="user-pfp" height="40" />
+            <a className="" href="#dashboard" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img className="border rounded-2 border-primary" src={pfp} alt="user-pfp" height="60" />
             </a>
             <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
               <li>
@@ -300,7 +300,7 @@ class Dashboard extends React.Component {
               </li>
             </ul>
           </div>
-        </nav>
+        </header>
         <main className="d-flex flex-fill flex-column flex-md-row justify-content-between">
           <div className="col-md-8 flex-fill h-100 d-flex align-items-center justify-content-center" id="mainContainer" >
             {this.renderMainComponent()}
@@ -315,7 +315,7 @@ class Dashboard extends React.Component {
             <div className="col mt-2">
               <div className="d-none d-sm-none d-md-block">
                 <button
-                  className="col-12 p-4 btn border-dashed border-primary text-primary"
+                  className="col-12 p-4 btn border-dashed border-primary btn-outline-primary"
                   type="button"
                   onClick={() => this.handleDashboardChange('createSubscription')}
                 >
@@ -324,7 +324,7 @@ class Dashboard extends React.Component {
               </div>
               <div className="d-md-none">
                 <button
-                  className="col-12 p-4 btn border-dashed border-primary text-primary"
+                  className="col-12 p-4 btn border-dashed border-primary btn-outline-primary"
                   type="button"
                   data-bs-toggle="offcanvas"
                   data-bs-target="#offcanvasExample"
