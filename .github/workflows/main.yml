@@ -15,4 +15,4 @@ jobs:
         with:
           build: npm run build
           wait-on: "http://localhost:3000"
-          start: npm run heroku-test
+          start: npm run dev
