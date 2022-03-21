@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const users = require('../actions/users');
 
 dotenv.config();
+const {BASE_URL, ISSUER, CLIENT_ID} = process.env;
 
 const router = express.Router();
 
@@ -76,7 +77,7 @@ router.get('/callback', (req, res, next) => {
       
       // URGENT: Need to look at purpose of deleting returnTo
       delete req.session.returnTo;
-      await res.redirect(`${process.env.BASE_URL}/users/${user_uuid}`);
+      await res.redirect(`${BASE_URL}/users/${user_uuid}`);
       res.end();
     });
   })(req, res, next);
@@ -86,12 +87,12 @@ router.get('/logout', (req, res) => {
   req.logOut();
   res.clearCookie('connect.sid');
 
-  const returnTo = process.env.BASE_URL;
+  const returnTo = BASE_URL;
 
-  const logoutURL = new URL(`https://${process.env.ISSUER}/v2/logout`);
+  const logoutURL = new URL(`https://${ISSUER}/v2/logout`);
 
   const searchString = new URLSearchParams({
-    client_id: process.env.CLIENT_ID,
+    client_id: CLIENT_ID,
     returnTo, 
   });
 
