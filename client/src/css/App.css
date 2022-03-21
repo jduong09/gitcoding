@@ -25,19 +25,6 @@ html, body, #root {
   }
 }
 
-.subscription-list {
-  border: 1px solid green;
-}
-
-.subscription-details {
-  list-style: none;
-  display: flex;
-}
-
-.subscription-details > li {
-  padding: 3px;
-}
-
 /* TODO: Move these classes to a more sensible place maybe...? */
 .text-underline-color {
   box-shadow: inset 0 -0.4em #7866D3;
