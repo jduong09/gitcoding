@@ -28,7 +28,6 @@ module.exports = (on, config) => {
   config.env.DOMAIN = process.env.ISSUER
   config.env.CALLBACK_URL = process.env.CALLBACK_URL
   config.env.PORT = process.env.PORT
-
-  config.env = process.env
+  
   return config
 }

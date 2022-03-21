@@ -5,6 +5,7 @@ on: [push]
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    wait-on: "http://localhost:3000"
     steps:
       - name: Checkout
         uses: actions/checkout@v2
