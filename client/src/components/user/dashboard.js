@@ -10,14 +10,13 @@ import DashboardCalendar from '../date/dashboardCalendar';
 import UpdateSubscription from '../subscription/updateSubscription';
 import CreateSubscription from '../subscription/createSubscription';
 import SubscriptionDetail from '../subscription/subscriptionDetail';
-import DashboardModal from '../dashboardModal';
+import ModalComponent from '../modalComponent';
 import logo from '../../assets/watering-can.png';
 
 const href = process && process.env && process.env.NODE_ENV === 'production'
   ? '/auth/logout'
   : 'http://localhost:5000/auth/logout';
 
-/*
 const waitUserClick = () => (
   new Promise((resolve) => {
     const button = document.getElementById('continueBtn');
@@ -31,7 +30,6 @@ const waitUserClick = () => (
     closeBtn.addEventListener('click', listener);
   })
 );
-*/
 
 // logo: https://www.flaticon.com/free-icon/watering-can_5268400?term=watering%20can&page=1&position=73&page=1&position=73&related_id=5268400&origin=tag
 class Dashboard extends React.Component {
@@ -98,14 +96,14 @@ class Dashboard extends React.Component {
       return this.setState({ mainComponentView: newView });
     }
 
-    const modal = new Modal(document.getElementById('myModal'));
+    const modal = new Modal(document.getElementById('dashboardModal'));
     modal.show();
 
-    // const userInput = await waitUserClick();
+    const userInput = await waitUserClick();
 
-    if (newView === 'next') {
+    if (userInput === 'next') {
       this.setState({ mainComponentView: newView });
-    } else if (newView === 'close') {
+    } else if (userInput === 'close') {
       this.setState({ mainComponentView });
     }
     return modal.hide();
@@ -338,7 +336,7 @@ class Dashboard extends React.Component {
             <div className="offcanvas offcanvas-bottom d-md-none offcanvasBorder" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
               {addingSubscription || activeSubscription ? subscriptionForm : ''}
             </div>
-            <DashboardModal handleDashboardChange={this.handleDashboardChange} />
+            <ModalComponent id="dashboardModal" />
           </div>
         </main>
       </div>
