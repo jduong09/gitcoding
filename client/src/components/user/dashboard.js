@@ -17,8 +17,9 @@ const href = process && process.env && process.env.NODE_ENV === 'production'
   ? '/auth/logout'
   : 'http://localhost:5000/auth/logout';
 
+/*
 const waitUserClick = () => (
-  new Promise((resolve, ) => {
+  new Promise((resolve) => {
     const button = document.getElementById('continueBtn');
     const closeBtn = document.getElementById('closeBtn');
     const listener = e => {
@@ -30,6 +31,7 @@ const waitUserClick = () => (
     closeBtn.addEventListener('click', listener);
   })
 );
+*/
 
 // logo: https://www.flaticon.com/free-icon/watering-can_5268400?term=watering%20can&page=1&position=73&page=1&position=73&related_id=5268400&origin=tag
 class Dashboard extends React.Component {
@@ -99,17 +101,18 @@ class Dashboard extends React.Component {
     const modal = new Modal(document.getElementById('myModal'));
     modal.show();
 
-    const userInput = await waitUserClick();
-    if (userInput === 'next') {
-      await this.setState({ mainComponentView: newView });
-    } else if (userInput === 'close') {
-      await this.setState({ mainComponentView });
+    // const userInput = await waitUserClick();
+
+    if (newView === 'next') {
+      this.setState({ mainComponentView: newView });
+    } else if (newView === 'close') {
+      this.setState({ mainComponentView });
     }
     return modal.hide();
   }
 
-  setMainComponentView = async (newView) => {
-    await this.setState({ mainComponentView: newView });
+  setMainComponentView = (newView) => {
+    this.setState({ mainComponentView: newView });
   };
 
   setAddingSubscription = async (addingSubscription) => {
@@ -226,7 +229,7 @@ class Dashboard extends React.Component {
                 toggleLoadingState={this.toggleLoadingState}
                 prevSubscription={activeSubscription}
               />
-          </div>
+            </div>
             <div className="d-md-none">
               <DashboardCalendar subscriptions={subscriptions} />
             </div>
@@ -335,7 +338,7 @@ class Dashboard extends React.Component {
             <div className="offcanvas offcanvas-bottom d-md-none offcanvasBorder" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
               {addingSubscription || activeSubscription ? subscriptionForm : ''}
             </div>
-            <DashboardModal setMainComponentView={this.setMainComponentView} />
+            <DashboardModal handleDashboardChange={this.handleDashboardChange} />
           </div>
         </main>
       </div>
