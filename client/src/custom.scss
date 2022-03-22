@@ -39,7 +39,7 @@ $offcanvas-vertical-height: 75vh;
   #mainContainer::after {
     content : "";
     position: absolute;
-    bottom  : 10%;
+    bottom  : 5%;
     height  : 4px;
     width   : 90%;
     border-bottom: 3px solid black;
@@ -53,7 +53,7 @@ $offcanvas-vertical-height: 75vh;
     left    : 0;
     bottom  : 50;
     height  : 90%;
-    width   : 1px;  /* or 100px */
+    width   : 1px;
     border-left: 3px solid black;
   }
 
@@ -64,5 +64,4 @@ $offcanvas-vertical-height: 75vh;
 }
 
 // Import Bootstrap and its default variables
-
 @import '~bootstrap/scss/bootstrap.scss';

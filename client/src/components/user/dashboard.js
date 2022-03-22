@@ -59,12 +59,8 @@ class Dashboard extends React.Component {
           style: { backgroundColor: 'red', color: '#000000' }
         });
       } else if (DateUtils.isSameDay(new Date(dueDate.nextDueDate), new Date()) && !dueDate.lateDueDate) {
-        toast(`Your ${name} subscription is due today!`, {
-          autoClose:false,
-          style: {
-            backgroundColor: '#8C7AE6',
-            color: '#000000'
-          }
+        toast.info(`Your ${name} subscription is due today!`, {
+          autoClose:false
         });
       }
     };
@@ -205,9 +201,9 @@ class Dashboard extends React.Component {
         <header className="navbar p-2 d-flex justify-content-between align-items-center text-dark border-bottom shadow-sm">
           <a className="navbar-brand d-flex text-dark" href="#changeThis">
             <img src={logo} alt="wateringCanIcon" height="60" />
-            <div className="align-self-center d-none d-md-block">Water Your  Subs</div>
+            <div className="align-self-center d-none d-md-block">Water Your Subs</div>
           </a>
-          <h1 className="display-4">{`${new Date().toDateString()}`}</h1>
+          <h1 className="display-4 fw-normal">{`${new Date().toDateString()}`}</h1>
           <div className="d-flex dropdown">
             <a className="" href="#dashboard" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <img className="border rounded-2 border-primary" src={pfp} alt="user-pfp" height="60" />
