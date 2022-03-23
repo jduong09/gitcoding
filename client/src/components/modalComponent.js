@@ -16,8 +16,12 @@ const ModalComponent = ({ id, handleModalClick }) => (
           }
         </div>
         <div className="modal-footer">
-          <button onClick={() => handleModalClick('close')} type="button" className="btn btn-primary" data-bs-dismiss="modal">Stay On Page</button>
-          <button onClick={() => handleModalClick('next')} type="button" className="btn btn-primary">Discard Changes</button>
+          <button onClick={() => handleModalClick(false)} type="button" className="btn btn-primary" data-bs-dismiss="modal">
+            {id === 'deleteModal' ? 'Do not Delete' : 'Stay On Page'}
+          </button>
+          <button onClick={() => handleModalClick(true)} type="button" className="btn btn-primary">
+            {id === 'deleteModal' ? 'Delete' : 'Discard Changes'}
+          </button>
         </div>
       </div>
     </div>

@@ -75,6 +75,7 @@ class Dashboard extends React.Component {
 
     this.setState({ subscriptions });
     this.viewFormModal = new Modal(document.getElementById('formModal'));
+    this.viewDeleteModal = new Modal(document.getElementById('deleteModal'));
   };
 
   async handleDashboardChange(newView) {
@@ -90,9 +91,17 @@ class Dashboard extends React.Component {
   }
 
   handleModalClick = (userInput) => {
-    const { mainComponentView, nextView } = this.state;
-    this.setState({ mainComponentView: userInput === 'next' ? nextView : mainComponentView });
-    this.viewFormModal.hide();
+    const { mainComponentView, nextView, activeSubscription } = this.state;
+    if (nextView) {
+      this.setState({ mainComponentView: userInput ? nextView : mainComponentView, nextView: null });
+      this.viewFormModal.hide();
+    } else {
+      if (userInput) {
+        this.handleDelete(activeSubscription.subscriptionUuid);
+        this.setState({ mainComponentView: 'dashboardCalendar', activeSubscription: false });
+      }
+      this.viewDeleteModal.hide();
+    }
   }
 
   setMainComponentView = (newView) => {
@@ -295,6 +304,7 @@ class Dashboard extends React.Component {
               setActiveSubscription={this.setActiveSubscription}
               handleDashboard={this.handleDashboardChange}
               handleDelete={this.handleDelete}
+              deleteModal={this.viewDeleteModal}
             />
             <div className="col mt-2">
               <div className="d-none d-sm-none d-md-block">
@@ -323,6 +333,7 @@ class Dashboard extends React.Component {
               {addingSubscription || activeSubscription ? subscriptionForm : ''}
             </div>
             <ModalComponent id="formModal" handleModalClick={this.handleModalClick} />
+            <ModalComponent id="deleteModal" handleModalClick={this.handleModalClick} />
           </div>
         </main>
       </div>

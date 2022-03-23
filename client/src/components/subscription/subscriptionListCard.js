@@ -2,8 +2,8 @@ import React, { useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-const SubscriptionListCard = ({ details, setActiveSubscription, handleDashboard, handleDelete }) => {
-  const { name, nickname, dueDate, amount, subscriptionUuid } = details;
+const SubscriptionListCard = ({ details, setActiveSubscription, handleDashboard, deleteModal }) => {
+  const { name, nickname, dueDate, amount } = details;
 
   const handleEdit = useCallback((e) => {
     e.stopPropagation();
@@ -15,8 +15,9 @@ const SubscriptionListCard = ({ details, setActiveSubscription, handleDashboard,
 
   const clickDelete = useCallback((e) => {
     e.stopPropagation();
-    handleDelete(subscriptionUuid);
-  }, [handleDelete, subscriptionUuid]);
+    setActiveSubscription(details);
+    deleteModal.show();
+  }, [setActiveSubscription, details, deleteModal]);
 
   return (
     <div className="w-100 subscriptionListCard d-flex justify-content-between align-items-center">
