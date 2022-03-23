@@ -17,20 +17,6 @@ const href = process && process.env && process.env.NODE_ENV === 'production'
   ? '/auth/logout'
   : 'http://localhost:5000/auth/logout';
 
-const waitUserClick = () => (
-  new Promise((resolve) => {
-    const button = document.getElementById('continueBtn');
-    const closeBtn = document.getElementById('closeBtn');
-    const listener = e => {
-      const input = e.target.value;
-      e.target.removeEventListener('click', listener);
-      resolve(input);
-    };
-    button.addEventListener('click', listener);
-    closeBtn.addEventListener('click', listener);
-  })
-);
-
 // logo: https://www.flaticon.com/free-icon/watering-can_5268400?term=watering%20can&page=1&position=73&page=1&position=73&related_id=5268400&origin=tag
 class Dashboard extends React.Component {
   constructor(props) {
@@ -41,7 +27,8 @@ class Dashboard extends React.Component {
       loading: false,
       addingSubscription: false,
       activeSubscription: false,
-      mainComponentView: 'dashboardCalendar'
+      mainComponentView: 'dashboardCalendar',
+      nextView: null,
     };
 
     this.setAddingSubscription = this.setAddingSubscription.bind(this);
@@ -87,26 +74,25 @@ class Dashboard extends React.Component {
     };
 
     this.setState({ subscriptions });
+    this.viewFormModal = new Modal(document.getElementById('formModal'));
   };
 
   async handleDashboardChange(newView) {
     const { mainComponentView } = this.state;
 
     if (mainComponentView === 'dashboardCalendar' || mainComponentView === 'subscriptionDetail') {
-      return this.setState({ mainComponentView: newView });
-    }
-
-    const modal = new Modal(document.getElementById('dashboardModal'));
-    modal.show();
-
-    const userInput = await waitUserClick();
-
-    if (userInput === 'next') {
       this.setState({ mainComponentView: newView });
-    } else if (userInput === 'close') {
-      this.setState({ mainComponentView });
+      return;
     }
-    return modal.hide();
+
+    this.setState({ nextView: newView });
+    this.viewFormModal.show();
+  }
+
+  handleModalClick = (userInput) => {
+    const { mainComponentView, nextView } = this.state;
+    this.setState({ mainComponentView: userInput === 'next' ? nextView : mainComponentView });
+    this.viewFormModal.hide();
   }
 
   setMainComponentView = (newView) => {
@@ -336,11 +322,7 @@ class Dashboard extends React.Component {
             <div className="offcanvas offcanvas-bottom d-md-none offcanvasBorder" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
               {addingSubscription || activeSubscription ? subscriptionForm : ''}
             </div>
-            <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">
-              Launch Delete Modal
-            </button>
-            <ModalComponent id="dashboardModal" />
-            <ModalComponent id="deleteModal" />
+            <ModalComponent id="formModal" handleModalClick={this.handleModalClick} />
           </div>
         </main>
       </div>
