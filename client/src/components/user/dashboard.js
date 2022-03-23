@@ -209,7 +209,7 @@ class Dashboard extends React.Component {
             <img src={logo} alt="wateringCanIcon" height="60" />
             <div className="align-self-center d-none d-md-block">Water Your Subs</div>
           </a>
-          <h1 className="h3 fw-normal">{concatenatedString}</h1>
+          <h1 className="h3 fw-normal" id="nav-header">{concatenatedString}</h1>
           <div className="d-flex dropdown">
             <a className="" href="#dashboard" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <img className="border rounded-circle border-primary" src={pfp} alt="user-pfp" height="60" />
