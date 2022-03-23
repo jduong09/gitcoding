@@ -9,7 +9,7 @@ const header = 'Keep Your Subscriptions Healthy';
 
 const LandingPage = () => (
   <div>
-    <header className="d-flex justify-content-between align-items-center border-bottom shadow-sm p-2">
+    <header className="py-2 px-4 d-flex justify-content-between align-items-center border-bottom shadow-sm">
       <img src={logo} alt="watering can logo" width="60px" />
       <h1 className="display-4 fw-normal">Water Your Subs</h1>
       <div />

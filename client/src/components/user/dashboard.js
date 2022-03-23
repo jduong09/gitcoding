@@ -15,6 +15,12 @@ const href = process && process.env && process.env.NODE_ENV === 'production'
   ? '/auth/logout'
   : 'http://localhost:5000/auth/logout';
 
+const todaysDate = new Date().toDateString();
+const year = todaysDate.slice(todaysDate.length - 4);
+const monthAndDay = todaysDate.slice(0, todaysDate.length - 5);
+const concatenatedString = `${monthAndDay}, ${year}`;
+
+
 // logo: https://www.flaticon.com/free-icon/watering-can_5268400?term=watering%20can&page=1&position=73&page=1&position=73&related_id=5268400&origin=tag
 class Dashboard extends React.Component {
   constructor(props) {
@@ -198,15 +204,15 @@ class Dashboard extends React.Component {
         </div>;
     return (
       <div className="h-100 d-flex flex-column">
-        <header className="navbar p-2 d-flex justify-content-between align-items-center text-dark border-bottom shadow-sm">
+        <header className="navbar py-2 px-4 d-flex justify-content-between align-items-center text-dark border-bottom shadow-sm">
           <a className="navbar-brand d-flex text-dark" href="#changeThis">
             <img src={logo} alt="wateringCanIcon" height="60" />
             <div className="align-self-center d-none d-md-block">Water Your Subs</div>
           </a>
-          <h1 className="display-4 fw-normal">{`${new Date().toDateString()}`}</h1>
+          <h1 className="h3 fw-normal">{concatenatedString}</h1>
           <div className="d-flex dropdown">
             <a className="" href="#dashboard" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img className="border rounded-2 border-primary" src={pfp} alt="user-pfp" height="60" />
+              <img className="border rounded-circle border-primary" src={pfp} alt="user-pfp" height="60" />
             </a>
             <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
               <li>

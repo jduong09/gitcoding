@@ -26,26 +26,28 @@ const SubscriptionListCard = ({ details, setEditingSubscription, setActiveSubscr
           <li><strong>Amount: </strong>${amount/100}</li>
         </ul>
       </button>
-      <div>
-        <button
-          className="btn innerButtonEdit d-none d-md-block"
-          type="button"
-          onClick={handleEdit}
-        >
-          <FontAwesomeIcon icon={faPen} />
-        </button>
-        <button
-          className="btn innerButtonEdit d-md-none"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasExample"
-          aria-controls="offcanvasExample"
-          onClick={handleEdit}
-          type="button"
-          aria-label="Edit">
+      <div className="d-flex flex-column justify-content-between">
+        <div>
+          <button
+            className="btn d-none d-md-block"
+            type="button"
+            onClick={handleEdit}
+          >
             <FontAwesomeIcon icon={faPen} />
-        </button>
-        <button className="btn innerButtonDelete" onClick={clickDelete} type="button" aria-label="Delete"><FontAwesomeIcon icon={faTrash} /></button>
-      </div>
+          </button>
+          <button
+            className="btn d-md-none"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasExample"
+            aria-controls="offcanvasExample"
+            onClick={handleEdit}
+            type="button"
+            aria-label="Edit">
+              <FontAwesomeIcon icon={faPen} />
+          </button>
+          <button className="btn" onClick={clickDelete} type="button" aria-label="Delete"><FontAwesomeIcon icon={faTrash} /></button>
+        </div>
+        </div>
       </div>
   );
 };
