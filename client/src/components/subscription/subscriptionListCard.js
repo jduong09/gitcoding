@@ -48,7 +48,7 @@ const SubscriptionListCard = ({ details, setActiveSubscription, handleDashboard,
           aria-label="Edit">
             <FontAwesomeIcon icon={faPen} />
         </button>
-        <button className="btn innerButtonDelete" onClick={clickDelete} type="button" aria-label="Delete"><FontAwesomeIcon icon={faTrash} /></button>
+        <button className="btn innerButtonDelete" data-bs-toggle="modal" data-bs-target="#deleteModal" onClick={clickDelete} type="button" aria-label="Delete"><FontAwesomeIcon icon={faTrash} /></button>
       </div>
       </div>
   );

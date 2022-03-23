@@ -336,7 +336,11 @@ class Dashboard extends React.Component {
             <div className="offcanvas offcanvas-bottom d-md-none offcanvasBorder" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
               {addingSubscription || activeSubscription ? subscriptionForm : ''}
             </div>
+            <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">
+              Launch Delete Modal
+            </button>
             <ModalComponent id="dashboardModal" />
+            <ModalComponent id="deleteModal" />
           </div>
         </main>
       </div>
