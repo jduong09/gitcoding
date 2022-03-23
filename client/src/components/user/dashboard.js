@@ -176,7 +176,15 @@ class Dashboard extends React.Component {
 
     switch (mainComponentView) {
       case 'subscriptionDetail':
-        return <SubscriptionDetail setActiveSubscription={this.setActiveSubscription} handleDashboard={this.handleDashboardChange} handleDelete={this.handleDelete} details={activeSubscription} />;
+        return (
+          <SubscriptionDetail 
+            setActiveSubscription={this.setActiveSubscription}
+            handleDashboard={this.handleDashboardChange}
+            handleDelete={this.handleDelete}
+            details={activeSubscription} 
+            deleteModal={this.viewDeleteModal}
+          />
+        );
       case 'createSubscription':
         return (
           <div>
