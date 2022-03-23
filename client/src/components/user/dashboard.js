@@ -74,7 +74,7 @@ class Dashboard extends React.Component {
     };
 
     this.setState({ subscriptions });
-    this.viewNavModal = new Modal(document.getElementById('dashboardModal'));
+    this.viewFormModal = new Modal(document.getElementById('formModal'));
   };
 
   async handleDashboardChange(newView) {
@@ -86,13 +86,13 @@ class Dashboard extends React.Component {
     }
 
     this.setState({ nextView: newView });
-    this.viewNavModal.show();
+    this.viewFormModal.show();
   }
 
   handleModalClick = (userInput) => {
     const { mainComponentView, nextView } = this.state;
     this.setState({ mainComponentView: userInput === 'next' ? nextView : mainComponentView });
-    this.viewNavModal.hide();
+    this.viewFormModal.hide();
   }
 
   setMainComponentView = (newView) => {
@@ -322,7 +322,7 @@ class Dashboard extends React.Component {
             <div className="offcanvas offcanvas-bottom d-md-none offcanvasBorder" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
               {addingSubscription || activeSubscription ? subscriptionForm : ''}
             </div>
-            <ModalComponent id="dashboardModal" handleModalClick={this.handleModalClick} />
+            <ModalComponent id="formModal" handleModalClick={this.handleModalClick} />
           </div>
         </main>
       </div>
