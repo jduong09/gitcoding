@@ -1,6 +1,6 @@
 import React  from 'react';
 
-const ModalComponent = ({ id }) => (
+const ModalComponent = ({ id, handleModalClick }) => (
   <div className="modal fade" id={id} tabIndex="-1" aria-labelledby="dashboardModal" aria-hidden="true">
     <div className="modal-dialog">
       <div className="modal-content">
@@ -11,8 +11,8 @@ const ModalComponent = ({ id }) => (
           If you leave, all unsaved changes will be discarded.
         </div>
         <div className="modal-footer">
-          <button type="button" className="btn btn-primary" id="closeBtn" value="close" data-bs-dismiss="modal">Stay On Page</button>
-          <button type="button" className="btn btn-primary" id="continueBtn" value="next">Discard Changes</button>
+          <button onClick={() => handleModalClick('close')} type="button" className="btn btn-primary" data-bs-dismiss="modal">Stay On Page</button>
+          <button onClick={() => handleModalClick('next')} type="button" className="btn btn-primary">Discard Changes</button>
         </div>
       </div>
     </div>
