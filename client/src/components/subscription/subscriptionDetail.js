@@ -4,7 +4,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { parseWeeklyDates, parseMonthlyDates } from '../../utils/frontendDateUtils';
 import DetailCalendar from '../date/detailCalendar';
 
-const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, deleteModal }) => {
+const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, openDeleteModal }) => {
   const { name, nickname, dueDate, reminderDays, amount } = details;
 
   const [repeatString, setRepeatString] = useState('');
@@ -40,8 +40,8 @@ const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, d
   const clickDelete = useCallback((e) => {
     e.stopPropagation();
     setActiveSubscription(details);
-    deleteModal.show();
-  }, [setActiveSubscription, details, deleteModal]);
+    openDeleteModal();
+  }, [setActiveSubscription, details, openDeleteModal]);
 
   return (
     <div className="col-11 p-1 d-flex flex-column borderSubscriptionForm">
@@ -77,7 +77,7 @@ const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, d
           <button className="btn w-100 btn-primary d-none d-md-block" type="button" onClick={handleEdit}>Edit</button>
         </div>
         <button className="col-3 btn btn-primary" type="button" onClick={() => handleDashboard('dashboardCalendar')}>Close</button>
-        <button className="col-3 btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal" type="button" onClick={clickDelete}>Delete</button>
+        <button className="col-3 btn btn-primary" type="button" onClick={clickDelete}>Delete</button>
       </div>
     </div>
   );

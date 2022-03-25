@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-const SubscriptionListCard = ({ details, setActiveSubscription, handleDashboard, deleteModal }) => {
+const SubscriptionListCard = ({ details, setActiveSubscription, handleDashboard, openDeleteModal }) => {
   const { name, nickname, dueDate, amount } = details;
 
   const handleEdit = useCallback((e) => {
@@ -16,8 +16,8 @@ const SubscriptionListCard = ({ details, setActiveSubscription, handleDashboard,
   const clickDelete = useCallback((e) => {
     e.stopPropagation();
     setActiveSubscription(details);
-    deleteModal.show();
-  }, [setActiveSubscription, details, deleteModal]);
+    openDeleteModal();
+  }, [setActiveSubscription, details, openDeleteModal]);
 
   return (
     <div className="w-100 subscriptionListCard d-flex justify-content-between align-items-center">
@@ -49,7 +49,7 @@ const SubscriptionListCard = ({ details, setActiveSubscription, handleDashboard,
           aria-label="Edit">
             <FontAwesomeIcon icon={faPen} />
         </button>
-        <button className="btn innerButtonDelete" data-bs-toggle="modal" data-bs-target="#deleteModal" onClick={clickDelete} type="button" aria-label="Delete"><FontAwesomeIcon icon={faTrash} /></button>
+        <button className="btn innerButtonDelete" onClick={clickDelete} type="button" aria-label="Delete"><FontAwesomeIcon icon={faTrash} /></button>
       </div>
       </div>
   );

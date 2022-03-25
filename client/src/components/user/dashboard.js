@@ -29,6 +29,7 @@ class Dashboard extends React.Component {
       activeSubscription: false,
       mainComponentView: 'dashboardCalendar',
       nextView: null,
+      isDeleting: false
     };
 
     this.setAddingSubscription = this.setAddingSubscription.bind(this);
@@ -37,6 +38,7 @@ class Dashboard extends React.Component {
     this.showSubscriptionList = this.showSubscriptionList.bind(this);
     this.setMainComponentView = this.setMainComponentView.bind(this);
     this.handleDashboardChange = this.handleDashboardChange.bind(this);
+    this.openDeleteModal = this.openDeleteModal.bind(this);
   };
   
   async componentDidMount() {
@@ -74,11 +76,10 @@ class Dashboard extends React.Component {
     };
 
     this.setState({ subscriptions });
-    this.viewFormModal = new Modal(document.getElementById('formModal'));
-    this.viewDeleteModal = new Modal(document.getElementById('deleteModal'));
+    this.viewModal = new Modal(document.getElementById('dashboardModal'));
   };
 
-  async handleDashboardChange(newView) {
+  handleDashboardChange(newView) {
     const { mainComponentView } = this.state;
 
     if (mainComponentView === 'dashboardCalendar' || mainComponentView === 'subscriptionDetail') {
@@ -86,21 +87,21 @@ class Dashboard extends React.Component {
       return;
     }
 
-    this.setState({ nextView: newView });
-    this.viewFormModal.show();
+    this.setState({ nextView: newView, isDeleting: false });
+    this.viewModal.show();
   }
 
   handleModalClick = (userInput) => {
     const { mainComponentView, nextView, activeSubscription } = this.state;
     if (nextView) {
       this.setState({ mainComponentView: userInput ? nextView : mainComponentView, nextView: null });
-      this.viewFormModal.hide();
+      this.viewModal.hide();
     } else {
       if (userInput) {
         this.handleDelete(activeSubscription.subscriptionUuid);
         this.setState({ mainComponentView: 'dashboardCalendar', activeSubscription: false });
       }
-      this.viewDeleteModal.hide();
+      this.viewModal.hide();
     }
   }
 
@@ -147,6 +148,11 @@ class Dashboard extends React.Component {
     this.setState(newState);
   }
 
+  openDeleteModal() {
+    this.setState({ isDeleting: true });
+    this.viewModal.show();
+  }
+
   showSubscriptionList() {
     this.setState({ addingSubscription: false });
   }
@@ -182,7 +188,7 @@ class Dashboard extends React.Component {
             handleDashboard={this.handleDashboardChange}
             handleDelete={this.handleDelete}
             details={activeSubscription} 
-            deleteModal={this.viewDeleteModal}
+            openDeleteModal={this.openDeleteModal}
           />
         );
       case 'createSubscription':
@@ -243,7 +249,7 @@ class Dashboard extends React.Component {
 
   render() {
     const { pfp } = this.props;
-    const { subscriptions, addingSubscription, activeSubscription } = this.state;
+    const { subscriptions, addingSubscription, activeSubscription, isDeleting } = this.state;
     const subscriptionForm = addingSubscription
       ? <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm">
           <div className="col d-flex justify-content-between align-items-center">
@@ -285,7 +291,7 @@ class Dashboard extends React.Component {
         <header className="navbar p-2 d-flex justify-content-between align-items-center text-dark border-bottom shadow-sm">
           <a className="navbar-brand d-flex text-dark" href="#changeThis">
             <img src={logo} alt="wateringCanIcon" height="60" />
-            <div className="align-self-center d-none d-md-block">Water Your  Subs</div>
+            <div className="align-self-center d-none d-md-block">Water Your Subs</div>
           </a>
           <h1 className="display-4">{`${new Date().toDateString()}`}</h1>
           <div className="d-flex dropdown">
@@ -312,7 +318,7 @@ class Dashboard extends React.Component {
               setActiveSubscription={this.setActiveSubscription}
               handleDashboard={this.handleDashboardChange}
               handleDelete={this.handleDelete}
-              deleteModal={this.viewDeleteModal}
+              openDeleteModal={this.openDeleteModal}
             />
             <div className="col mt-2">
               <div className="d-none d-sm-none d-md-block">
@@ -340,8 +346,7 @@ class Dashboard extends React.Component {
             <div className="offcanvas offcanvas-bottom d-md-none offcanvasBorder" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
               {addingSubscription || activeSubscription ? subscriptionForm : ''}
             </div>
-            <ModalComponent id="formModal" handleModalClick={this.handleModalClick} />
-            <ModalComponent id="deleteModal" handleModalClick={this.handleModalClick} />
+            <ModalComponent handleModalClick={this.handleModalClick} isDeleting={isDeleting} />
           </div>
         </main>
       </div>
