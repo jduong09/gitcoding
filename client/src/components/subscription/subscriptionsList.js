@@ -6,7 +6,7 @@ const SubscriptionsList = ({ subscriptions, setEditingSubscription, setActiveSub
     const { subscriptionUuid } = subscription;
     return (
       <li 
-        className="list-group-item p-0 list-group-item-action border-bottom border-dark"
+        className="list-group-item p-0 mt-2 list-group-item-action border border-dark rounded-1"
         key={subscriptionUuid}
       >
         <SubscriptionListCard 
@@ -22,7 +22,7 @@ const SubscriptionsList = ({ subscriptions, setEditingSubscription, setActiveSub
   return (
     <div>
       <h2 className="text-start">Subscriptions</h2>
-      <ul className="list-group border-bottom-0 border-dark">
+      <ul className="list-group">
         {subscriptionsList}
       </ul>
     </div>

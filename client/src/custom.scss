@@ -2,6 +2,11 @@
 $primary: #7866D3;
 $offcanvas-vertical-height: 75vh;
 
+.btn:focus, .btn:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 .border-dashed {
   border-style: dashed !important;
 }
@@ -16,7 +21,7 @@ $offcanvas-vertical-height: 75vh;
 }
 
 .list-group-item-action:hover {
-  background-color: #7866D3 !important;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
 #mainContainer {
