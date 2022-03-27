@@ -8,7 +8,6 @@ const SubscriptionListCard = ({ details, setActiveSubscription, handleDashboard,
   const handleEdit = useCallback((e) => {
     e.stopPropagation();
     setActiveSubscription(details);
-    // moving from one updateForm to a next, requires setting mainComponentView state from updateSubscription -> subscriptionDetail -> updateSubscription
     handleDashboard('subscriptionDetail');
     handleDashboard('updateSubscription');
   }, [setActiveSubscription, details, handleDashboard]);
