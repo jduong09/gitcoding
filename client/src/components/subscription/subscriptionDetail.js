@@ -48,7 +48,7 @@ const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, o
       <div className="col-12 d-flex justify-content-between">
         <div />
         <h2>{nickname || name}</h2>
-        <button className="btn" type="button" onClick={() => setActiveSubscription(false)}>
+        <button className="btn" type="button" onClick={() => handleDashboard('dashboardCalendar')}>
           <FontAwesomeIcon icon={faTimes} />
         </button>
       </div>
@@ -76,7 +76,6 @@ const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, o
           </button>
           <button className="btn w-100 btn-primary d-none d-md-block" type="button" onClick={handleEdit}>Edit</button>
         </div>
-        <button className="col-3 btn btn-primary" type="button" onClick={() => handleDashboard('dashboardCalendar')}>Close</button>
         <button className="col-3 btn btn-primary" type="button" onClick={clickDelete}>Delete</button>
       </div>
     </div>
