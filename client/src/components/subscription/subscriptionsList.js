@@ -1,7 +1,7 @@
 import React from 'react';
 import SubscriptionListCard from './subscriptionListCard';
 
-const SubscriptionsList = ({ subscriptions, setEditingSubscription, setActiveSubscription, handleDelete }) => {
+const SubscriptionsList = ({ subscriptions, setActiveSubscription, handleDashboard, handleDelete, openDeleteModal }) => {
   const subscriptionsList = subscriptions.map((subscription) => {
     const { subscriptionUuid } = subscription;
     return (
@@ -11,9 +11,10 @@ const SubscriptionsList = ({ subscriptions, setEditingSubscription, setActiveSub
       >
         <SubscriptionListCard 
           details={subscription}
-          setEditingSubscription={setEditingSubscription}
           setActiveSubscription={setActiveSubscription}
+          handleDashboard={handleDashboard}
           handleDelete={handleDelete}
+          openDeleteModal={openDeleteModal}
         />
       </li>
     );

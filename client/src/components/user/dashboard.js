@@ -1,4 +1,5 @@
 import React from 'react';
+import { Modal } from 'bootstrap';
 import { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,6 +10,7 @@ import DashboardCalendar from '../date/dashboardCalendar';
 import UpdateSubscription from '../subscription/updateSubscription';
 import CreateSubscription from '../subscription/createSubscription';
 import SubscriptionDetail from '../subscription/subscriptionDetail';
+import ModalComponent from '../modalComponent';
 import logo from '../../assets/watering-can.png';
 
 const href = process && process.env && process.env.NODE_ENV === 'production'
@@ -30,15 +32,19 @@ class Dashboard extends React.Component {
       subscriptions: [],
       loading: false,
       addingSubscription: false,
-      editingSubscription: null,
       activeSubscription: false,
+      mainComponentView: 'dashboardCalendar',
+      nextView: null,
+      isDeleting: false
     };
 
-    this.setEditingSubscription = this.setEditingSubscription.bind(this);
     this.setAddingSubscription = this.setAddingSubscription.bind(this);
     this.setActiveSubscription = this.setActiveSubscription.bind(this);
     this.toggleLoadingState = this.toggleLoadingState.bind(this);
     this.showSubscriptionList = this.showSubscriptionList.bind(this);
+    this.setMainComponentView = this.setMainComponentView.bind(this);
+    this.handleDashboardChange = this.handleDashboardChange.bind(this);
+    this.openDeleteModal = this.openDeleteModal.bind(this);
   };
   
   async componentDidMount() {
@@ -72,11 +78,38 @@ class Dashboard extends React.Component {
     };
 
     this.setState({ subscriptions });
+    this.viewModal = new Modal(document.getElementById('dashboardModal'));
   };
 
-  setEditingSubscription = async (editingSubscription) => {
-    await this.setState({ editingSubscription });
+  handleDashboardChange(newView) {
+    const { mainComponentView } = this.state;
+
+    if (mainComponentView === 'dashboardCalendar' || mainComponentView === 'subscriptionDetail') {
+      this.setState({ mainComponentView: newView });
+      return;
+    }
+
+    this.setState({ nextView: newView, isDeleting: false });
+    this.viewModal.show();
   }
+
+  handleModalClick = (userInput) => {
+    const { mainComponentView, nextView, activeSubscription } = this.state;
+    if (nextView) {
+      this.setState({ mainComponentView: userInput ? nextView : mainComponentView, nextView: null });
+      this.viewModal.hide();
+    } else {
+      if (userInput) {
+        this.handleDelete(activeSubscription.subscriptionUuid);
+        this.setState({ mainComponentView: 'dashboardCalendar', activeSubscription: false });
+      }
+      this.viewModal.hide();
+    }
+  }
+
+  setMainComponentView = (newView) => {
+    this.setState({ mainComponentView: newView });
+  };
 
   setAddingSubscription = async (addingSubscription) => {
     await this.setState({ addingSubscription, activeSubscription: false });
@@ -87,7 +120,7 @@ class Dashboard extends React.Component {
   }
 
   handleUpdate = async (newSubscriptionsList) => {
-    await this.setState({ subscriptions: newSubscriptionsList, activeSubscription: false });
+    await this.setState({ subscriptions: newSubscriptionsList, mainComponentView: 'dashboardCalendar' });
   }
 
   handleDelete = async (subscriptionUuid) => {
@@ -107,14 +140,23 @@ class Dashboard extends React.Component {
 
     toast.success(response);
     
-    const { subscriptions } = this.state;
+    const { subscriptions, activeSubscription } = this.state;
     const updatedSubscriptionsList = await subscriptions.filter(subscription => subscription.subscriptionUuid !== subscriptionUuid);
 
-    this.setState({ subscriptions: updatedSubscriptionsList, activeSubscription: false });
+    const newState = (subscriptionUuid === activeSubscription.subscriptionUuid)
+      ? { subscriptions: updatedSubscriptionsList, activeSubscription: false, mainComponentView: 'dashboardCalendar' }
+      : { subscriptions: updatedSubscriptionsList };
+
+    this.setState(newState);
+  }
+
+  openDeleteModal() {
+    this.setState({ isDeleting: true });
+    this.viewModal.show();
   }
 
   showSubscriptionList() {
-    this.setState({ addingSubscription: false, editingSubscription: null });
+    this.setState({ addingSubscription: false });
   }
 
   toggleLoadingState() {
@@ -128,9 +170,8 @@ class Dashboard extends React.Component {
     }
   };
 
-  
-  renderMainComponent(subscriptionForm) {
-    const { activeSubscription, addingSubscription, editingSubscription, loading, subscriptions } = this.state;
+  renderMainComponent() {
+    const { activeSubscription, loading, subscriptions, mainComponentView } = this.state;
 
     if (loading) {
       return (
@@ -141,40 +182,85 @@ class Dashboard extends React.Component {
       );
     }
 
-    let display;
-    if (activeSubscription) {
-     display = <SubscriptionDetail setActiveSubscription={this.setActiveSubscription} setEditingSubscription={this.setEditingSubscription} handleDelete={this.handleDelete} details={activeSubscription} />;
-    } else if (editingSubscription || addingSubscription) {
-      display = (
-        <div className="col-12">
-          <div className="d-none d-md-block">
-            {subscriptionForm}
+    switch (mainComponentView) {
+      case 'subscriptionDetail':
+        return (
+          <SubscriptionDetail 
+            setActiveSubscription={this.setActiveSubscription}
+            handleDashboard={this.handleDashboardChange}
+            handleDelete={this.handleDelete}
+            details={activeSubscription} 
+            openDeleteModal={this.openDeleteModal}
+          />
+        );
+      case 'createSubscription':
+        return (
+          <div>
+            <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm d-none d-md-block">
+              <div className="col d-flex justify-content-between align-items-center">
+                <div />
+                <h2 className="text-start">Create Subscription</h2>
+                <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.handleDashboardChange('dashboardCalendar')}>
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+                <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.handleDashboardChange('dashboardCalendar')}>
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+              </div>
+              <CreateSubscription 
+                addSubscription={this.handleUpdate}
+                toggleLoadingState={this.toggleLoadingState}
+                showSubscriptionList={this.showSubscriptionList}
+                currentSubscriptions={subscriptions} />
+            </div>
+            <div className="d-md-none">
+              <DashboardCalendar subscriptions={subscriptions} />
+            </div>
           </div>
-          <div className="d-md-none">
-            <DashboardCalendar subscriptions={subscriptions}/>
+        );
+      case 'updateSubscription': 
+        return (
+          <div>
+            <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm d-none d-md-block">
+              <div className="col d-flex justify-content-between align-items-center">
+                <div />
+                <h2 className="text-start">Update Subscription</h2>
+                <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.handleDashboardChange('subscriptionDetail')} >
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+                <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.handleDashboardChange('subscriptionDetail')}>
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+              </div>
+              <UpdateSubscription
+                updateSubscription={this.handleUpdate}
+                showSubscriptionList={this.showSubscriptionList}
+                toggleLoadingState={this.toggleLoadingState}
+                prevSubscription={activeSubscription}
+              />
+            </div>
+            <div className="d-md-none">
+              <DashboardCalendar subscriptions={subscriptions} />
+            </div>
           </div>
-        </div>
-      );
-    } else {
-      display = <DashboardCalendar subscriptions={subscriptions} />;
+        );
+      default: 
+        return <DashboardCalendar subscriptions={subscriptions} />;
     }
-
-    return display;
   }
 
   render() {
     const { pfp } = this.props;
-    const { subscriptions, addingSubscription, editingSubscription } = this.state;
-
+    const { subscriptions, addingSubscription, activeSubscription, isDeleting } = this.state;
     const subscriptionForm = addingSubscription
       ? <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm">
           <div className="col d-flex justify-content-between align-items-center">
             <div />
             <h2 className="text-start">Create Subscription</h2>
-            <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ addingSubscription: !addingSubscription })}>
+            <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ addingSubscription: !addingSubscription, mainComponentView: 'dashboardCalendar' })}>
               <FontAwesomeIcon icon={faTimes} />
             </button>
-            <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.setState({ addingSubscription: !addingSubscription })}>
+            <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.setState({ addingSubscription: !addingSubscription, mainComponentView: 'dashboardCalendar' })}>
               <FontAwesomeIcon icon={faTimes} />
             </button>
           </div>
@@ -188,10 +274,10 @@ class Dashboard extends React.Component {
           <div className="col d-flex justify-content-between align-items-center">
             <div />
             <h2 className="text-start">Update Subscription</h2>
-            <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ editingSubscription: !editingSubscription, activeSubscription: false })} >
+            <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ activeSubscription: false, mainComponentView: 'dashboardCalendar' })} >
               <FontAwesomeIcon icon={faTimes} />
             </button>
-            <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.setState({ editingSubscription: !editingSubscription, activeSubscription: false })}>
+            <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.setState({ activeSubscription: false, mainComponentView: 'dashboardCalendar' })}>
               <FontAwesomeIcon icon={faTimes} />
             </button>
           </div>
@@ -199,7 +285,7 @@ class Dashboard extends React.Component {
           updateSubscription={this.handleUpdate}
           showSubscriptionList={this.showSubscriptionList}
           toggleLoadingState={this.toggleLoadingState}
-          prevSubscription={editingSubscription}
+          prevSubscription={activeSubscription}
           />
         </div>;
     return (
@@ -226,21 +312,22 @@ class Dashboard extends React.Component {
         </header>
         <main className="d-flex flex-fill flex-column flex-md-row justify-content-between">
           <div className="col-md-8 flex-fill h-100 d-flex align-items-center justify-content-center" id="mainContainer" >
-            {this.renderMainComponent(subscriptionForm)}
+            {this.renderMainComponent()}
           </div>
           <div className="col-md-4 p-3 order-md-first flex-fill">
             <SubscriptionsList
               subscriptions={subscriptions}
-              setEditingSubscription={this.setEditingSubscription}
               setActiveSubscription={this.setActiveSubscription}
+              handleDashboard={this.handleDashboardChange}
               handleDelete={this.handleDelete}
+              openDeleteModal={this.openDeleteModal}
             />
             <div className="col mt-2">
               <div className="d-none d-sm-none d-md-block">
                 <button
                   className="col-12 p-4 btn border-dashed border-primary btn-outline-primary"
                   type="button"
-                  onClick={() => this.setAddingSubscription(true)}
+                  onClick={() => this.handleDashboardChange('createSubscription')}
                 >
                   + Create
                 </button>
@@ -252,15 +339,16 @@ class Dashboard extends React.Component {
                   data-bs-toggle="offcanvas"
                   data-bs-target="#offcanvasExample"
                   aria-controls="offcanvasExample"
-                  onClick={() => this.setAddingSubscription(true)}
+                  onClick={() => this.setState({ addingSubscription: true })}
                 >
                   + Create
                 </button>
               </div>
             </div>
             <div className="offcanvas offcanvas-bottom d-md-none offcanvasBorder" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-              {addingSubscription || editingSubscription ? subscriptionForm : ''}
+              {addingSubscription || activeSubscription ? subscriptionForm : ''}
             </div>
+            <ModalComponent handleModalClick={this.handleModalClick} isDeleting={isDeleting} />
           </div>
         </main>
       </div>
