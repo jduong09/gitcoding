@@ -2,7 +2,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import '../toast.scss';
 import '../css/App.css';
 import User from './user/user';
 import LandingPage from './landingPage';
@@ -15,7 +15,7 @@ const App = () => (
       <Route path='/users/:userId' element={<User />} />
       <Route path='/*' element={<NotFound />} />
     </Routes>
-    <ToastContainer />
+    <ToastContainer position="top-right" />
   </div>
 );
 
