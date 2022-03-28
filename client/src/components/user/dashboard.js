@@ -345,7 +345,7 @@ class Dashboard extends React.Component {
                 </button>
               </div>
             </div>
-            <div className="offcanvas offcanvas-bottom d-md-none offcanvasBorder overflow-auto" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div className="offcanvas offcanvas-bottom d-md-none overflow-auto offcanvasBorder" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
               {addingSubscription || activeSubscription ? subscriptionForm : ''}
             </div>
             <ModalComponent handleModalClick={this.handleModalClick} isDeleting={isDeleting} />

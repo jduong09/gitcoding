@@ -125,35 +125,35 @@ class SubscriptionForm extends React.Component {
 
   renderSwitch(frequency) {
     const { occurrence, days, nextDueDate, checkedDays } = this.state;
-    const weeklyCheckbox = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day, idx) => 
-      <label className="d-flex" htmlFor={day} key={day}>
-        <div className="col-md-3 form-check-label">{day}:</div>
-        <input className="col-md-1 mx-3 form-check-input" type="checkbox" id={day} name='days' value={idx} onChange={this.handleCheck} checked={checkedDays.includes(idx)}/>
+    const weeklyCheckbox = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, idx) => 
+      <label className="d-flex flex-column" htmlFor={day} key={day}>
+        <div className="mx-auto col-md-3 form-check-label">{day}</div>
+        <input className="mx-auto col-md-1 form-check-input" type="checkbox" id={day} name='days' value={idx} onChange={this.handleCheck} checked={checkedDays.includes(idx)}/>
       </label>
     );
 
     switch (frequency) {
       case 'yearly':
         return (
-          <div className="col-12 p-1 d-flex flex-column align-items-center">
+          <div className="col-12 p-1 d-flex flex-column">
             <div className="text-center d-none d-md-block">On which day(s) do you want to be reminded?</div>
-            <div className="col mx-auto text-center">
-              <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='yearly' />
+            <div className="col-12 col-md-6 dayPickerBorder">
+              <div className="col mx-auto text-center">
+                <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='yearly' />
+              </div>
             </div>
           </div>
         );
       case 'monthly':
         return (
-          <div className="col-12 d-flex">
-            <div className="col-md-6">
-              <label className="col d-flex form-label" htmlFor="occurrence">
-                <div className="col-4 col-md-3">Every (?) Months:</div>
-                <div className="col-8 col-md-7">
-                  <input className="form-control" type="number" id="occurrence" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')} min="0" max="12" />
-                </div>
-              </label>
-            </div>
-            <div className="col-md-6 mx-auto">
+          <div className="col-12 d-flex flex-column">
+            <label className="col-12 d-flex flex-column flex-row-md form-label" htmlFor="occurrence">
+              <div className="col-12 col-md-3">Every (?) Months:</div>
+              <div className="col-12 col-md-7">
+                <input className="form-control" type="number" id="occurrence" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')} min="0" max="12" />
+              </div>
+            </label>
+            <div className="col-12 col-md-6 dayPickerBorder">
               <div className="text-center d-none d-md-block">On which day(s) do you want to be reminded?</div>
               <div className="col mx-auto text-center" id="dayPickerForm">
                 <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='monthly' />
@@ -163,22 +163,22 @@ class SubscriptionForm extends React.Component {
         );
       case 'weekly':
         return (
-          <div className="col-12 d-flex">
-            <div className="col-md-6">
-              <label className="col d-flex form-label" htmlFor="occurrence">
-                <div className="col-4 col-md-3">Every (?) Weeks:</div>
-                <div className="col-8 col-md-7">
-                <select className="form-select" id="occurrence" placeholder="ex: Every 2 weeks" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')}>
-                  <option value="1">Every Week</option>
-                  <option value="2">Every 2 Weeks</option>
-                  <option value="3">Every 3 Weeks</option>
-                  <option value="4">Every 4 Weeks</option>
-                </select>
+          <div className="col-12">
+            <div className="col-12 col-md-6">
+              <label className="col d-flex flex-column flex-row-md form-label" htmlFor="occurrence">
+                <div className="col-12 col-md-3">Every (?) Weeks:</div>
+                <div className="col-12 col-md-7">
+                  <select className="form-select" id="occurrence" placeholder="ex: Every 2 weeks" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')}>
+                    <option value="1">Every Week</option>
+                    <option value="2">Every 2 Weeks</option>
+                    <option value="3">Every 3 Weeks</option>
+                    <option value="4">Every 4 Weeks</option>
+                  </select>
                 </div>
               </label>
-              <div className="d-flex flex-column" >{weeklyCheckbox}</div>
             </div>
-            <div className="col-md-6">
+            <div className="col-12 d-flex justify-content-around" >{weeklyCheckbox}</div>
+            <div className="col-12 col-md-6 dayPickerBorder">
               <div className="col mx-auto text-center" id="dayPickerForm">
                 <ReactDayPicker updating={days} nextDueDate={nextDueDate} frequency='weekly' />
               </div>
@@ -187,19 +187,21 @@ class SubscriptionForm extends React.Component {
         );
       case 'daily':
         return (
-          <div className="col-12 d-flex">
-            <div className="col-md-6">
-              <label className="col d-flex form-label" htmlFor="occurrence">
-                <div className="col-4 col-md-3">Every (?) Days:</div>
-                <div className="col-8 col-md-7">
+          <div className="col-12">
+            <div className="col-12 col-md-6">
+              <label className="col d-flex flex-column flex-row-md form-label" htmlFor="occurrence">
+                <div className="col-12 col-md-3">Every (?) Days:</div>
+                <div className="col-12 col-md-7">
                   <input className="form-control" type="number" id="occurence" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')} />
                 </div>
               </label>
             </div>
-            <div className="col-md-6">
+            <div className="col-12 col-md-6">
               <div className="text-center d-none d-md-block">On which day(s) do you want to be reminded?</div>
-              <div className="col mx-auto text-center" id="dayPickerForm">
-                <ReactDayPicker handleUpdate={this.handleDays} updating={days} frequency='daily' />
+              <div className="col-12 col-md-6 dayPickerBorder">
+                <div className="col mx-auto text-center" id="dayPickerForm">
+                  <ReactDayPicker handleUpdate={this.handleDays} updating={days} frequency='daily' />
+                </div>
               </div>
             </div>
           </div>
@@ -216,36 +218,36 @@ class SubscriptionForm extends React.Component {
       <section className="col-12 d-flex flex-column">
         <form className="text-start d-md-flex flex-wrap" onSubmit={this.handleSubmit}>
           <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-name">
-            <div className="col-12 col-md-3">Name:</div>
-            <div className="col-8 align-self-start col-md-7">
+            <div className="col-12 col-md-3">Name</div>
+            <div className="col-12 align-self-start col-md-7">
               <input className="form-control" id="subscription-name" type="text" placeholder="e.g. Crunchyroll" name="subscription-name" value={name} onChange={(event) => this.handleChange(event, 'name')} required />
             </div>
           </label>
 
           <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-nickname">
-            <div className="col-12 col-md-3">Nickname:</div>
-            <div className="col-8 align-self-start col-md-7">
+            <div className="col-12 col-md-3">Nickname</div>
+            <div className="col-12 align-self-start col-md-7">
               <input className="form-control" type="text" placeholder="e.g. My favorite streaming site"name="subscription-nickname" value={nickname} onChange={(event) => this.handleChange(event, 'nickname')}  /> 
             </div>
           </label>
 
           <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-reminder-days">
-            <div className="col-12 col-md-3">Reminder Days:</div>
-            <div className="col-8 align-self-start col-md-7">
+            <div className="col-12 col-md-3">Reminder Days</div>
+            <div className="col-12 align-self-start col-md-7">
               <input className="form-control" type="number" name="subscription-reminder-days" min="0" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} required />
             </div>
           </label>
 
           <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-amount">
-            <div className="col-12 col-md-3">Amount:</div>
-            <div className="col-8 align-self-start col-md-7">
+            <div className="col-12 col-md-3">Amount</div>
+            <div className="col-12 align-self-start col-md-7">
               <input className="form-control" type="number" name="subscription-amount" min="0" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} required />
             </div>
           </label>
 
           <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="due-date-select">
-            <div className="col-12 col-md-3">Repeat:</div>
-            <div className="col-8 align-self-start col-md-7">
+            <div className="col-12 col-md-3">Repeat</div>
+            <div className="col-12 align-self-start col-md-7">
               <select className="form-select" id="due-date-select" value={frequency} onChange={(event) => this.handleChange(event, 'frequency')} required >
                 <option value="" defaultValue disabled>--Select--</option>
                 <option value="yearly">Yearly</option>

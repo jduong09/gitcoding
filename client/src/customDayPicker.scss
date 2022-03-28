@@ -1,9 +1,57 @@
+/*
+ * width: 100%
+*/
 .DayPicker {
+  width: 100%;
   font-size: calc(16px + 0.9vw) !important;
 }
 
+/* remove font-size: .7rem */
+/* font-size: 1rem */
 #dayPickerForm .DayPicker {
-  font-size: .7rem !important;
+  font-size: calc(16px + 0.3vw) !important;
+}
+
+.dayPickerBorder {
+  border: 1px solid white;
+  border-radius: 1rem;
+  background-color: #dee2e670;
+  margin: 1rem 0;
+}
+
+/*
+ ** .DayPicker-Month
+ * width: 100%
+ * margin-left: 0
+ * margin-right: 0
+
+ ** .DayPicker-Weekday
+ * color: #7866D3
+ * font-size: 1rem
+
+ ** .DayPicker-Day--today
+ * color: #7866D3
+
+ ** .DayPicker-TodayButton
+ * color: #7866D3
+*/
+
+.DayPicker-Month {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.DayPicker-Weekday {
+  color: #7866D3;
+  font-size: 1rem;
+}
+
+.DayPicker-Day--today, .DayPicker-TodayButton {
+  color: #7866D3;
+}
+
+.DayPicker-Day--disabled {
+  color: #DCE0E0 !important;
 }
 
 .DayPicker-Day {

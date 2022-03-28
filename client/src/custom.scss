@@ -6,6 +6,11 @@ $offcanvas-vertical-height: 75vh;
   height: 90% !important;
 }
 
+.offcanvasBorder {
+  border-top-left-radius: 1rem !important;
+  border-top-right-radius: 1rem !important;
+}
+
 .btn:focus, .btn:active {
   outline: none !important;
   box-shadow: none !important;
