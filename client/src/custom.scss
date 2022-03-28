@@ -19,17 +19,22 @@ $offcanvas-vertical-height: 75vh;
   position: relative !important;
 }
 
-.offcanvasBorder {
-  border-top-left-radius: 1rem !important;
-  border-top-right-radius: 1rem !important;
-}
-
 .list-group-item-action:hover {
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
 #mainContainer {
   position: relative !important;
+}
+
+@media(max-width: 766px) and (max-height: 700px) {
+  .h-90 {
+    height: auto !important;
+  }
+
+  #mainContainer::after {
+    bottom: 0% !important;
+  }
 }
 
 @media(max-width: 766px) {
