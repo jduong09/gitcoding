@@ -213,7 +213,7 @@ class SubscriptionForm extends React.Component {
     const { name, nickname, reminderDays, amount, frequency } = this.state;
 
     return (
-      <section className="col-12">
+      <section className="col-12 d-flex flex-column">
         <form className="text-start d-md-flex flex-wrap" onSubmit={this.handleSubmit}>
           <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-name">
             <div className="col-12 col-md-3">Name:</div>

@@ -2,6 +2,10 @@
 $primary: #7866D3;
 $offcanvas-vertical-height: 75vh;
 
+.h-90 {
+  height: 90% !important;
+}
+
 .btn:focus, .btn:active {
   outline: none !important;
   box-shadow: none !important;

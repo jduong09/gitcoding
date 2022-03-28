@@ -44,7 +44,7 @@ const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, o
   }, [setActiveSubscription, details, openDeleteModal]);
 
   return (
-    <div className="col-11 p-1 d-flex flex-column borderSubscriptionForm">
+    <div className="h-90 align-items-start col-11 p-1 d-flex flex-column">
       <div className="col-12 d-flex justify-content-between">
         <div />
         <h2>{nickname || name}</h2>

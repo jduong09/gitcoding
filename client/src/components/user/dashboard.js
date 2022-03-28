@@ -195,9 +195,9 @@ class Dashboard extends React.Component {
         );
       case 'createSubscription':
         return (
-          <div>
-            <div className="col-11 p-1 mx-auto d-flex flex-wrap borderSubscriptionForm d-none d-md-block">
-              <div className="col d-flex justify-content-between align-items-center">
+          <div className="h-90 d-flex align-items-start">
+            <div className="col-11 p-1 mx-auto flex-column d-none d-md-flex">
+              <div className="d-flex mb-4 justify-content-between align-items-center">
                 <div />
                 <h2 className="text-start">Create Subscription</h2>
                 <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.handleDashboardChange('dashboardCalendar')}>
@@ -207,7 +207,7 @@ class Dashboard extends React.Component {
                   <FontAwesomeIcon icon={faTimes} />
                 </button>
               </div>
-              <CreateSubscription 
+              <CreateSubscription
                 addSubscription={this.handleUpdate}
                 toggleLoadingState={this.toggleLoadingState}
                 showSubscriptionList={this.showSubscriptionList}
@@ -220,9 +220,9 @@ class Dashboard extends React.Component {
         );
       case 'updateSubscription': 
         return (
-          <div>
-            <div className="col-11 p-1 mx-auto d-flex flex-wrap borderSubscriptionForm d-none d-md-block">
-              <div className="col d-flex justify-content-between align-items-center">
+          <div className="h-90 d-flex align-items-start">
+            <div className="col-11 p-1 mx-auto flex-column d-none d-md-flex">
+              <div className="d-flex mb-4 justify-content-between align-items-center">
                 <div />
                 <h2 className="text-start">Update Subscription</h2>
                 <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.handleDashboardChange('subscriptionDetail')} >
