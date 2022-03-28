@@ -215,37 +215,37 @@ class SubscriptionForm extends React.Component {
     return (
       <section className="col-12">
         <form className="text-start d-md-flex flex-wrap" onSubmit={this.handleSubmit}>
-          <label className="d-flex form-label align-items-center col-md-6" htmlFor="subscription-name">
-            <div className="col-4 col-md-3">Name:</div>
-            <div className="col-8 col-md-7">
+          <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-name">
+            <div className="col-12 col-md-3">Name:</div>
+            <div className="col-8 align-self-start col-md-7">
               <input className="form-control" id="subscription-name" type="text" placeholder="e.g. Crunchyroll" name="subscription-name" value={name} onChange={(event) => this.handleChange(event, 'name')} required />
             </div>
           </label>
 
-          <label className="col d-flex form-label align-items-center col-md-6" htmlFor="subscription-nickname">
-            <div className="col-4 col-md-3">Nickname:</div>
-            <div className="col-8 col-md-7">
+          <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-nickname">
+            <div className="col-12 col-md-3">Nickname:</div>
+            <div className="col-8 align-self-start col-md-7">
               <input className="form-control" type="text" placeholder="e.g. My favorite streaming site"name="subscription-nickname" value={nickname} onChange={(event) => this.handleChange(event, 'nickname')}  /> 
             </div>
           </label>
 
-          <label className="col d-flex form-label align-items-center col-md-6" htmlFor="subscription-reminder-days">
-            <div className="col-4 col-md-3">Reminder Days:</div>
-            <div className="col-8 col-md-7">
+          <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-reminder-days">
+            <div className="col-12 col-md-3">Reminder Days:</div>
+            <div className="col-8 align-self-start col-md-7">
               <input className="form-control" type="number" name="subscription-reminder-days" min="0" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} required />
             </div>
           </label>
 
-          <label className="col d-flex form-label align-items-center col-md-6" htmlFor="subscription-amount">
-            <div className="col-4 col-md-3">Amount:</div>
-            <div className="col-8 col-md-7">
+          <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-amount">
+            <div className="col-12 col-md-3">Amount:</div>
+            <div className="col-8 align-self-start col-md-7">
               <input className="form-control" type="number" name="subscription-amount" min="0" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} required />
             </div>
           </label>
 
-          <label className="col d-flex form-label align-items-center col-md-6" htmlFor="due-date-select">
-            <div className="col-4 col-md-3">Repeat:</div>
-            <div className="col-8 col-md-7">
+          <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="due-date-select">
+            <div className="col-12 col-md-3">Repeat:</div>
+            <div className="col-8 align-self-start col-md-7">
               <select className="form-select" id="due-date-select" value={frequency} onChange={(event) => this.handleChange(event, 'frequency')} required >
                 <option value="" defaultValue disabled>--Select--</option>
                 <option value="yearly">Yearly</option>

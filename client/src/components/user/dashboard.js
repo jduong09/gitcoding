@@ -196,7 +196,7 @@ class Dashboard extends React.Component {
       case 'createSubscription':
         return (
           <div>
-            <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm d-none d-md-block">
+            <div className="col-11 p-1 mx-auto d-flex flex-wrap borderSubscriptionForm d-none d-md-block">
               <div className="col d-flex justify-content-between align-items-center">
                 <div />
                 <h2 className="text-start">Create Subscription</h2>
@@ -221,7 +221,7 @@ class Dashboard extends React.Component {
       case 'updateSubscription': 
         return (
           <div>
-            <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm d-none d-md-block">
+            <div className="col-11 p-1 mx-auto d-flex flex-wrap borderSubscriptionForm d-none d-md-block">
               <div className="col d-flex justify-content-between align-items-center">
                 <div />
                 <h2 className="text-start">Update Subscription</h2>
@@ -345,7 +345,7 @@ class Dashboard extends React.Component {
                 </button>
               </div>
             </div>
-            <div className="offcanvas offcanvas-bottom d-md-none offcanvasBorder" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div className="offcanvas offcanvas-bottom d-md-none offcanvasBorder" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel" data-bs-scroll="true">
               {addingSubscription || activeSubscription ? subscriptionForm : ''}
             </div>
             <ModalComponent handleModalClick={this.handleModalClick} isDeleting={isDeleting} />

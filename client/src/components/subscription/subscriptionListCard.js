@@ -32,26 +32,16 @@ const SubscriptionListCard = ({ details, setActiveSubscription, handleDashboard 
           <FontAwesomeIcon icon={faPen} />
         </button>
         <button
-          className="btn innerButtonEdit d-md-none"
+          className="btn d-md-none"
           data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasExample"
           aria-controls="offcanvasExample"
-          onClick={() => setActiveSubscription(details)}
+          onClick={handleEdit}
           type="button"
           aria-label="Edit">
             <FontAwesomeIcon icon={faPen} />
-          </button>
-          <button
-            className="btn d-md-none"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasExample"
-            aria-controls="offcanvasExample"
-            onClick={handleEdit}
-            type="button"
-            aria-label="Edit">
-              <FontAwesomeIcon icon={faPen} />
-          </button>
-        </div>
+        </button>
+      </div>
     </div>
   );
 };
