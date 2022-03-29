@@ -1,12 +1,17 @@
 import React from 'react';
 import SubscriptionListCard from './subscriptionListCard';
 
-const SubscriptionsList = ({ subscriptions, setActiveSubscription, handleDashboard, handleDelete, openDeleteModal }) => {
+const SubscriptionsList = ({ subscriptions, setActiveSubscription, handleDashboard, handleDelete, openDeleteModal, activeSubscription }) => {
   const subscriptionsList = subscriptions.map((subscription) => {
     const { subscriptionUuid } = subscription;
+    let className="list-group-item p-0 mt-2 list-group-item-action border border-dark rounded-1";
+    if (activeSubscription.subscriptionUuid === subscriptionUuid) {
+      className += " bg-primary";
+    }
+
     return (
       <li 
-        className="list-group-item p-0 mt-2 list-group-item-action border border-dark rounded-1"
+        className={className}
         key={subscriptionUuid}
       >
         <SubscriptionListCard 

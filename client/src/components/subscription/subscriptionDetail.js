@@ -31,6 +31,12 @@ const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, o
     setRepeatString(`${new Date(dueDate.nextDueDate).toLocaleDateString()}, ${parsedRepeatString}`);
   }, [name, dueDate]);
 
+  const handleClose = useCallback((e) => {
+    e.stopPropagation();
+    setActiveSubscription(false);
+    handleDashboard('dashboardCalendar');
+  }, [setActiveSubscription, handleDashboard]);
+
   const handleEdit = useCallback((e) => {
     e.stopPropagation();
     setActiveSubscription(details);
@@ -47,7 +53,7 @@ const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, o
     <div className="col-12 p-3 d-flex flex-column">
       <div className="col-12 d-flex justify-content-between">
         <h2>{nickname || name}</h2>
-        <button className="btn" type="button" onClick={() => handleDashboard('dashboardCalendar')}>
+        <button className="btn" type="button" onClick={handleClose}>
           <FontAwesomeIcon icon={faTimes} />
         </button>
       </div>

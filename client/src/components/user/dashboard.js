@@ -82,11 +82,13 @@ class Dashboard extends React.Component {
 
   handleDashboardChange(newView) {
     const { mainComponentView } = this.state;
-
+    
     if (mainComponentView === 'dashboardCalendar' || mainComponentView === 'subscriptionDetail') {
-      this.setState({ mainComponentView: newView });
+      const newState = (newView === 'createSubscription') ? { mainComponentView: newView, activeSubscription: false } : { mainComponentView: newView };
+      this.setState(newState);
       return;
     }
+
 
     this.setState({ nextView: newView, isDeleting: false });
     this.viewModal.show();
@@ -95,7 +97,7 @@ class Dashboard extends React.Component {
   handleModalClick = (userInput) => {
     const { mainComponentView, nextView, activeSubscription } = this.state;
     if (nextView) {
-      this.setState({ mainComponentView: userInput ? nextView : mainComponentView, nextView: null });
+      this.setState({ mainComponentView: userInput ? nextView : mainComponentView, nextView: null, activeSubscription: userInput && nextView === 'createSubscription' ? false : activeSubscription });
       this.viewModal.hide();
     } else {
       if (userInput) {
@@ -320,6 +322,7 @@ class Dashboard extends React.Component {
               handleDashboard={this.handleDashboardChange}
               handleDelete={this.handleDelete}
               openDeleteModal={this.openDeleteModal}
+              activeSubscription={activeSubscription}
             />
             <div className="col mt-2">
               <div className="d-none d-sm-none d-md-block">
@@ -328,7 +331,7 @@ class Dashboard extends React.Component {
                   type="button"
                   onClick={() => this.handleDashboardChange('createSubscription')}
                 >
-                  + Create
+                  +Create
                 </button>
               </div>
               <div className="d-md-none">
@@ -340,7 +343,7 @@ class Dashboard extends React.Component {
                   aria-controls="offcanvasExample"
                   onClick={() => this.setState({ addingSubscription: true })}
                 >
-                  + Create
+                  +Create
                 </button>
               </div>
             </div>
