@@ -68,7 +68,6 @@ class Dashboard extends React.Component {
       if (dueDate.lateDueDate) {
         toast.error(`Your ${name} subscription was due on ${new Date(dueDate.lateDueDate).toLocaleDateString()}`, {
           autoClose: false,
-          style: { backgroundColor: 'red', color: '#000000' }
         });
       } else if (DateUtils.isSameDay(new Date(dueDate.nextDueDate), new Date()) && !dueDate.lateDueDate) {
         toast.info(`Your ${name} subscription is due today!`, {
