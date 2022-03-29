@@ -44,40 +44,42 @@ const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, o
   }, [setActiveSubscription, details, openDeleteModal]);
 
   return (
-    <div className="h-90 align-items-start col-11 p-1 d-flex flex-column">
+    <div className="col-12 p-3 d-flex flex-column">
       <div className="col-12 d-flex justify-content-between">
-        <div />
         <h2>{nickname || name}</h2>
         <button className="btn" type="button" onClick={() => handleDashboard('dashboardCalendar')}>
           <FontAwesomeIcon icon={faTimes} />
         </button>
       </div>
-      <div className="col-12 d-flex">
-        <ul className="col-6 text-start align-self-center">
-          <li><strong>Amount: </strong>${amount/100}</li>
-          <li><strong>Next Due Date: </strong>{repeatString}</li>
-          <li><strong>Reminder Days: </strong>{reminderDays}</li>
-        </ul>
-        <div className="col-6" id="dayPickerForm">
-          <DetailCalendar dueDate={dueDate}/>
+      <div className="col-12 col-md-6 dayPickerBorder">
+        <div className="text-center" id="dayPickerForm">
+            <DetailCalendar dueDate={dueDate}/>
         </div>
+      </div>
+      <div className="col-12">
+        <ul className="col-12 p-1 text-start">
+          {nickname && <li className="d-flex flex-column"><strong>Name: </strong><span>{name}</span></li>}
+          <li className="d-flex flex-column"><strong>Amount</strong><span>${amount/100}</span></li>
+          <li className="d-flex flex-column"><strong>Next Due Date</strong><span>{repeatString}</span></li>
+          <li className="d-flex flex-column"><strong>Alert</strong><span>{reminderDays} day(s) before due date</span></li>
+        </ul>
       </div>
       <div className="col-10 d-flex justify-content-around mx-auto">
-        <div className="col-3">
-          <button
-            className="btn w-100 btn-primary d-md-none"
-            type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasExample"
-            aria-controls="offcanvasExample"
-            onClick={handleEdit}
-          >
-            Edit
-          </button>
-          <button className="btn w-100 btn-primary d-none d-md-block" type="button" onClick={handleEdit}>Edit</button>
+          <div className="col-3">
+            <button
+              className="btn w-100 d-md-none border-dashed border-primary btn-outline-primary"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasExample"
+              aria-controls="offcanvasExample"
+              onClick={handleEdit}
+            >
+              Edit
+            </button>
+            <button className="btn w-100 d-none d-md-block border-dashed border-primary btn-outline-primary" type="button" onClick={handleEdit}>Edit</button>
+          </div>
+          <button className="col-3 btn border-dashed border-primary btn-outline-primary" type="button" onClick={clickDelete}>Delete</button>
         </div>
-        <button className="col-3 btn btn-primary" type="button" onClick={clickDelete}>Delete</button>
-      </div>
     </div>
   );
 };

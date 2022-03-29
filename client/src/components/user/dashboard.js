@@ -198,12 +198,11 @@ class Dashboard extends React.Component {
           <div className="h-90 d-flex align-items-start">
             <div className="col-11 p-1 mx-auto flex-column d-none d-md-flex">
               <div className="d-flex mb-4 justify-content-between align-items-center">
-                <div />
                 <h2 className="text-start">Create Subscription</h2>
-                <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.handleDashboardChange('dashboardCalendar')}>
+                <button className="btn my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.handleDashboardChange('dashboardCalendar')}>
                   <FontAwesomeIcon icon={faTimes} />
                 </button>
-                <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.handleDashboardChange('dashboardCalendar')}>
+                <button className="btn my-2 d-none d-md-block" type="button" onClick={() => this.handleDashboardChange('dashboardCalendar')}>
                   <FontAwesomeIcon icon={faTimes} />
                 </button>
               </div>
@@ -223,12 +222,11 @@ class Dashboard extends React.Component {
           <div className="h-90 d-flex align-items-start">
             <div className="col-11 p-1 mx-auto flex-column d-none d-md-flex">
               <div className="d-flex mb-4 justify-content-between align-items-center">
-                <div />
                 <h2 className="text-start">Update Subscription</h2>
-                <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.handleDashboardChange('subscriptionDetail')} >
+                <button className="btn my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.handleDashboardChange('subscriptionDetail')} >
                   <FontAwesomeIcon icon={faTimes} />
                 </button>
-                <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.handleDashboardChange('subscriptionDetail')}>
+                <button className="btn my-2 d-none d-md-block" type="button" onClick={() => this.handleDashboardChange('subscriptionDetail')}>
                   <FontAwesomeIcon icon={faTimes} />
                 </button>
               </div>
@@ -245,7 +243,11 @@ class Dashboard extends React.Component {
           </div>
         );
       default: 
-        return <DashboardCalendar subscriptions={subscriptions} />;
+        return (
+          <div className="align-self-center">
+            <DashboardCalendar subscriptions={subscriptions} />
+          </div>
+        );
     }
   }
 
@@ -255,12 +257,11 @@ class Dashboard extends React.Component {
     const subscriptionForm = addingSubscription
       ? <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm">
           <div className="col d-flex justify-content-between align-items-center">
-            <div />
             <h2 className="text-start">Create Subscription</h2>
-            <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ addingSubscription: !addingSubscription, mainComponentView: 'dashboardCalendar' })}>
+            <button className="btn my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ addingSubscription: !addingSubscription, mainComponentView: 'dashboardCalendar' })}>
               <FontAwesomeIcon icon={faTimes} />
             </button>
-            <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.setState({ addingSubscription: !addingSubscription, mainComponentView: 'dashboardCalendar' })}>
+            <button className="btn my-2 d-none d-md-block" type="button" onClick={() => this.setState({ addingSubscription: !addingSubscription, mainComponentView: 'dashboardCalendar' })}>
               <FontAwesomeIcon icon={faTimes} />
             </button>
           </div>
@@ -272,12 +273,11 @@ class Dashboard extends React.Component {
         </div>
       : <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm">
           <div className="col d-flex justify-content-between align-items-center">
-            <div />
             <h2 className="text-start">Update Subscription</h2>
-            <button className="btn btn-link my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ activeSubscription: false, mainComponentView: 'dashboardCalendar' })} >
+            <button className="btn my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.setState({ activeSubscription: false, mainComponentView: 'dashboardCalendar' })} >
               <FontAwesomeIcon icon={faTimes} />
             </button>
-            <button className="btn btn-link my-2 d-none d-md-block" type="button" onClick={() => this.setState({ activeSubscription: false, mainComponentView: 'dashboardCalendar' })}>
+            <button className="btn my-2 d-none d-md-block" type="button" onClick={() => this.setState({ activeSubscription: false, mainComponentView: 'dashboardCalendar' })}>
               <FontAwesomeIcon icon={faTimes} />
             </button>
           </div>
@@ -295,7 +295,7 @@ class Dashboard extends React.Component {
             <img src={logo} alt="wateringCanIcon" height="60" />
             <div className="align-self-center d-none d-md-block">Water Your Subs</div>
           </a>
-          <h1 className="h3 fw-normal" id="nav-header">{concatenatedString}</h1>
+          <h1 className="h3 fw-bolder text-primary" id="nav-header">{concatenatedString}</h1>
           <div className="d-flex dropdown">
             <a className="" href="#dashboard" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <img className="border rounded-circle border-primary" src={pfp} alt="user-pfp" height="60" />
@@ -311,10 +311,10 @@ class Dashboard extends React.Component {
           </div>
         </header>
         <main className="d-flex flex-fill flex-column flex-md-row justify-content-between">
-          <div className="col-md-8 flex-fill h-100 d-flex align-items-center justify-content-center" id="mainContainer" >
+          <div className="col-md-8 flex-fill h-100 d-flex justify-content-center" id="mainContainer" >
             {this.renderMainComponent()}
           </div>
-          <div className="col-md-4 p-3 order-md-first flex-fill">
+          <div className="col-md-4 p-3 order-md-first flex-fill border-end shadow-sm">
             <SubscriptionsList
               subscriptions={subscriptions}
               setActiveSubscription={this.setActiveSubscription}

@@ -11,7 +11,7 @@ const LandingPage = () => (
   <div>
     <header className="py-2 px-4 d-flex justify-content-between align-items-center border-bottom shadow-sm">
       <img src={logo} alt="watering can logo" width="60px" />
-      <h1 className="h3 fw-normal" id="nav-header">Water Your Subs</h1>
+      <h1 className="h3 fw-bolder text-primary" id="nav-header">Water Your Subs</h1>
       <div />
     </header>
     <div className="container p-4 d-flex flex-column flex-lg-row justify-content-around align-items-center" style={{'minHeight': '85vh'}}>
