@@ -124,7 +124,7 @@ class SubscriptionForm extends React.Component {
   }
 
   renderSwitch(frequency) {
-    const { occurrence, days, nextDueDate, checkedDays } = this.state;
+    const { days, nextDueDate, checkedDays } = this.state;
     const weeklyCheckbox = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, idx) => 
       <label className="d-flex flex-column" htmlFor={day} key={day}>
         <div className="mx-auto col-md-3 form-check-label">{day}</div>
@@ -135,10 +135,10 @@ class SubscriptionForm extends React.Component {
     switch (frequency) {
       case 'yearly':
         return (
-          <div className="col-12 p-1 d-flex flex-column">
-            <div className="text-center d-none d-md-block">On which day(s) do you want to be reminded?</div>
+          <div className="col-12 p-3 d-flex flex-column">
+            <div className="text-center d-none d-md-block">On which day do you want to be reminded?</div>
             <div className="col-12 col-md-6 dayPickerBorder">
-              <div className="col mx-auto text-center">
+              <div className="text-center" id="dayPickerForm">
                 <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='yearly' />
               </div>
             </div>
@@ -147,15 +147,9 @@ class SubscriptionForm extends React.Component {
       case 'monthly':
         return (
           <div className="col-12 d-flex flex-column">
-            <label className="col-12 d-flex flex-column flex-row-md form-label" htmlFor="occurrence">
-              <div className="col-12 col-md-3">Every (?) Months:</div>
-              <div className="col-12 col-md-7">
-                <input className="form-control" type="number" id="occurrence" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')} min="0" max="12" />
-              </div>
-            </label>
+            <div className="text-center d-none d-md-block">On which day(s) do you want to be reminded?</div>
             <div className="col-12 col-md-6 dayPickerBorder">
-              <div className="text-center d-none d-md-block">On which day(s) do you want to be reminded?</div>
-              <div className="col mx-auto text-center" id="dayPickerForm">
+              <div className="text-center" id="dayPickerForm">
                 <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='monthly' />
               </div>
             </div>
@@ -164,19 +158,6 @@ class SubscriptionForm extends React.Component {
       case 'weekly':
         return (
           <div className="col-12">
-            <div className="col-12 col-md-6">
-              <label className="col d-flex flex-column flex-row-md form-label" htmlFor="occurrence">
-                <div className="col-12 col-md-3">Every (?) Weeks:</div>
-                <div className="col-12 col-md-7">
-                  <select className="form-select" id="occurrence" placeholder="ex: Every 2 weeks" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')}>
-                    <option value="1">Every Week</option>
-                    <option value="2">Every 2 Weeks</option>
-                    <option value="3">Every 3 Weeks</option>
-                    <option value="4">Every 4 Weeks</option>
-                  </select>
-                </div>
-              </label>
-            </div>
             <div className="col-12 d-flex justify-content-around" >{weeklyCheckbox}</div>
             <div className="col-12 col-md-6 dayPickerBorder">
               <div className="col mx-auto text-center" id="dayPickerForm">
@@ -187,21 +168,11 @@ class SubscriptionForm extends React.Component {
         );
       case 'daily':
         return (
-          <div className="col-12">
-            <div className="col-12 col-md-6">
-              <label className="col d-flex flex-column flex-row-md form-label" htmlFor="occurrence">
-                <div className="col-12 col-md-3">Every (?) Days:</div>
-                <div className="col-12 col-md-7">
-                  <input className="form-control" type="number" id="occurence" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')} />
-                </div>
-              </label>
-            </div>
-            <div className="col-12 col-md-6">
-              <div className="text-center d-none d-md-block">On which day(s) do you want to be reminded?</div>
-              <div className="col-12 col-md-6 dayPickerBorder">
-                <div className="col mx-auto text-center" id="dayPickerForm">
-                  <ReactDayPicker handleUpdate={this.handleDays} updating={days} frequency='daily' />
-                </div>
+          <div className="col-12 d-flex flex-column">
+            <div className="text-center d-none d-md-block">On which day do you want to be reminded?</div>
+            <div className="col-12 col-md-6 dayPickerBorder">
+              <div className="text-center" id="dayPickerForm">
+                <ReactDayPicker handleUpdate={this.handleDays} updating={days} frequency='daily' />
               </div>
             </div>
           </div>
@@ -212,7 +183,7 @@ class SubscriptionForm extends React.Component {
   }
 
   render() {
-    const { name, nickname, reminderDays, amount, frequency } = this.state;
+    const { name, nickname, reminderDays, amount, frequency, occurrence } = this.state;
 
     return (
       <section className="col-12 d-flex flex-column">
@@ -232,7 +203,7 @@ class SubscriptionForm extends React.Component {
           </label>
 
           <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-reminder-days">
-            <div className="col-12 col-md-3">Reminder Days</div>
+            <div className="col-12 col-md-3">Alert</div>
             <div className="col-12 align-self-start col-md-7">
               <input className="form-control" type="number" name="subscription-reminder-days" min="0" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} required />
             </div>
@@ -258,9 +229,24 @@ class SubscriptionForm extends React.Component {
             </div>
           </label>
 
+          {/* lol lemme know what you think of these conditionals */}
+          {frequency && frequency !== 'yearly' &&
+            <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="occurrence">
+              <div className="col-12 col-md-3">
+                {frequency !== 'daily'
+                  ? `Every (?) ${frequency.charAt(0).toUpperCase()}${frequency.substring(1, frequency.length - 2)}s`
+                  : 'Every (?) Days'
+                }
+              </div>
+              <div className="col-12 align-self-start col-md-7">
+                <input className="form-control" type="number" id="occurrence" value={occurrence} onChange={(event) => this.handleChange(event, 'occurrence')} min="0" max="12" />
+              </div>
+            </label>
+          }
+
           {this.renderSwitch(frequency)}
 
-          <div className="col form-label text-center">
+          <div className="col-12 form-label text-center">
             <input className="btn btn-primary form-control d-none d-sm-none d-md-block" type="submit" value="Submit" />
             <input className="btn btn-primary form-control-sm d-md-none" type="submit" data-bs-dismiss="offcanvas" aria-label="Close" value="Submit" />
           </div>
