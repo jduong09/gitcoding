@@ -2,6 +2,19 @@
 $primary: #7866D3;
 $offcanvas-vertical-height: 75vh;
 
+/* change offcanvas name in task/dashboardDesign */ 
+#offcanvasExample::-webkit-scrollbar {
+  width: 0px;
+}
+
+.navbar-brand {
+  margin-right: 0 !important;
+}
+
+.activeCard {
+  background-color: #b8aaff !important;
+}
+
 .h-90 {
   height: 90% !important;
 }

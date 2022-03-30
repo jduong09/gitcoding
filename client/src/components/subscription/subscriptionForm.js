@@ -189,35 +189,35 @@ class SubscriptionForm extends React.Component {
       <section className="col-12 d-flex flex-column">
         <form className="text-start d-md-flex flex-wrap" onSubmit={this.handleSubmit}>
           <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-name">
-            <div className="col-12 col-md-3">Name</div>
+            <div className="col-12 col-md-3 fw-bolder">Name</div>
             <div className="col-12 align-self-start col-md-7">
               <input className="form-control" id="subscription-name" type="text" placeholder="e.g. Crunchyroll" name="subscription-name" value={name} onChange={(event) => this.handleChange(event, 'name')} required />
             </div>
           </label>
 
           <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-nickname">
-            <div className="col-12 col-md-3">Nickname</div>
+            <div className="col-12 col-md-3 fw-bolder">Nickname</div>
             <div className="col-12 align-self-start col-md-7">
               <input className="form-control" type="text" placeholder="e.g. My favorite streaming site"name="subscription-nickname" value={nickname} onChange={(event) => this.handleChange(event, 'nickname')}  /> 
             </div>
           </label>
 
           <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-reminder-days">
-            <div className="col-12 col-md-3">Alert</div>
+            <div className="col-12 col-md-3 fw-bolder">Alert</div>
             <div className="col-12 align-self-start col-md-7">
               <input className="form-control" type="number" name="subscription-reminder-days" min="0" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} required />
             </div>
           </label>
 
           <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-amount">
-            <div className="col-12 col-md-3">Amount</div>
+            <div className="col-12 col-md-3 fw-bolder">Amount</div>
             <div className="col-12 align-self-start col-md-7">
               <input className="form-control" type="number" name="subscription-amount" min="0" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} required />
             </div>
           </label>
 
           <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="due-date-select">
-            <div className="col-12 col-md-3">Repeat</div>
+            <div className="col-12 col-md-3 fw-bolder">Repeat</div>
             <div className="col-12 align-self-start col-md-7">
               <select className="form-select" id="due-date-select" value={frequency} onChange={(event) => this.handleChange(event, 'frequency')} required >
                 <option value="" defaultValue disabled>--Select--</option>
@@ -232,7 +232,7 @@ class SubscriptionForm extends React.Component {
           {/* lol lemme know what you think of these conditionals */}
           {frequency && frequency !== 'yearly' &&
             <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="occurrence">
-              <div className="col-12 col-md-3">
+              <div className="col-12 col-md-3 fw-bolder">
                 {frequency !== 'daily'
                   ? `Every (?) ${frequency.charAt(0).toUpperCase()}${frequency.substring(1, frequency.length - 2)}s`
                   : 'Every (?) Days'

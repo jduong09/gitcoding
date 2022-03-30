@@ -6,7 +6,7 @@ const SubscriptionsList = ({ subscriptions, setActiveSubscription, handleDashboa
     const { subscriptionUuid } = subscription;
     let className="list-group-item p-0 mt-2 list-group-item-action border border-dark rounded-1";
     if (activeSubscription.subscriptionUuid === subscriptionUuid) {
-      className += " bg-primary";
+      className += " activeCard";
     }
 
     return (

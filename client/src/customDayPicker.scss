@@ -19,22 +19,10 @@
   margin: 1rem auto;
 }
 
-/*
- ** .DayPicker-Month
- * width: 100%
- * margin-left: 0
- * margin-right: 0
-
- ** .DayPicker-Weekday
- * color: #7866D3
- * font-size: 1rem
-
- ** .DayPicker-Day--today
- * color: #7866D3
-
- ** .DayPicker-TodayButton
- * color: #7866D3
-*/
+.DayPicker-NavButton {
+  width: 1.75rem;
+  height: 1.75rem;
+}
 
 .DayPicker-Month {
   margin-left: 0;
@@ -48,7 +36,9 @@
 
 .DayPicker-Day--today, .DayPicker-TodayButton {
   color: #7866D3;
+  font-weight: 700;
 }
+
 
 .DayPicker-Day--disabled {
   color: #DCE0E0 !important;
@@ -59,11 +49,12 @@
 }
 
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
-  background-color: #7866D3 !important;
+  background-color: #937dff !important;
+  color: #000000;
 }
 
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover {
-  background-color: #9984ff !important;
+  background-color: #7866D3 !important;
 }
 
 .DayPicker:not(.DayPicker--interactionDisabled)

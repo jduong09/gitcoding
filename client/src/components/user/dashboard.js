@@ -82,13 +82,12 @@ class Dashboard extends React.Component {
 
   handleDashboardChange(newView) {
     const { mainComponentView } = this.state;
-    
+
     if (mainComponentView === 'dashboardCalendar' || mainComponentView === 'subscriptionDetail') {
-      const newState = (newView === 'createSubscription') ? { mainComponentView: newView, activeSubscription: false } : { mainComponentView: newView };
+      const newState = newView === 'createSubscription' ? { mainComponentView: newView, activeSubscription: false } : { mainComponentView: newView };
       this.setState(newState);
       return;
     }
-
 
     this.setState({ nextView: newView, isDeleting: false });
     this.viewModal.show();
@@ -291,13 +290,13 @@ class Dashboard extends React.Component {
         </div>;
     return (
       <div className="h-100 d-flex flex-column">
-        <header className="navbar py-2 px-4 d-flex justify-content-between align-items-center text-dark border-bottom shadow-sm">
+        <header className="navbar py-2 px-3 d-flex justify-content-between align-items-center text-dark border-bottom shadow-sm">
           <a className="navbar-brand d-flex text-dark" href="#changeThis">
             <img src={logo} alt="wateringCanIcon" height="60" />
             <div className="align-self-center d-none d-md-block">Water Your Subs</div>
           </a>
           <h1 className="h3 fw-bolder text-primary" id="nav-header">{concatenatedString}</h1>
-          <div className="d-flex dropdown">
+          <div className="ps-1 d-flex dropdown">
             <a className="" href="#dashboard" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <img className="border rounded-circle border-primary" src={pfp} alt="user-pfp" height="60" />
             </a>
@@ -331,7 +330,7 @@ class Dashboard extends React.Component {
                   type="button"
                   onClick={() => this.handleDashboardChange('createSubscription')}
                 >
-                  +Create
+                  + Create
                 </button>
               </div>
               <div className="d-md-none">
@@ -343,7 +342,7 @@ class Dashboard extends React.Component {
                   aria-controls="offcanvasExample"
                   onClick={() => this.setState({ addingSubscription: true })}
                 >
-                  +Create
+                  + Create
                 </button>
               </div>
             </div>
