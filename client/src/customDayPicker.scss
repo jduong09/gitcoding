@@ -3,7 +3,7 @@
 */
 .DayPicker {
   width: 100%;
-  font-size: calc(16px + 0.9vw) !important;
+  font-size: calc(16px + 0.6vw) !important;
 }
 
 /* remove font-size: .7rem */
@@ -27,6 +27,8 @@
 .DayPicker-Month {
   margin-left: 0;
   margin-right: 0;
+  border-spacing: .25rem;
+  border-collapse: separate;
 }
 
 .DayPicker-Weekday {
@@ -45,7 +47,7 @@
 }
 
 .DayPicker-Day {
-  padding: .7em;
+  padding: .7rem;
 }
 
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
