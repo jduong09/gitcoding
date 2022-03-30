@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal } from 'bootstrap';
+import { Modal, Offcanvas } from 'bootstrap';
 import { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -45,6 +45,7 @@ class Dashboard extends React.Component {
     this.setMainComponentView = this.setMainComponentView.bind(this);
     this.handleDashboardChange = this.handleDashboardChange.bind(this);
     this.openDeleteModal = this.openDeleteModal.bind(this);
+    this.closeOffcanvas = this.closeOffcanvas.bind(this);
   };
   
   async componentDidMount() {
@@ -78,6 +79,7 @@ class Dashboard extends React.Component {
 
     this.setState({ subscriptions });
     this.viewModal = new Modal(document.getElementById('dashboardModal'));
+    this.viewOffcanvas = new Offcanvas(document.getElementById('offcanvasExample'));
   };
 
   handleDashboardChange(newView) {
@@ -147,6 +149,10 @@ class Dashboard extends React.Component {
       : { subscriptions: updatedSubscriptionsList };
 
     this.setState(newState);
+  }
+
+  closeOffcanvas() {
+    this.viewOffcanvas.hide();
   }
 
   openDeleteModal() {
@@ -268,7 +274,9 @@ class Dashboard extends React.Component {
           addSubscription={this.handleUpdate}
           toggleLoadingState={this.toggleLoadingState}
           showSubscriptionList={this.showSubscriptionList}
-          currentSubscriptions={subscriptions} />
+          currentSubscriptions={subscriptions}
+          closeOffcanvas={this.closeOffcanvas}
+          />
         </div>
       : <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm">
           <div className="col d-flex justify-content-between align-items-center">
@@ -285,6 +293,7 @@ class Dashboard extends React.Component {
           showSubscriptionList={this.showSubscriptionList}
           toggleLoadingState={this.toggleLoadingState}
           prevSubscription={activeSubscription}
+          closeOffcanvas={this.closeOffcanvas}
           />
         </div>;
     return (
