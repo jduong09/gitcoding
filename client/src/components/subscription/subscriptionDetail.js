@@ -33,9 +33,8 @@ const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, o
 
   const handleClose = useCallback((e) => {
     e.stopPropagation();
-    setActiveSubscription(false);
     handleDashboard('dashboardCalendar');
-  }, [setActiveSubscription, handleDashboard]);
+  }, [handleDashboard]);
 
   const handleEdit = useCallback((e) => {
     e.stopPropagation();

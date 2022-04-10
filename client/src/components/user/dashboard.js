@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal } from 'bootstrap';
+import { Modal, Offcanvas } from 'bootstrap';
 import { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -33,6 +33,7 @@ class Dashboard extends React.Component {
       loading: false,
       addingSubscription: false,
       activeSubscription: false,
+      editingSubscription: false,
       mainComponentView: 'dashboardCalendar',
       nextView: null,
       isDeleting: false
@@ -40,6 +41,7 @@ class Dashboard extends React.Component {
 
     this.setAddingSubscription = this.setAddingSubscription.bind(this);
     this.setActiveSubscription = this.setActiveSubscription.bind(this);
+    this.setEditingSubscription = this.setEditingSubscription.bind(this);
     this.toggleLoadingState = this.toggleLoadingState.bind(this);
     this.showSubscriptionList = this.showSubscriptionList.bind(this);
     this.setMainComponentView = this.setMainComponentView.bind(this);
@@ -78,25 +80,41 @@ class Dashboard extends React.Component {
 
     this.setState({ subscriptions });
     this.viewModal = new Modal(document.getElementById('dashboardModal'));
+    this.viewOffCanvas = new Offcanvas(document.getElementById('offcanvasExample'));
+
+    const offcanvas = document.getElementById('offcanvasExample');
+    offcanvas.addEventListener('hide.bs.offcanvas', () => {
+      this.setState({ addingSubscription: false, mainComponentView: 'dashboardCalendar', activeSubscription: false, editingSubscription: false});
+    });
   };
 
   handleDashboardChange(newView) {
-    const { mainComponentView } = this.state;
+    const { mainComponentView, editingSubscription, activeSubscription } = this.state;
+    
+    // If user closes main component view (detail/form), then newView is dashboardCalendar.
+    if (newView === 'dashboardCalendar') {
+      this.setState({ mainComponentView: newView, activeSubscription: false, editingSubscription: false });
+      return;
+    }
 
+    // if user navigates from a screen that does not require a modal
+    // we want to navigate user to newView, and not show a modal
     if (mainComponentView === 'dashboardCalendar' || mainComponentView === 'subscriptionDetail') {
-      const newState = newView === 'createSubscription' ? { mainComponentView: newView, activeSubscription: false } : { mainComponentView: newView };
+      const newState = newView === 'createSubscription' ? { mainComponentView: newView, activeSubscription: false } : { mainComponentView: newView, activeSubscription: editingSubscription || activeSubscription };
       this.setState(newState);
       return;
     }
 
+    // user is navigating from form, and requires a modal.
     this.setState({ nextView: newView, isDeleting: false });
     this.viewModal.show();
   }
 
   handleModalClick = (userInput) => {
-    const { mainComponentView, nextView, activeSubscription } = this.state;
+    const { mainComponentView, nextView, activeSubscription, editingSubscription } = this.state;
+    // && nextView === 'createSubscription' ? false : activeSubscription
     if (nextView) {
-      this.setState({ mainComponentView: userInput ? nextView : mainComponentView, nextView: null, activeSubscription: userInput && nextView === 'createSubscription' ? false : activeSubscription });
+      this.setState({ mainComponentView: userInput ? nextView : mainComponentView, nextView: null, activeSubscription: userInput ? editingSubscription : activeSubscription });
       this.viewModal.hide();
     } else {
       if (userInput) {
@@ -117,6 +135,10 @@ class Dashboard extends React.Component {
 
   setActiveSubscription = async (subscription) => {
     await this.setState({ activeSubscription: subscription });
+  }
+
+  setEditingSubscription = async (subscription) => {
+    await this.setState({ editingSubscription: subscription });
   }
 
   handleUpdate = async (newSubscriptionsList) => {
@@ -148,6 +170,14 @@ class Dashboard extends React.Component {
       : { subscriptions: updatedSubscriptionsList };
 
     this.setState(newState);
+  }
+
+  openOffcanvas(form) {
+    if (form === 'create') {
+      this.setAddingSubscription(true);
+    }
+
+    this.viewOffCanvas.show();
   }
 
   openDeleteModal() {
@@ -231,6 +261,7 @@ class Dashboard extends React.Component {
                 </button>
               </div>
               <UpdateSubscription
+                key={activeSubscription.subscriptionUuid}
                 updateSubscription={this.handleUpdate}
                 showSubscriptionList={this.showSubscriptionList}
                 toggleLoadingState={this.toggleLoadingState}
@@ -318,6 +349,7 @@ class Dashboard extends React.Component {
             <SubscriptionsList
               subscriptions={subscriptions}
               setActiveSubscription={this.setActiveSubscription}
+              setEditingSubscription={this.setEditingSubscription}
               handleDashboard={this.handleDashboardChange}
               handleDelete={this.handleDelete}
               openDeleteModal={this.openDeleteModal}
@@ -337,16 +369,13 @@ class Dashboard extends React.Component {
                 <button
                   className="col-12 p-4 btn border-dashed border-primary btn-outline-primary"
                   type="button"
-                  data-bs-toggle="offcanvas"
-                  data-bs-target="#offcanvasExample"
-                  aria-controls="offcanvasExample"
-                  onClick={() => this.setState({ addingSubscription: true })}
+                  onClick={() => this.openOffcanvas('create')}
                 >
                   + Create
                 </button>
               </div>
             </div>
-            <div className="offcanvas offcanvas-bottom d-md-none overflow-auto offcanvasBorder" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div className="offcanvas offcanvas-bottom d-md-none overflow-auto offcanvasBorder" id="offcanvasExample">
               {addingSubscription || activeSubscription ? subscriptionForm : ''}
             </div>
             <ModalComponent handleModalClick={this.handleModalClick} isDeleting={isDeleting} />
