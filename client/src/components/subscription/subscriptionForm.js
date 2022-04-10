@@ -72,7 +72,7 @@ class SubscriptionForm extends React.Component {
   }
 
   async handleSubmit(event) {
-    const { method, handleSubscriptions, showSubscriptionList, toggleLoadingState } = this.props;
+    const { method, handleSubscriptions, showSubscriptionList, toggleLoadingState, closeOffcanvas } = this.props;
     const { name, nickname, reminderDays, amount, frequency, occurrence, days }  = this.state;
     event.preventDefault();
 
@@ -110,6 +110,7 @@ class SubscriptionForm extends React.Component {
     }
 
     await handleSubscriptions(response);
+    closeOffcanvas();
     toggleLoadingState();
     showSubscriptionList();
   }
@@ -247,8 +248,8 @@ class SubscriptionForm extends React.Component {
           {this.renderSwitch(frequency)}
 
           <div className="col-12 form-label text-center">
-            <input className="btn btn-primary form-control d-none d-sm-none d-md-block" type="submit" value="Submit" />
-            <input className="btn btn-primary form-control-sm d-md-none" type="submit" data-bs-dismiss="offcanvas" aria-label="Close" value="Submit" />
+            <input className="btn btn-primary form-control d-none d-sm-none d-md-block" type="submit" id="desktopSubmit" value="Submit" />
+            <input className="btn btn-primary form-control-sm d-md-none" type="submit" id="offcanvasSubmit" value="Submit" />
           </div>
         </form>
       </section>

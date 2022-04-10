@@ -1,7 +1,7 @@
 import React from 'react';
 import SubscriptionListCard from './subscriptionListCard';
 
-const SubscriptionsList = ({ subscriptions, setActiveSubscription, setEditingSubscription, handleDashboard, handleDelete, openDeleteModal, activeSubscription }) => {
+const SubscriptionsList = ({ subscriptions, setEditingSubscription, handleDashboard, activeSubscription, openOffcanvas }) => {
   const subscriptionsList = subscriptions.map((subscription) => {
     const { subscriptionUuid } = subscription;
     let className="list-group-item p-0 mt-2 list-group-item-action border border-dark rounded-1";
@@ -16,11 +16,9 @@ const SubscriptionsList = ({ subscriptions, setActiveSubscription, setEditingSub
       >
         <SubscriptionListCard 
           details={subscription}
-          setActiveSubscription={setActiveSubscription}
           setEditingSubscription={setEditingSubscription}
           handleDashboard={handleDashboard}
-          handleDelete={handleDelete}
-          openDeleteModal={openDeleteModal}
+          openOffcanvas={openOffcanvas}
         />
       </li>
     );
