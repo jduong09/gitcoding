@@ -82,7 +82,7 @@ class Dashboard extends React.Component {
 
     this.setState({ subscriptions });
     this.viewModal = new Modal(document.getElementById('dashboardModal'));
-    this.viewOffCanvas = new Offcanvas(document.getElementById('offcanvasExample'));
+    this.viewOffcanvas = new Offcanvas(document.getElementById('offcanvasExample'));
 
     const offcanvas = document.getElementById('offcanvasExample');
     offcanvas.addEventListener('hide.bs.offcanvas', () => {
@@ -92,8 +92,7 @@ class Dashboard extends React.Component {
 
   handleDashboardChange(newView) {
     const { mainComponentView, editingSubscription, activeSubscription } = this.state;
-    
-    // If user closes main component view (detail/form), then newView is dashboardCalendar.
+
     if (newView === 'dashboardCalendar' && mainComponentView === 'subscriptionDetail') {
       this.setState({ mainComponentView: newView, activeSubscription: false, editingSubscription: false });
       return;
@@ -114,7 +113,7 @@ class Dashboard extends React.Component {
 
   handleModalClick = (userInput) => {
     const { mainComponentView, nextView, activeSubscription, editingSubscription } = this.state;
-    // && nextView === 'createSubscription' ? false : activeSubscription
+
     if (nextView === 'createSubscription' || mainComponentView === 'createSubscription') {
       this.setState({ activeSubscription: false, editingSubscription: false });
     }
@@ -188,7 +187,7 @@ class Dashboard extends React.Component {
       this.setActiveSubscription(form);
     }
 
-    this.viewOffCanvas.show();
+    this.viewOffcanvas.show();
   }
 
   closeOffcanvas() {
@@ -217,7 +216,7 @@ class Dashboard extends React.Component {
 
   renderMainComponent() {
     const { activeSubscription, loading, subscriptions, mainComponentView } = this.state;
-    console.log(this.state);
+
     if (loading) {
       return (
         <div className="col-12 d-flex flex-column justify-content-center align-items-center fs-1">
