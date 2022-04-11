@@ -17,7 +17,7 @@ const CreateSubscription = ({ toggleLoadingState, addSubscription, currentSubscr
       showSubscriptionList={showSubscriptionList}
       handleSubscriptions={handleSubscriptions}
       closeOffcanvas={closeOffcanvas}
-      />
+    />
   );
 };
 

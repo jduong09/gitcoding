@@ -192,7 +192,7 @@ class Dashboard extends React.Component {
   }
 
   closeOffcanvas() {
-    this.viewOffCanvas.hide();
+    this.viewOffcanvas.hide();
   }
 
   openDeleteModal() {

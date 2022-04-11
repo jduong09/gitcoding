@@ -101,7 +101,7 @@ class SubscriptionForm extends React.Component {
 
     const { status } = subscription;
     const response = await subscription.json();
-    toggleLoadingState();
+
     if (status === 400) {
       const { errorMessage } = response;
       toast.error(errorMessage);
@@ -110,7 +110,11 @@ class SubscriptionForm extends React.Component {
     }
 
     await handleSubscriptions(response);
-    closeOffcanvas();
+
+    if (event.nativeEvent.submitter.ariaLabel === 'closeMobile') {
+      closeOffcanvas();
+    }
+
     toggleLoadingState();
     showSubscriptionList();
   }
@@ -248,8 +252,8 @@ class SubscriptionForm extends React.Component {
           {this.renderSwitch(frequency)}
 
           <div className="col-12 form-label text-center">
-            <input className="btn btn-primary form-control d-none d-sm-none d-md-block" type="submit" id="desktopSubmit" value="Submit" />
-            <input className="btn btn-primary form-control-sm d-md-none" type="submit" id="offcanvasSubmit" value="Submit" />
+            <input className="btn btn-primary form-control d-none d-sm-none d-md-block" type="submit" aria-label="closeDesktop" value="Submit" />
+            <input className="btn btn-primary form-control-sm d-md-none" type="submit" aria-label="closeMobile" value="Submit" />
           </div>
         </form>
       </section>
