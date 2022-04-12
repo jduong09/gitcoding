@@ -348,7 +348,7 @@ class Dashboard extends React.Component {
           <h1 className="h3 fw-bolder text-primary" id="nav-header">{concatenatedString}</h1>
           <div className="ps-1 d-flex dropdown">
             <a className="" href="#dashboard" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img className="border rounded-circle border-primary" src={pfp} alt="user-pfp" height="60" />
+              <img className="border rounded-circle border-light" src={pfp} alt="user-pfp" height="60" />
             </a>
             <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
               <li>
