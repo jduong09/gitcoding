@@ -31,6 +31,11 @@ const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, o
     setRepeatString(`${new Date(dueDate.nextDueDate).toLocaleDateString()}, ${parsedRepeatString}`);
   }, [name, dueDate]);
 
+  const handleClose = useCallback((e) => {
+    e.stopPropagation();
+    handleDashboard('dashboardCalendar');
+  }, [handleDashboard]);
+
   const handleEdit = useCallback((e) => {
     e.stopPropagation();
     setActiveSubscription(details);
@@ -47,7 +52,7 @@ const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, o
     <div className="col-12 p-3 d-flex flex-column">
       <div className="col-12 d-flex justify-content-between">
         <h2>{nickname || name}</h2>
-        <button className="btn" type="button" onClick={() => handleDashboard('dashboardCalendar')}>
+        <button className="btn" type="button" onClick={handleClose}>
           <FontAwesomeIcon icon={faTimes} />
         </button>
       </div>
@@ -67,7 +72,7 @@ const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, o
       <div className="col-10 d-flex justify-content-around mx-auto">
           <div className="col-3">
             <button
-              className="btn w-100 d-md-none border-dashed border-primary btn-outline-primary"
+              className="btn btn-primary w-100 d-md-none"
               type="button"
               data-bs-toggle="offcanvas"
               data-bs-target="#offcanvasExample"
@@ -76,9 +81,9 @@ const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, o
             >
               Edit
             </button>
-            <button className="btn w-100 d-none d-md-block border-dashed border-primary btn-outline-primary" type="button" onClick={handleEdit}>Edit</button>
+            <button className="btn btn-primary w-100 d-none d-md-block" type="button" onClick={handleEdit}>Edit</button>
           </div>
-          <button className="col-3 btn border-dashed border-primary btn-outline-primary" type="button" onClick={clickDelete}>Delete</button>
+          <button className="col-3 btn btn-primary" type="button" onClick={clickDelete}>Delete</button>
         </div>
     </div>
   );

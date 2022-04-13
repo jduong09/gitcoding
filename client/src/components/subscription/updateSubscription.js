@@ -19,11 +19,11 @@ const UpdateSubscription = ({ updateSubscription, prevSubscription, showSubscrip
   };
 
   return (
-    <SubscriptionForm
-      method="PATCH"
-      prevSubscription={prevSubscription}
-      handleSubscriptions={handleSubscriptions}
-      showSubscriptionList={showSubscriptionList}
+    <SubscriptionForm 
+      method="PATCH" 
+      prevSubscription={prevSubscription} 
+      handleSubscriptions={handleSubscriptions} 
+      showSubscriptionList={showSubscriptionList} 
       toggleLoadingState={toggleLoadingState}
       closeOffcanvas={closeOffcanvas}
     />
