@@ -22,7 +22,6 @@ const year = todaysDate.slice(todaysDate.length - 4);
 const monthAndDay = todaysDate.slice(0, todaysDate.length - 5);
 const concatenatedString = `${monthAndDay}, ${year}`;
 
-
 // logo: https://www.flaticon.com/free-icon/watering-can_5268400?term=watering%20can&page=1&position=73&page=1&position=73&related_id=5268400&origin=tag
 class Dashboard extends React.Component {
   constructor(props) {

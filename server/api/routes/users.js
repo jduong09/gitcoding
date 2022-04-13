@@ -21,6 +21,4 @@ router.get('/:userUuid/userInfo', async (req, res) => {
   res.status(200).json({ name: user.displayName, pfp: user.picture });
 });
 
-
-
 module.exports = router;
