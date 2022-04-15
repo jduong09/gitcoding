@@ -148,7 +148,7 @@ class Dashboard extends React.Component {
   }
 
   handleUpdate = async (newSubscriptionsList) => {
-    await this.setState({ subscriptions: newSubscriptionsList, mainComponentView: 'dashboardCalendar' });
+    await this.setState({ subscriptions: newSubscriptionsList, mainComponentView: 'dashboardCalendar', activeSubscription: false, editingSubscription: false });
   }
 
   handleDelete = async (subscriptionUuid) => {

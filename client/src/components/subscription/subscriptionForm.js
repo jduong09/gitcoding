@@ -115,6 +115,7 @@ class SubscriptionForm extends React.Component {
       closeOffcanvas();
     }
 
+
     toggleLoadingState();
     showSubscriptionList();
   }

@@ -32,6 +32,7 @@ const SubscriptionListCard = ({ details, setEditingSubscription, handleDashboard
           className="btn innerButtonEdit d-none d-md-block"
           type="button"
           onClick={handleEdit}
+          aria-label="Edit"
         >
           <FontAwesomeIcon icon={faPen} />
         </button>
