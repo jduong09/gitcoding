@@ -31,6 +31,12 @@ html, body, #root {
 }
 
 #heroImage {
-  width: 75%;
+  width: 70%;
   height: auto;
+}
+
+@media (min-width: 992px) {
+  #heroImage {
+    width: 50%;
+  }
 }

@@ -15,7 +15,7 @@ const LandingPage = () => (
       <h1 className="h3 fw-bolder text-primary" id="nav-header">Water Your Subs</h1>
       <div />
     </header>
-    <div className="container p-4 d-flex flex-column flex-lg-row justify-content-around align-items-center" style={{'minHeight': '85vh'}}>
+    <div className="container py-2 px-4 d-flex flex-column flex-lg-row align-items-center">
       <div className="col-12 col-lg-6 order-1 order-lg-0">
         <div className="d-flex flex-column align-items-start">
           <h1 className="text-start display-4 fw-bold">
