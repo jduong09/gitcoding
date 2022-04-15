@@ -29,3 +29,8 @@ html, body, #root {
 .text-underline-color {
   box-shadow: inset 0 -.1em #7866D3;
 }
+
+#heroImage {
+  width: 75%;
+  height: auto;
+}
