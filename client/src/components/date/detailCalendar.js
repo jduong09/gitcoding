@@ -10,9 +10,9 @@ const DetailCalendar = ({ dueDate }) => {
 
     setDates(selectedDays);
   }, [dueDate]);
-
+  
   return (
-    <DayPicker selectedDays={subscriptionDates} />
+    <DayPicker selectedDays={subscriptionDates} month={new Date(dueDate.nextDueDate)} />
   );
 };
 
