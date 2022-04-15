@@ -2,7 +2,7 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import SubscriptionForm from './subscriptionForm';
 
-const UpdateSubscription = ({ updateSubscription, prevSubscription, showSubscriptionList, toggleLoadingState }) => {
+const UpdateSubscription = ({ updateSubscription, prevSubscription, showSubscriptionList, toggleLoadingState, closeOffcanvas }) => {
   const handleSubscriptions = async () => {
     toggleLoadingState();
     const newSubscriptionList = await fetch(`${window.location.pathname}/subscriptions`); 
@@ -19,7 +19,14 @@ const UpdateSubscription = ({ updateSubscription, prevSubscription, showSubscrip
   };
 
   return (
-    <SubscriptionForm method="PATCH" prevSubscription={prevSubscription} handleSubscriptions={handleSubscriptions} showSubscriptionList={showSubscriptionList} toggleLoadingState={toggleLoadingState} />
+    <SubscriptionForm 
+      method="PATCH" 
+      prevSubscription={prevSubscription} 
+      handleSubscriptions={handleSubscriptions} 
+      showSubscriptionList={showSubscriptionList} 
+      toggleLoadingState={toggleLoadingState}
+      closeOffcanvas={closeOffcanvas}
+    />
   );
 };
 

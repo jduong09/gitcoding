@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import DayPicker, { DateUtils } from 'react-day-picker';
-import 'react-day-picker/lib/style.css';
+import '../../customDayPicker.scss';
 import { toast } from 'react-toastify';
 
 const ReactDayPicker = ({ handleUpdate, updating, nextDueDate, frequency }) => {
@@ -53,15 +53,17 @@ const ReactDayPicker = ({ handleUpdate, updating, nextDueDate, frequency }) => {
   
   return (
     <section className="day-picker">
-      <DayPicker 
-        onDayClick={handleDayClick}
-        selectedDays={days}
-        disabledDays={disabledDay}
-        month={nextDueDate ? new Date(nextDueDate) : new Date()}
-        todayButton="Jump To Today"
-        canChangeMonth={canChangeMonth}
-      />
-      <div>Days Selected: {daysList.join(', ')}</div>
+      <div id="dayPickerForm">
+        <DayPicker 
+          onDayClick={handleDayClick}
+          selectedDays={days}
+          disabledDays={disabledDay}
+          month={nextDueDate ? new Date(nextDueDate) : new Date()}
+          todayButton="Jump To Today"
+          canChangeMonth={canChangeMonth}
+        />
+      </div>
+      <div className="d-none d-md-block">{daysList.length ? `Days Selected: ${daysList.join(', ')}` : ''}</div>
     </section>
   );
 };

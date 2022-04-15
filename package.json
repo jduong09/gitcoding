@@ -9,7 +9,7 @@
     "concurrently": "^6.5.1",
     "connect-pg-simple": "^7.0.0",
     "cors": "^2.8.5",
-    "cypress": "^9.2.0",
+    "cypress": "^9.5.2",
     "dotenv": "^10.0.0",
     "eslint": "^7.11.0",
     "eslint-config-airbnb": "^19.0.0",

@@ -16,4 +16,9 @@ router.route('/')
     }
   });
 
+router.get('/:userUuid/userInfo', async (req, res) => {
+  const { user }  = req.session.passport;
+  res.status(200).json({ name: user.displayName, pfp: user.picture });
+});
+
 module.exports = router;

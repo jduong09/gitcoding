@@ -1,0 +1,95 @@
+/*
+ * width: 100%
+*/
+.DayPicker {
+  width: 100%;
+  font-size: calc(16px + 0.6vw) !important;
+}
+
+/* remove font-size: .7rem */
+/* font-size: 1rem */
+#dayPickerForm .DayPicker {
+  font-size: calc(16px + 0.3vw) !important;
+}
+
+.dayPickerBorder {
+  border: 1px solid white;
+  border-radius: 1rem;
+  background-color: #dee2e670;
+  margin: 1rem auto;
+}
+
+.DayPicker-NavButton {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.DayPicker-Month {
+  margin-left: 0;
+  margin-right: 0;
+  border-spacing: .25rem;
+  border-collapse: separate;
+}
+
+.DayPicker-Weekday {
+  color: #7866D3;
+  font-size: 1rem;
+}
+
+.DayPicker-Day--today, .DayPicker-TodayButton {
+  color: #7866D3;
+  font-weight: 700;
+}
+
+
+.DayPicker-Day--disabled {
+  color: #DCE0E0 !important;
+}
+
+.DayPicker-Day {
+  padding: .7rem;
+}
+
+.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+  background-color: #937dff !important;
+  color: #000000;
+}
+
+.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover {
+  background-color: #7866D3 !important;
+}
+
+.DayPicker:not(.DayPicker--interactionDisabled)
+  .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
+    background-color: #ddd6ff !important;
+}
+
+@media(min-width: 577px) {
+  .DayPicker-Day {
+    padding: .5em;
+  }
+}
+
+@media(min-width: 767px) {
+  #dayPickerForm .DayPicker {
+    font-size: .8rem !important;
+  }
+
+  .DayPicker-Day {
+    padding: .7em;
+  }
+}
+
+@media(min-width: 992px) {
+  .DayPicker-Day {
+    padding: .8em;
+  }
+}
+
+@media(min-width: 1200px) {
+  .DayPicker-Day {
+    padding: 1.0em;
+  }
+}
+
+@import "~react-day-picker/lib/style.css";

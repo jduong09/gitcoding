@@ -2,7 +2,7 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import SubscriptionForm from './subscriptionForm';
 
-const CreateSubscription = ({ toggleLoadingState, addSubscription, currentSubscriptions, showSubscriptionList }) => {
+const CreateSubscription = ({ toggleLoadingState, addSubscription, currentSubscriptions, showSubscriptionList, closeOffcanvas }) => {
   const handleSubscriptions = async (subscription) => {
     const newSubscriptionList = [ ...currentSubscriptions, subscription];
     toggleLoadingState();
@@ -15,7 +15,9 @@ const CreateSubscription = ({ toggleLoadingState, addSubscription, currentSubscr
       method="PUT"
       toggleLoadingState={toggleLoadingState}
       showSubscriptionList={showSubscriptionList}
-      handleSubscriptions={handleSubscriptions} />
+      handleSubscriptions={handleSubscriptions}
+      closeOffcanvas={closeOffcanvas}
+    />
   );
 };
 
