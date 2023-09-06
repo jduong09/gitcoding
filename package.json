@@ -9,7 +9,7 @@
     "concurrently": "^6.5.1",
     "connect-pg-simple": "^7.0.0",
     "cors": "^2.8.5",
-    "cypress": "^9.5.2",
+    "cypress": "^13.1.0",
     "dotenv": "^10.0.0",
     "eslint": "^7.11.0",
     "eslint-config-airbnb": "^19.0.0",
@@ -22,7 +22,7 @@
     "express-session": "^1.17.2",
     "fs": "*",
     "nodemon": "^2.0.15",
-    "passport": "^0.5.0",
+    "passport": "^0.6.0",
     "passport-auth0": "^1.4.1",
     "pg": "^8.7.1",
     "prettier": "^2.4.1"
