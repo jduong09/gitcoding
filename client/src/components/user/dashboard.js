@@ -13,7 +13,7 @@ import SubscriptionDetail from '../subscription/subscriptionDetail';
 import ModalComponent from '../modalComponent';
 import logo from '../../assets/watering-can.png';
 
-const href = process && process.env && process.env.NODE_ENV === 'production'
+const href = process.env && process.env.NODE_ENV === 'production'
   ? '/auth/logout'
   : 'http://localhost:5000/auth/logout';
 

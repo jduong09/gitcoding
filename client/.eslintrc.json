@@ -1,17 +1,17 @@
 {
+    "root": true,
     "env": {
         "browser": true,
         "node": true,
-        "root": true,
         "es2021": true
     },
     "extends": [
         "eslint:recommended",
         "plugin:jsx-a11y/recommended",
-        "plugin:react/recommended",
         "airbnb",
         "airbnb/hooks",
-        "prettier"
+        "prettier",
+        "plugin:cypress/recommended"
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -23,16 +23,23 @@
     "plugins": [
         "react",
         "jsx-a11y",
-        "prettier"
+        "prettier",
+        "cypress"
     ],
     "rules": {
         "react/function-component-definition": "off",
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
         "react/forbid-prop-types": 0,
         "react/require-default-props": "off",
-        "react/prop-types": "off",
         "react/no-did-update-set-state": 0,
-        "semi": "warn",
-        "react/no-unescaped-entities": 0
+        "react/prop-types": "off",
+        "cypress/no-assigning-return-values": "error",
+        "cypress/no-unnecessary-waiting": "error",
+        "cypress/assertion-before-screenshot": "warn",
+        "cypress/no-force": "warn",
+        "cypress/no-async-tests": "error",
+        "cypress/no-pause": "error",
+        "no-console": 1,
+        "semi": "warn"
     }
 }

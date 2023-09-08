@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const NotFound = () => (
   <div>
     <header>
-      <h1>404. Sorry, the page you are looking for doesn't exist.</h1>
+      <h1>404. Sorry, the page you are looking for doesn&apos;t exist.</h1>
       <Link to="/">Go Home</Link>
     </header>
   </div>
