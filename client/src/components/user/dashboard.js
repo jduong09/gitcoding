@@ -13,9 +13,11 @@ import SubscriptionDetail from '../subscription/subscriptionDetail';
 import ModalComponent from '../modalComponent';
 import logo from '../../assets/watering-can.png';
 
+/*
 const href = process.env && process.env.NODE_ENV === 'production'
   ? '/auth/logout'
   : 'http://localhost:5000/auth/logout';
+*/
 
 const todaysDate = new Date().toDateString();
 const year = todaysDate.slice(todaysDate.length - 4);
@@ -297,7 +299,7 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { pfp } = this.props;
+    const { pfp, handleLogOut } = this.props;
     const { subscriptions, addingSubscription, activeSubscription, isDeleting } = this.state;
     const subscriptionForm = addingSubscription
       ? <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm">
@@ -351,10 +353,10 @@ class Dashboard extends React.Component {
             </a>
             <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
               <li>
-                <a className="dropdown-item d-flex align-items-center" href={href}>
+                <button className="dropdown-item d-flex align-items-center" type="button" onClick={handleLogOut}>
                   <div className="p-2">Sign Out</div>
                   <FontAwesomeIcon icon={faSignOutAlt} />
-                </a>
+                </button>
               </li>
             </ul>
           </div>

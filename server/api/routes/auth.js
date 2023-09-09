@@ -84,23 +84,27 @@ router.get('/callback', (req, res, next) => {
   })(req, res, next);
 });
 
-router.get('/logout', (req, res) => {
-  req.logOut();
-  res.clearCookie('connect.sid');
+router.post('/logout', (req, res, next) => {
+  req.logout((err) => {
+    if (err) { 
+      return next(err); 
+    }
+    res.clearCookie('connect.sid');
 
-  const returnTo = BASE_URL;
+    const returnTo = BASE_URL;
 
-  const logoutURL = new URL(`https://${ISSUER}/v2/logout`);
+    const logoutURL = new URL(`https://${ISSUER}/v2/logout`);
 
-  const searchString = new URLSearchParams({
-    client_id: CLIENT_ID,
-    returnTo, 
+    const searchString = new URLSearchParams({
+      client_id: CLIENT_ID,
+      returnTo, 
+    });
+
+    logoutURL.search = searchString;
+
+    res.redirect(logoutURL);
+    res.end();
   });
-
-  logoutURL.search = searchString;
-
-  res.redirect(logoutURL);
-  res.end();
 });
 
 module.exports = router;

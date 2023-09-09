@@ -26,10 +26,20 @@ class User extends React.Component {
       toast.error(`Error fetching user info: ${error}`);
     } 
   }
+
+  static async handleLogOut() {
+    try {
+      await fetch(`/auth/logout`, {
+        method: 'POST'
+      });
+    } catch(error) {
+      toast.error(`Error logging out user: ${error}`);
+    }
+  }
   
   render() {
     const { isAuth, name, pfp } = this.state;
-    return (isAuth === true ) ? <Dashboard name={name} pfp={pfp} /> : <Navigate to='/' />;
+    return (isAuth === true ) ? <Dashboard name={name} pfp={pfp} handleLogOut={User.handleLogOut} /> : <Navigate to='/' />;
   };
 }
 
