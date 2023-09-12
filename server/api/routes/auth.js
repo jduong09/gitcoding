@@ -70,7 +70,7 @@ router.get('/callback', (req, res, next) => {
         }
       }
 
-      const { user_uuid, id } = data;
+      const { userUuid, id } = data;
       req.session.userInfo = {
         user_id: id,
         picture: user.picture
@@ -78,7 +78,7 @@ router.get('/callback', (req, res, next) => {
       
       // URGENT: Need to look at purpose of deleting returnTo
       delete req.session.returnTo;
-      await res.redirect(`${BASE_URL}/users/${user_uuid}`);
+      await res.redirect(`${BASE_URL}/users/${userUuid}`);
       res.end();
     });
   })(req, res, next);
