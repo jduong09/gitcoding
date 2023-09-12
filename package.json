@@ -37,7 +37,7 @@
     "cypress:open": "cypress open"
   },
   "engines": {
-    "node": "18.16.1",
-    "npm": "9.5.1"
+    "node": ">=18.16.1",
+    "npm": ">=9.5.1"
   }
 }
