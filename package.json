@@ -26,7 +26,8 @@
     "passport-auth0": "^1.4.1",
     "pg": "^8.7.1",
     "prettier": "^2.4.1",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "wait-on": "^7.0.1"
   },
   "scripts": {
     "start": "nodemon server/server.js",
@@ -34,7 +35,9 @@
     "build": "cd client && npm i && npm run build",
     "heroku-test": "cd client && npm run start",
     "heroku-postbuild": "npm run build",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "server": "npm run dev & wait-on http://localhost:3000",
+    "test": "concurrently \"npm run server\" \"cypress run\""
   },
   "engines": {
     "node": ">=18.16.1",

@@ -12,9 +12,9 @@ jobs:
       # and run all Cypress tests
       - name: Install dependencies
         run: npm install
-      - name: Cypress run
+      - name: Run e2e tests
         uses: cypress-io/github-action@v6
         with:
           build: npm run build
-          wait-on: "http://localhost:3000"
-          start: npm run dev
+          config-file: cypress.config.js
+          start: npm run test
