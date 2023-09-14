@@ -23,8 +23,7 @@
     "plugins": [
         "react",
         "jsx-a11y",
-        "prettier",
-        "cypress"
+        "prettier"
     ],
     "rules": {
         "react/function-component-definition": "off",
@@ -33,12 +32,6 @@
         "react/require-default-props": "off",
         "react/no-did-update-set-state": 0,
         "react/prop-types": "off",
-        "cypress/no-assigning-return-values": "error",
-        "cypress/no-unnecessary-waiting": "error",
-        "cypress/assertion-before-screenshot": "warn",
-        "cypress/no-force": "warn",
-        "cypress/no-async-tests": "error",
-        "cypress/no-pause": "error",
         "no-console": 1,
         "semi": "warn"
     }
