@@ -10,8 +10,7 @@
         "plugin:jsx-a11y/recommended",
         "airbnb",
         "airbnb/hooks",
-        "prettier",
-        "plugin:cypress/recommended"
+        "prettier"
     ],
     "parserOptions": {
         "ecmaFeatures": {
