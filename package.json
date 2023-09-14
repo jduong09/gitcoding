@@ -30,14 +30,14 @@
     "wait-on": "^7.0.1"
   },
   "scripts": {
-    "server": "nodemon server/server.js",
-    "start": "concurrently \"npm run server\" \"cd client && npm run start \"",
+    "start": "nodemon server/server.js",
+    "dev": "concurrently \"npm run start\" \"cd client && npm run start\"",
     "build": "cd client && npm i && npm run build",
     "cypress:open": "cypress open",
     "test": "concurrently \"npm run dev\" \"cypress run\""
   },
   "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=8.0.0"
+    "node": ">=18.16.1",
+    "npm": ">=9.5.1"
   }
 }
