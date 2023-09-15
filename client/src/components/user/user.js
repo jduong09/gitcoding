@@ -3,6 +3,10 @@ import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Dashboard from './dashboard';
 
+const href = process.env && process.env.NODE_ENV === 'production'
+  ? '/auth/logout'
+  : 'http://localhost:5000/auth/logout';
+
 class User extends React.Component {
   constructor(props) {
     super(props);
@@ -29,7 +33,7 @@ class User extends React.Component {
 
   static async handleLogOut() {
     try {
-      await fetch(`/auth/logout`, {
+      await fetch(`${href}`, {
         method: 'POST'
       });
     } catch(error) {
