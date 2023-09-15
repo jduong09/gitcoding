@@ -35,7 +35,10 @@ class User extends React.Component {
     try {
       await fetch(`${href}`, {
         method: 'POST'
-      });
+      }).then(response => response.json())
+        .then(data => {
+          window.location = data.url;
+        });
     } catch(error) {
       toast.error(`Error logging out user: ${error}`);
     }

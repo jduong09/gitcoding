@@ -9,7 +9,7 @@ const {BASE_URL, ISSUER, CLIENT_ID} = process.env;
 const router = express.Router();
 
 router.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader(
     'Access-Control-Allow-Methods',
     'OPTIONS, GET, POST, PUT, PATCH, DELETE'
@@ -85,7 +85,8 @@ router.get('/callback', (req, res, next) => {
 });
 
 router.post('/logout', (req, res, next) => {
-  req.logout((err) => {
+  console.log('hello i made it here');
+  req.logout(async (err) => {
     if (err) { 
       return next(err); 
     }
@@ -101,8 +102,8 @@ router.post('/logout', (req, res, next) => {
     });
 
     logoutURL.search = searchString;
-
-    res.redirect(logoutURL);
+    console.log(logoutURL);
+    await res.json({ url: logoutURL });
     res.end();
   });
 });
