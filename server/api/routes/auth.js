@@ -54,6 +54,18 @@ router.get('/callback', (req, res, next) => {
       let userExists;
       let data;
 
+      /*
+      If User exists on passport log in, find User by Id, set User into to userExists variable.
+
+      If User exists on passport login, but user is not found in the database, try to create user in the database.
+      Set newly created user to data variable. extract the user_uuid, id.
+      
+      Set userInfo object to include the user_id and users picture for frontend.
+
+      Delete sessions returnTo?
+
+      Redirect to users personal web page.
+      */
       // TODO: Handle alert on catch statement.
       try {
         userExists = await users.getUserByIdentifier(userInfo.identifier).then(user => data = user);
@@ -74,19 +86,22 @@ router.get('/callback', (req, res, next) => {
       req.session.userInfo = {
         user_id: id,
         picture: user.picture
-      };
-      
+      };      
       // URGENT: Need to look at purpose of deleting returnTo
       delete req.session.returnTo;
-      await res.redirect(`${BASE_URL}/users/${user_uuid}`);
+      await res.redirect(`/users/${user_uuid}`);
       res.end();
     });
   })(req, res, next);
 });
 
-router.post('/logout', (req, res, next) => {
-  console.log('hello i made it here');
-  req.logout(async (err) => {
+router.get('/validateCookie', async (req, res, next) => {
+  console.log('check cookie');
+});
+
+router.post('/logout', async (req, res, next) => {
+  console.log('In log out router', req.session);
+  await req.logout(async (err) => {
     if (err) { 
       return next(err); 
     }
@@ -102,11 +117,19 @@ router.post('/logout', (req, res, next) => {
     });
 
     logoutURL.search = searchString;
-    console.log(logoutURL);
     await res.json({ url: logoutURL });
     res.end();
   });
 });
+
+/*
+http://localhost:3000/users/654739fa-aecc-4681-9e72-bf96d6fa4fd4 jduong@umich.edu
+http://localhost:3000/users/e3fa89e3-c061-4195-8beb-d4f99da5a594 jd1443@gmail.com
+
+Signing into one account does not allow you to load a different one.
+Clearing session is incorrect.
+
+*/
 
 module.exports = router;
 

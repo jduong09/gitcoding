@@ -8,7 +8,7 @@ const confirmUser = async (req, res, next) => {
   const { userUuid: user_uuid } = req.params;
   try {
     const { rows: [user] } = await db.execute('server/sql/users/getByUserUuid.sql', { user_uuid });
-    if(user?.identifier === req.session?.passport?.user?.id) {
+    if (user?.identifier === req.session?.passport?.user?.id) {
       next();
       return;
     } else {
