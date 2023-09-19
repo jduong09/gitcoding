@@ -3,11 +3,13 @@ const bodyParser = require('body-parser');
 const expressSession = require('express-session');
 const PGSession = require('connect-pg-simple')(expressSession);
 const passport = require('passport');
+const cookieParser = require('cookie-parser');
 const Auth0Strategy = require('passport-auth0');
 const path = require('path');
 const dotenv = require('dotenv');
 const apiRouter = require('./api');
 const db = require('./db/db');
+const users = require('./api/actions/users');
 
 
 dotenv.config();
@@ -23,6 +25,7 @@ app.listen(PORT, () => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 /*
  * Session Configuration
@@ -35,55 +38,55 @@ const session = {
   }),
   secret: process.env.SESSION_SECRET,
   cookie: {
-    sameSite: 'Lax',
+    sameSite: 'lax',
     httpOnly: false,
+    maxAge: 24 * 12 * 60 * 100
   },
   resave: false,
   saveUninitialized: false,
 };
 
+// For using secure cookies in production, but allowing for testing in development,
+// following is an example of enabling this setup based on NODE_ENV in express
 if (process.env.NODE_ENV === 'production') {
   app.set('trust proxy', 1);
   // Serve secure cookies, requires HTTPS
   session.cookie.secure = true;
 }
 
+app.use(expressSession(session));
+
 /*
  * Passport Configuration
 */
-
 const strategy = new Auth0Strategy({
     domain: process.env.ISSUER,
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
     callbackURL: process.env.CALLBACK_URL,
     passReqToCallback: true
-  },
-  // verify callback, use 'passReqToCallback' in order to pass state into verify callback function? 
-  (req, accessToken, refreshToken, extraParams, profile, done) => done(null, profile)
-);
+  }, (req, accessToken, refreshToken, extraParams, profile, done) => done(null, profile));
 
 /*
  * App Configuration
 */
-
-// auth router attaches /login, /logout, and /callback routes to the baseURL
 // middleware for passport and expressSession.
 passport.use(strategy);
 
-passport.serializeUser((user, done) => done(null, user));
+passport.serializeUser((user, cb) => cb(null, { id: user.id, username: user.username, picture: user.picture }));
 
-passport.deserializeUser((user, done) => done(null, user));
+passport.deserializeUser((user, done) => done(null, user.id));
 
-app.use(expressSession(session));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(apiRouter);
 
 /**
  * Authentication check middleware
 */
 const checkAuthentication = (req, res, next) => {
-  if (req.isAuthenticated()) {
+  if (req.user) {
     next();
   } else {
     res.redirect('/');
@@ -91,11 +94,10 @@ const checkAuthentication = (req, res, next) => {
   }
 };
 
+// on route /users/:userUuid, check if request is authenticated.
 app.use('/users/:userUuid', checkAuthentication, (req, res, next) => {
   next();
 });
-
-app.use(apiRouter);
 
 /** 
  * @description Serve static files from express backend.

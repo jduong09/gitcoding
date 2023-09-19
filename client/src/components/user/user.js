@@ -34,7 +34,11 @@ class User extends React.Component {
   static async handleLogOut() {
     try {
       await fetch(`${href}`, {
-        method: 'POST'
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
       }).then(response => response.json())
         .then(data => {
           window.location = data.url;

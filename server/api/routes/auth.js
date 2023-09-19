@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 const users = require('../actions/users');
 
 dotenv.config();
-const {BASE_URL, ISSUER, CLIENT_ID} = process.env;
+const { BASE_URL, ISSUER, CLIENT_ID } = process.env;
 
 const router = express.Router();
 
@@ -14,7 +14,8 @@ router.use((req, res, next) => {
     'Access-Control-Allow-Methods',
     'OPTIONS, GET, POST, PUT, PATCH, DELETE'
   );
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Access-Control-Allow-Origin');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   next();
 });
 
@@ -31,8 +32,28 @@ router.get(
   })
 );
 
+router.get('/callback', passport.authenticate('auth0', { failureRedirect: '/login' }), async (req, res) => {
+  console.log('Google Auth User:', req.user);
+  console.log('Request session in Callback:', req.session);
+  if (req.user) {
+    const user = await users.getUserByIdentifier(req.user.id).then(data => data);
+    console.log('User info in callback:', user);
+
+    req.session.userInfo = {
+      user_id: user.id,
+      picture: user.picture
+    };
+    
+    // URGENT: Need to look at purpose of deleting returnTo
+    // delete req.session.returnTo;
+    await res.redirect(`/users/${user.user_uuid}`);
+  }
+});
+
+/*
 router.get('/callback', (req, res, next) => {
   passport.authenticate('auth0', (err, user) => {
+
     if (err) {
       return next(err);
     }
@@ -54,7 +75,6 @@ router.get('/callback', (req, res, next) => {
       let userExists;
       let data;
 
-      /*
       If User exists on passport log in, find User by Id, set User into to userExists variable.
 
       If User exists on passport login, but user is not found in the database, try to create user in the database.
@@ -65,7 +85,6 @@ router.get('/callback', (req, res, next) => {
       Delete sessions returnTo?
 
       Redirect to users personal web page.
-      */
       // TODO: Handle alert on catch statement.
       try {
         userExists = await users.getUserByIdentifier(userInfo.identifier).then(user => data = user);
@@ -86,7 +105,8 @@ router.get('/callback', (req, res, next) => {
       req.session.userInfo = {
         user_id: id,
         picture: user.picture
-      };      
+      };
+
       // URGENT: Need to look at purpose of deleting returnTo
       delete req.session.returnTo;
       await res.redirect(`/users/${user_uuid}`);
@@ -94,19 +114,17 @@ router.get('/callback', (req, res, next) => {
     });
   })(req, res, next);
 });
-
-router.get('/validateCookie', async (req, res, next) => {
-  console.log('check cookie');
-  console.log(req.session);
-});
+*/
 
 router.post('/logout', async (req, res, next) => {
   console.log('In log out router', req.session);
+  console.log('Cookies in request: ', req);
   await req.logout(async (err) => {
     if (err) { 
-      return next(err); 
+      return next(err);
     }
-    res.clearCookie('connect.sid');
+    req.session.destroy();
+    res.clearCookie('connect.sid', { domain: 'localhost', path: '/' });
 
     const returnTo = BASE_URL;
 
@@ -120,6 +138,8 @@ router.post('/logout', async (req, res, next) => {
     logoutURL.search = searchString;
     await res.json({ url: logoutURL });
     res.end();
+    /*
+    */
   });
 });
 
