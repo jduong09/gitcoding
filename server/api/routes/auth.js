@@ -97,6 +97,7 @@ router.get('/callback', (req, res, next) => {
 
 router.get('/validateCookie', async (req, res, next) => {
   console.log('check cookie');
+  console.log(req.session);
 });
 
 router.post('/logout', async (req, res, next) => {
@@ -125,10 +126,8 @@ router.post('/logout', async (req, res, next) => {
 /*
 http://localhost:3000/users/654739fa-aecc-4681-9e72-bf96d6fa4fd4 jduong@umich.edu
 http://localhost:3000/users/e3fa89e3-c061-4195-8beb-d4f99da5a594 jd1443@gmail.com
-
 Signing into one account does not allow you to load a different one.
 Clearing session is incorrect.
-
 */
 
 module.exports = router;

@@ -79,6 +79,7 @@ app.use(expressSession(session));
 app.use(passport.initialize());
 app.use(passport.session());
 
+
 /**
  * Authentication check middleware
 */
@@ -91,12 +92,12 @@ const checkAuthentication = (req, res, next) => {
   }
 };
 
+app.use(apiRouter);
+
 
 app.use('/users/:userUuid', checkAuthentication, (req, res, next) => {
   next();
 });
-
-app.use(apiRouter);
 
 /** 
  * @description Serve static files from express backend.
