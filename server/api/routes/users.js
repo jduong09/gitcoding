@@ -20,10 +20,12 @@ router.route('/')
     }
   });
 
+  /*
 router.get('/:userUuid', async (req, res) => {
   console.log('hit /users/user_uuid route', req.session);
   await res.redirect(`${process.env.BASE_URL}/users/${req.params.userUuid}`);
 });
+*/
 
 router.get('/:userUuid/userInfo', async (req, res) => {
   const { user }  = req.session.passport;
