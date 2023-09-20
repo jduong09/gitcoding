@@ -10,6 +10,29 @@ const { confirmUser } = require('./middleware');
 
 const router = express.Router({ mergeParams: true });
 
+const updateAllUsersSubscriptions = async (req) => {
+  const { user_id } = req.session.userInfo;
+
+  try {
+    const allSubscriptions = await getSubscriptionsByUserId(user_id);
+
+    const updatedSubscriptions = await Promise.all(allSubscriptions.map(({ dueDate, subscriptionUuid }) =>
+      updateNextDueDate(dueDate, subscriptionUuid)));
+    
+    const lateDueDates = updatedSubscriptions.reduce((lateSubs, subscription) => {
+        if (subscription?.dueDate?.lateDueDate) {
+          lateSubs.push({ name: subscription.name, date: subscription.dueDate.lateDueDate});
+        }
+        return lateSubs;
+    }, []);
+
+    return lateDueDates;
+  } catch(error) {
+    console.log('Error while updating user\'s subscriptions: ', error);
+    return null;
+  }
+}
+
 router.route('/')
   .all(confirmUser)
   .get(async (req, res) => {
@@ -53,27 +76,5 @@ router.delete('/:subscriptionUuid', async (req, res) => {
   }
 });
 
-const updateAllUsersSubscriptions = async (req) => {
-  const { user_id } = req.session.userInfo;
-
-  try {
-    const allSubscriptions = await getSubscriptionsByUserId(user_id);
-
-    const updatedSubscriptions = await Promise.all(allSubscriptions.map(({ dueDate, subscriptionUuid }) =>
-      updateNextDueDate(dueDate, subscriptionUuid)));
-    
-    const lateDueDates = updatedSubscriptions.reduce((lateSubs, subscription) => {
-        if (subscription?.dueDate?.lateDueDate) {
-          lateSubs.push({ name: subscription.name, date: subscription.dueDate.lateDueDate});
-        }
-        return lateSubs;
-    }, []);
-
-    return lateDueDates;
-  } catch(error) {
-    console.log('Error while updating user\'s subscriptions: ', error);
-    return null;
-  }
-}
 
 module.exports = router;

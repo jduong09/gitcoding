@@ -1,7 +1,9 @@
 const express = require('express');
+const dotenv = require('dotenv');
 const subscriptions = require('./subscriptions');
 const { getUsers } = require('../actions/users');
-const dotenv = require('dotenv');
+const { checkAuthentication } = require('./middleware');
+
 
 dotenv.config();
 
@@ -19,9 +21,13 @@ router.route('/')
     }
   });
 
-  /*
-router.get('/:userUuid', async (req, res) => {
-  console.log('hit /users/user_uuid route', req.session);
+router.use('/:userUuid', checkAuthentication, (req, res, next) => next());
+/*
+
+THIS ROUTE IS USED FOR LOCAL DEVELOPMENT: Frontend http://localhost:3000 makes request 'http://localhost:5000/users/:userId'
+
+
+router.get('/:userUuid', checkAuthentication, async (req, res) => {
   await res.redirect(`${process.env.BASE_URL}/users/${req.params.userUuid}`);
 });
 */

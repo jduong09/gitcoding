@@ -34,10 +34,11 @@ router.get(
 
 router.get('/callback', passport.authenticate('auth0', { failureRedirect: '/login' }), async (req, res) => {
   if (req.user) {
-    const user = await users.getUserByIdentifier(req.user.id).then(data => data);
+    const user = await users.getUserByIdentifier(req.user.identifier).then(data => data);
     req.session.userInfo = {
       user_id: user.id,
-      picture: user.picture
+      name: user.name,
+      picture: req.user.picture
     };
     
     // URGENT: Need to look at purpose of deleting returnTo

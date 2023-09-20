@@ -65,25 +65,28 @@ const strategy = new Auth0Strategy({
     clientSecret: process.env.CLIENT_SECRET,
     callbackURL: process.env.CALLBACK_URL,
     passReqToCallback: true
-  }, async (req, accessToken, refreshToken, extraParams, profile, done) => {
-    done(null, profile);
-
+  }, async (req, accessToken, refreshToken, extraParams, profile, done) => {    
+    let data;
+    
+    const user = await users.getUserByIdentifier(profile.id).then(response => data = response);
+    
+    if (!user) {
+      data = await users.createUser({
+        name: profile.displayName,
+        identifier: profile.id
+      });
+    }
+    
     const userInfo = {
-      name: profile.displayName,
-      identifier: profile.id
+      name: data.name,
+      identifier: data.identifier,
+      picture: profile.picture,
+      user_uuid: data.user_uuid
     };
 
-    let data;
-
-    const user = await users.getUserByIdentifier(profile.id).then(response => data = response);
-
     // TODO: Handle alert on catch statement.
-    if (!user) {
-      data = await users.createUser(userInfo);     
-    }
-
-    done(null, data);
-  });
+    done(null, userInfo);
+});
 
 /*
  * App Configuration
@@ -91,31 +94,15 @@ const strategy = new Auth0Strategy({
 // middleware for passport and expressSession.
 passport.use(strategy);
 
-passport.serializeUser((user, cb) => cb(null, { id: user.id, username: user.username, picture: user.picture }));
+passport.serializeUser((user, cb) => cb(null, { id: user.identifier, displayName: user.name, picture: user.picture }));
 
-passport.deserializeUser((user, done) => done(null, user.id));
+passport.deserializeUser((user, done) => done(null, { id: user.identifier, displayName: user.name, picture: user.picture }));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(apiRouter);
 
-/**
- * Authentication check middleware
-*/
-const checkAuthentication = (req, res, next) => {
-  if (req.user) {
-    next();
-  } else {
-    res.redirect('/');
-    res.end();
-  }
-};
-
-// on route /users/:userUuid, check if request is authenticated.
-app.use('/users/:userUuid', checkAuthentication, (req, res, next) => {
-  next();
-});
 
 /** 
  * @description Serve static files from express backend.

@@ -11,8 +11,6 @@ const confirmUser = async (req, res, next) => {
     if (user?.identifier === req.session?.passport?.user?.id) {
       next();
       return;
-    } else {
-      res.sendStatus(404);
     }
   } catch(error) {
     console.log('Error confirming user: ', error);
@@ -20,6 +18,19 @@ const confirmUser = async (req, res, next) => {
   }
 };
 
+/**
+ * Authentication check middleware
+*/
+const checkAuthentication = (req, res, next) => {
+  if (req.user) {
+    next();
+  } else {
+    res.redirect('/');
+    res.end();
+  }
+};
+
 module.exports = {
-  confirmUser
+  confirmUser,
+  checkAuthentication
 };
