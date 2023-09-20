@@ -22,8 +22,8 @@ router.route('/')
   });
 
 router.use('/:userUuid', checkAuthentication, (req, res, next) => next());
-/*
 
+/*
 THIS ROUTE IS USED FOR LOCAL DEVELOPMENT: Frontend http://localhost:3000 makes request 'http://localhost:5000/users/:userId'
 
 
