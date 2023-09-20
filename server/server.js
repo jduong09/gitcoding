@@ -65,7 +65,25 @@ const strategy = new Auth0Strategy({
     clientSecret: process.env.CLIENT_SECRET,
     callbackURL: process.env.CALLBACK_URL,
     passReqToCallback: true
-  }, (req, accessToken, refreshToken, extraParams, profile, done) => done(null, profile));
+  }, async (req, accessToken, refreshToken, extraParams, profile, done) => {
+    done(null, profile);
+
+    const userInfo = {
+      name: profile.displayName,
+      identifier: profile.id
+    };
+
+    let data;
+
+    const user = await users.getUserByIdentifier(profile.id).then(response => data = response);
+
+    // TODO: Handle alert on catch statement.
+    if (!user) {
+      data = await users.createUser(userInfo);     
+    }
+
+    done(null, data);
+  });
 
 /*
  * App Configuration
