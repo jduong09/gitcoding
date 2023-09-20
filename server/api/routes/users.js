@@ -11,7 +11,6 @@ router.use('/:userUuid/subscriptions', subscriptions);
 
 router.route('/')
   .get(async (req, res) => {
-    console.log('/users route', req.session);
     try {
       const data = await getUsers();
       res.status(200).json(data);

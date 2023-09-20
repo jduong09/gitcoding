@@ -33,12 +33,8 @@ router.get(
 );
 
 router.get('/callback', passport.authenticate('auth0', { failureRedirect: '/login' }), async (req, res) => {
-  console.log('Google Auth User:', req.user);
-  console.log('Request session in Callback:', req.session);
   if (req.user) {
     const user = await users.getUserByIdentifier(req.user.id).then(data => data);
-    console.log('User info in callback:', user);
-
     req.session.userInfo = {
       user_id: user.id,
       picture: user.picture
@@ -117,8 +113,6 @@ router.get('/callback', (req, res, next) => {
 */
 
 router.post('/logout', async (req, res, next) => {
-  console.log('In log out router', req.session);
-  console.log('Cookies in request: ', req);
   await req.logout(async (err) => {
     if (err) { 
       return next(err);
