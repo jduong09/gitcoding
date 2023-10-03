@@ -22,6 +22,7 @@ const confirmUser = async (req, res, next) => {
  * Authentication check middleware
 */
 const checkAuthentication = (req, res, next) => {
+  console.log('hit function');
   if (req.user) {
     next();
   } else {

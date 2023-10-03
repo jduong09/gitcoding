@@ -5,7 +5,7 @@ module.exports = defineConfig({
   e2e: {
     baseUrl: 'http://localhost:3000',
     supportFile: false,
-    specPattern: 'cypress/e2e/home_page_spec.js'
+    specPattern: 'cypress/e2e/auth_spec.js'
   },
   env: {
     CLIENT_ID: process.env.CLIENT_ID,
