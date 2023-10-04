@@ -136,6 +136,16 @@ router.post('/logout', async (req, res, next) => {
   });
 });
 
+router.get('/checkAuth', (req, res) => {
+  if (req.user) {
+    res.json({ authenticated: true });
+    res.end();
+  } else {
+    res.json({ authenticated: false });
+    res.end();
+  }
+});
+
 module.exports = router;
 
 
