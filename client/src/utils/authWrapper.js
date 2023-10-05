@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
-// import { Outlet } from 'react-router-dom';
 import Login from '../components/user/login';
 import User from '../components/user/user';
 
 const ProtectedRoute = () => {
-  const [user, setUser] = useState(null);
+  // const [isLoading, setIsLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(false);
+  
   useEffect(() => {
     fetch('/auth/checkAuth')
       .then(data => data.json())
-      .then(resp => setUser(resp.authenticated));
-    console.log('i fire once');
+      .then(resp => setUser(resp.authenticated))
+      .then(() => setIsLoggedIn(true));
   }, []);
 
   console.log(user);
+
+  if (!isLoggedIn) {
+    return <div>Loading...</div>;
+  }
 
   return (
     user ? <User /> : <Login />

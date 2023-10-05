@@ -40,6 +40,8 @@ router.get('/callback', passport.authenticate('auth0', { failureRedirect: '/logi
       name: user.name,
       picture: req.user.picture
     };
+
+    const domain = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3000';
     
     // URGENT: Need to look at purpose of deleting returnTo
     // delete req.session.returnTo;
