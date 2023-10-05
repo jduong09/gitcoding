@@ -3,7 +3,6 @@ import Login from '../components/user/login';
 import User from '../components/user/user';
 
 const ProtectedRoute = () => {
-  // const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(false);
   
@@ -13,8 +12,6 @@ const ProtectedRoute = () => {
       .then(resp => setUser(resp.authenticated))
       .then(() => setIsLoggedIn(true));
   }, []);
-
-  console.log(user);
 
   if (!isLoggedIn) {
     return <div>Loading...</div>;

@@ -4,7 +4,6 @@ const subscriptions = require('./subscriptions');
 const { getUsers } = require('../actions/users');
 const { checkAuthentication } = require('./middleware');
 
-
 dotenv.config();
 
 const router = express.Router();
@@ -25,9 +24,9 @@ router.route('/')
 router.use('/:userUuid', checkAuthentication, (req, res, next) => next());
 */
 router.get('/:userUuid', checkAuthentication, async (req, res) => {
-  console.log('hit :userUuid route');
   await res.redirect(`${process.env.BASE_URL}/users/${req.params.userUuid}`);
 });
+
 router.get('/:userUuid/userInfo', checkAuthentication, async (req, res) => {
   const { user }  = req.session.passport;
   res.status(200).json({ name: user.displayName, pfp: user.picture });

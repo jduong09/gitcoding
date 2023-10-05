@@ -4,7 +4,6 @@ import { Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import '../toast.scss';
 import '../css/App.css';
-// import User from './user/user';
 import LandingPage from './landingPage';
 import NotFound from './notFound';
 import ProtectedRoute from '../utils/authWrapper';

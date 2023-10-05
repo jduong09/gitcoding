@@ -22,10 +22,6 @@ class User extends React.Component {
         .then(response => response.json())
         .then(userInfo => this.setState({ name: userInfo.name, pfp: userInfo.pfp }));
 
-      // const userInfo = await response.json();
-      // const { name, pfp } = userInfo;
-
-      // this.setState({ name, pfp });
     } catch(error) {
       toast.error(`Error fetching user info: ${error}`);
     } 

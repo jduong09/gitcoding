@@ -35,7 +35,8 @@
     "dev": "concurrently \"npm run start\" \"cd client && npm run start\"",
     "build": "npm i && cd client && npm i && npm run build",
     "cypress:open": "cypress open",
-    "test": "concurrently \"npm run dev\" \"cypress run\""
+    "test": "concurrently \"npm run dev\" \"cypress run\"",
+    "cypress:test": "concurrently \"npm run dev\" \"npm run cypress:open\""
   },
   "engines": {
     "node": ">=18.16.1",

@@ -40,80 +40,12 @@ router.get('/callback', passport.authenticate('auth0', { failureRedirect: '/logi
       name: user.name,
       picture: req.user.picture
     };
-
-    const domain = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3000';
     
     // URGENT: Need to look at purpose of deleting returnTo
     // delete req.session.returnTo;
     await res.redirect(`/users/${user.user_uuid}`);
   }
 });
-
-/*
-router.get('/callback', (req, res, next) => {
-  passport.authenticate('auth0', (err, user) => {
-
-    if (err) {
-      return next(err);
-    }
-
-    if (!user) {
-      return res.redirect('/');
-    }
-
-    req.logIn(user, async (error) => {
-      if (error) {
-        return next(error);
-      }
-      
-      const userInfo = {
-        name: user.displayName,
-        identifier: user.id
-      };
-      
-      let userExists;
-      let data;
-
-      If User exists on passport log in, find User by Id, set User into to userExists variable.
-
-      If User exists on passport login, but user is not found in the database, try to create user in the database.
-      Set newly created user to data variable. extract the user_uuid, id.
-      
-      Set userInfo object to include the user_id and users picture for frontend.
-
-      Delete sessions returnTo?
-
-      Redirect to users personal web page.
-      // TODO: Handle alert on catch statement.
-      try {
-        userExists = await users.getUserByIdentifier(userInfo.identifier).then(user => data = user);
-      } catch(e) {
-        return res.redirect('/');
-      }
-
-      // TODO: Handle alert on catch statement.
-      if (!userExists) {
-        try {
-          data = await users.createUser(userInfo);
-        } catch(e) {
-          return res.redirect('/');
-        }
-      }
-
-      const { user_uuid, id } = data;
-      req.session.userInfo = {
-        user_id: id,
-        picture: user.picture
-      };
-
-      // URGENT: Need to look at purpose of deleting returnTo
-      delete req.session.returnTo;
-      await res.redirect(`/users/${user_uuid}`);
-      res.end();
-    });
-  })(req, res, next);
-});
-*/
 
 router.post('/logout', async (req, res, next) => {
   await req.logout(async (err) => {

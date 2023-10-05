@@ -12,6 +12,8 @@ module.exports = defineConfig({
     CLIENT_SECRET: process.env.CLIENT_SECRET,
     DOMAIN: process.env.ISSUER,
     CALLBACK_URL: process.env.CALLBACK_URL,
-    PORT: process.env.PORT
+    PORT: process.env.PORT,
+    AUTH0_username: process.env.AUTH0_username,
+    AUTH0_password: process.env.AUTH0_password
   },
 });
