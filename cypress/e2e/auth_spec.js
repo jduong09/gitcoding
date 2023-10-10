@@ -1,13 +1,20 @@
-const { _ } = Cypress;
+function loginViaAuth0Ui(processUsername, processPassword) {
+  // const sentArgs = { username: processUsername, password: processPassword };
+  cy.visit('/');
 
-function loginViaAuth0Ui(authUsername, authPassword) {
-  const args = { authUsername, authPassword }; 
-  cy.origin(Cypress.env('DOMAIN'), { args }, () => {
-    cy.get('input#username').type();
-    cy.get('input#password').type( , { log: false });
-    // cy.contains('button[value=default]', 'Continue').click();
+  cy.get('a').click();
+
+  const sentArgs = { username: processUsername, password: processPassword };
+  
+  cy.origin(Cypress.env('DOMAIN'), { args: sentArgs }, ({ username, password }) => {
+    cy.get('input#username').type(username);
+    cy.get('input#password').type(`${password}{enter}`, { log: false });
+
   });
-  cy.url().should('equal', 'http://localhost:3000/');
+  cy.getCookie('connect.sid').should('exist');
+  cy.get('h1#nav-header').should('have.html', 'Water Your Subs');
+  /*
+  */
 }
 
 Cypress.Commands.add('loginViaAuth0Ui', (username, password) => {
@@ -36,15 +43,12 @@ describe('Logging In - Single Sign on', () => {
       // Should redirect to login page.
       // Should contain login form.
       cy.getCookie('connect.sid').should('not.exist');
-      // How to check that it redirects to our login form, which is controlled by OAuth.
     });
-
+    
+    // How to check that it redirects to our login form, which is controlled by OAuth.
     it('can authenticate with cy.request', () => {
-      cy.loginViaAuth0Ui('test@aol.com', 'Password123');
-
-      cy.getCookie('cypress-session-cookie').should('exist');
-
-      cy.get('h1').should('contain', 'Welcome to the Dashboard');
+      cy.getCookie('connect.sid').should('not.exist');
+      loginViaAuth0Ui(Cypress.env('AUTH0_USERNAME'), Cypress.env('AUTH0_PASSWORD'));
     });
   });
 });

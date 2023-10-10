@@ -20,10 +20,9 @@ router.route('/')
     }
   });
 
-/*
-router.use('/:userUuid', checkAuthentication, (req, res, next) => next());
-*/
-router.get('/:userUuid', checkAuthentication, async (req, res) => {
+// router.use('/:userUuid', checkAuthentication, (req, res, next) => next());
+
+  router.get('/:userUuid', checkAuthentication, async (req, res) => {
   await res.redirect(`${process.env.BASE_URL}/users/${req.params.userUuid}`);
 });
 
