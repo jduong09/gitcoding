@@ -1,35 +1,4 @@
-function loginViaAuth0Ui(processUsername, processPassword) {
-  // const sentArgs = { username: processUsername, password: processPassword };
-  cy.visit('/');
-
-  cy.get('a').click();
-
-  const sentArgs = { username: processUsername, password: processPassword };
-  
-  cy.origin(Cypress.env('DOMAIN'), { args: sentArgs }, ({ username, password }) => {
-    cy.get('input#username').type(username);
-    cy.get('input#password').type(`${password}{enter}`, { log: false });
-
-  });
-  cy.getCookie('connect.sid').should('exist');
-  cy.get('h1#nav-header').should('have.html', 'Water Your Subs');
-  /*
-  */
-}
-
-Cypress.Commands.add('loginViaAuth0Ui', (username, password) => {
-  const log = Cypress.log({
-    name: 'loginViaAuth0Ui',
-  });
-
-  log.snapshot('before');
-
-  loginViaAuth0Ui(username, password);
-  log.snapshot('after');
-  log.end();
-});
-
-describe('Logging In - Single Sign on', () => {
+describe('Logging In', () => {
 
   context('Use redirectTo and a session cookie to login', () => {
     /*
@@ -48,7 +17,25 @@ describe('Logging In - Single Sign on', () => {
     // How to check that it redirects to our login form, which is controlled by OAuth.
     it('can authenticate with cy.request', () => {
       cy.getCookie('connect.sid').should('not.exist');
-      loginViaAuth0Ui(Cypress.env('AUTH0_USERNAME'), Cypress.env('AUTH0_PASSWORD'));
+      cy.loginViaAuth0Ui(Cypress.env('AUTH0_USERNAME'), Cypress.env('AUTH0_PASSWORD'));
+
+      cy.logoutUser();
+    });
+  });
+});
+
+describe('Logging Out', () => {
+  context('Use button to log user out', () => {
+    it('can log into app, and then click log out button and log out', () => {
+      // Show that user is not locked in, if cookie does not exist
+      cy.getCookie('connect.sid').should('not.exist');
+      // Log in user, here cookie should exist.
+      cy.loginViaAuth0Ui(Cypress.env('AUTH0_USERNAME'), Cypress.env('AUTH0_PASSWORD'));
+      // Log Out user, clicking log out button.
+      cy.logoutUser();
+      // Cookie should not exist, user should be logged out. Page should be on landing page.
+      cy.url().should('eq', 'http://localhost:3000/');
+      cy.getCookie('connect.sid').should('not.exist');
     });
   });
 });

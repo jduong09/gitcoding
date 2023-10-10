@@ -4,7 +4,7 @@ require('dotenv').config();
 module.exports = defineConfig({
   e2e: {
     baseUrl: 'http://localhost:3000',
-    supportFile: false,
+    supportFile: 'cypress/support/index.js',
     specPattern: 'cypress/e2e/'
   },
   experimentalModifyObstructiveThirdPartyCode: true,
@@ -15,6 +15,7 @@ module.exports = defineConfig({
     CALLBACK_URL: process.env.CALLBACK_URL,
     PORT: process.env.PORT,
     AUTH0_USERNAME: process.env.AUTH0_USERNAME,
-    AUTH0_PASSWORD: process.env.AUTH0_PASSWORD
+    AUTH0_PASSWORD: process.env.AUTH0_PASSWORD,
+    AUTH0_USER_UUID: process.env.AUTH0_USER_UUID
   },
 });

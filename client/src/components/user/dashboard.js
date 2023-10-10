@@ -342,7 +342,7 @@ class Dashboard extends React.Component {
     return (
       <div className="h-100 d-flex flex-column">
         <header className="navbar py-2 px-3 d-flex justify-content-between align-items-center text-dark border-bottom shadow-sm">
-          <a className="navbar-brand d-flex text-dark" href="#changeThis">
+          <a className="navbar-brand d-flex text-dark" id="link-logo" href="#changeThis">
             <img src={logo} alt="wateringCanIcon" height="60" />
             <div className="align-self-center d-none d-md-block">Water Your Subs</div>
           </a>
@@ -353,7 +353,7 @@ class Dashboard extends React.Component {
             </a>
             <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
               <li>
-                <button className="dropdown-item d-flex align-items-center" type="button" onClick={handleLogOut}>
+                <button className="dropdown-item d-flex align-items-center" id="btn-logout" type="button" onClick={handleLogOut}>
                   <div className="p-2">Sign Out</div>
                   <FontAwesomeIcon icon={faSignOutAlt} />
                 </button>
@@ -377,6 +377,7 @@ class Dashboard extends React.Component {
               <div className="d-none d-sm-none d-md-block">
                 <button
                   className="col-12 p-4 btn border-dashed border-primary btn-outline-primary"
+                  id="btn-subscription-create"
                   type="button"
                   onClick={() => this.handleDashboardChange('createSubscription')}
                 >

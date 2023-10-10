@@ -211,14 +211,14 @@ class SubscriptionForm extends React.Component {
           <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-reminder-days">
             <div className="col-12 col-md-3 fw-bolder">Alert</div>
             <div className="col-12 align-self-start col-md-7">
-              <input className="form-control" type="number" name="subscription-reminder-days" min="0" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} required />
+              <input className="form-control" type="number" id="subscription-reminder-days" name="subscription-reminder-days" min="0" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} required />
             </div>
           </label>
 
           <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-amount">
             <div className="col-12 col-md-3 fw-bolder">Amount</div>
             <div className="col-12 align-self-start col-md-7">
-              <input className="form-control" type="number" name="subscription-amount" min="0" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} required />
+              <input className="form-control" type="number" id="subscription-amount" name="subscription-amount" min="0" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} required />
             </div>
           </label>
 
@@ -253,8 +253,8 @@ class SubscriptionForm extends React.Component {
           {this.renderSwitch(frequency)}
 
           <div className="col-12 form-label text-center">
-            <input className="btn btn-primary form-control d-none d-sm-none d-md-block" type="submit" aria-label="closeDesktop" value="Submit" />
-            <input className="btn btn-primary form-control-sm d-md-none" type="submit" aria-label="closeMobile" value="Submit" />
+            <input className="btn btn-primary form-control d-none d-sm-none d-md-block" type="submit" id="input-submit-desktop" aria-label="closeDesktop" value="Submit" />
+            <input className="btn btn-primary form-control-sm d-md-none" type="submit" id="input-submit-mobile" aria-label="closeMobile" value="Submit" />
           </div>
         </form>
       </section>

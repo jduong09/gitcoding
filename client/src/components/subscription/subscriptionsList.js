@@ -27,7 +27,7 @@ const SubscriptionsList = ({ subscriptions, setEditingSubscription, handleDashbo
   return (
     <div>
       <h2 className="text-start">Subscriptions</h2>
-      <ul className="list-group">
+      <ul className="list-group" id="list-subscriptions">
         {subscriptionsList}
       </ul>
     </div>
