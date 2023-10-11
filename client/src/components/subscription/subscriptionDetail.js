@@ -83,7 +83,7 @@ const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, o
             </button>
             <button className="btn btn-primary w-100 d-none d-md-block" type="button" onClick={handleEdit}>Edit</button>
           </div>
-          <button className="col-3 btn btn-primary" type="button" onClick={clickDelete}>Delete</button>
+          <button className="col-3 btn btn-primary" id="btn-subscription-delete" type="button" onClick={clickDelete}>Delete</button>
         </div>
     </div>
   );
