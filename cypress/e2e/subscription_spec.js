@@ -3,15 +3,12 @@ describe('Subscription API', () => {
     // Before each test login to test user.
     cy.loginViaAuth0Ui(Cypress.env('AUTH0_USERNAME'), Cypress.env('AUTH0_PASSWORD'));
   });
-  
-  // Before Each, needs to be logged in.
+
   context('Creating a subscription', () => {
     it('creates a subscription with required inputs inputted.', () => {
       cy.visit(`http://localhost:3000/users/${Cypress.env('AUTH0_USER_UUID')}`);
-      // Click Create Subscription Button
       cy.get('button#btn-subscription-create').click();
 
-      // Form should be shown.
       cy.get('input#subscription-name').type('Test Subscription');
       cy.get('input#subscription-reminder-days').type(1);
       cy.get('input#subscription-amount').type(1);
@@ -21,6 +18,23 @@ describe('Subscription API', () => {
 
       cy.get('ul#list-subscriptions').children().should('have.length', 1);
       cy.get('ul#list-subscriptions').children().should('not.have.length', 2);
+    });
+
+    it('creates a subscription with nickname inputted', () => {
+      cy.visit(`http://localhost:3000/users/${Cypress.env('AUTH0_USER_UUID')}`);
+      cy.get('button#btn-subscription-create').click();
+
+      cy.get('input#subscription-name').type('Second Test Subscription');
+      cy.get('input#subscription-nickname').type('hehe');
+
+      cy.get('input#subscription-reminder-days').type(2);
+      cy.get('input#subscription-amount').type(2);
+      cy.get('select#due-date-select').select('yearly');
+      cy.get('div.DayPicker-Day[aria-label="Mon Oct 02 2023"]').click({ multiple: true, force: true });
+      cy.get('input#input-submit-desktop').click();
+
+      cy.get('ul#list-subscriptions').children().should('have.length', 2);
+      cy.get('ul#list-subscriptions').children().should('not.have.length', 3);
     });
   });
 
@@ -45,12 +59,11 @@ describe('Subscription API', () => {
   });
 
   context('Updating a subscription', () => {
-    beforeEach(() => {
-      cy.get('ul#list-subscriptions li:first').click();
-      cy.get('button#btn-subscription-update').click();
-    });
 
     it('updating name works correctly', () => {
+      cy.get('ul#list-subscriptions li:first').click();
+      cy.get('button#btn-subscription-update').click();
+
       cy.get('div#div-subscription-update').find('input#subscription-name').type('{selectall}{backspace}Updated Test');
 
       cy.get('div#div-subscription-update').find('input#input-submit-desktop').click();
@@ -59,6 +72,20 @@ describe('Subscription API', () => {
       cy.get('ul#list-subscriptions li:first').click();
       
       cy.get('div#div-subscription-detail').find('h2').should('have.text', 'Updated Test');
+    });
+
+    it('updating name that has nickname displays nickname in title and name in info list.', () => {
+      cy.get('ul#list-subscriptions li:last').click();
+      cy.get('button#btn-subscription-update').click();
+
+      cy.get('div#div-subscription-update').find('input#subscription-name').type('{selectall}{backspace}Second Updated Subscription');
+      cy.get('div#div-subscription-update').find('input#input-submit-desktop').click();
+
+      cy.wait(500);
+      cy.get('ul#list-subscriptions li:last').click();
+      cy.wait(500);
+      cy.get('div#div-subscription-detail').find('ul li:first span').should('have.text', 'Second Updated Subscription');
+
     });
   });
 
@@ -69,7 +96,14 @@ describe('Subscription API', () => {
       cy.get('button#btn-subscription-delete').click();
       cy.get('button#btn-modal-subscription-delete').click();
   
-      cy.get('ul#list-subscriptions').children().should('have.length', 0);
+      cy.get('ul#list-subscriptions').children().should('have.length', 1);
+
+      cy.wait(1000);
+
+      cy.get('ul#list-subscriptions li:first').click();
+  
+      cy.get('button#btn-subscription-delete').click();
+      cy.get('button#btn-modal-subscription-delete').click();
     });
   });
 });

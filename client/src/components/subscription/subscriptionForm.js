@@ -204,7 +204,7 @@ class SubscriptionForm extends React.Component {
           <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-nickname">
             <div className="col-12 col-md-3 fw-bolder">Nickname</div>
             <div className="col-12 align-self-start col-md-7">
-              <input className="form-control" type="text" placeholder="e.g. My favorite streaming site"name="subscription-nickname" value={nickname} onChange={(event) => this.handleChange(event, 'nickname')}  /> 
+              <input className="form-control" type="text" id="subscription-nickname" placeholder="e.g. My favorite streaming site"name="subscription-nickname" value={nickname} onChange={(event) => this.handleChange(event, 'nickname')}  /> 
             </div>
           </label>
 
