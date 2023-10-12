@@ -266,7 +266,7 @@ class Dashboard extends React.Component {
       case 'updateSubscription': 
         return (
           <div className="h-90 d-flex align-items-start">
-            <div className="col-11 p-1 mx-auto flex-column d-none d-md-flex">
+            <div className="col-11 p-1 mx-auto flex-column d-none d-md-flex"  id="div-subscription-update">
               <div className="d-flex mb-4 justify-content-between align-items-center">
                 <h2 className="text-start">Update Subscription</h2>
                 <button className="btn my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.handleDashboardChange('subscriptionDetail')} >

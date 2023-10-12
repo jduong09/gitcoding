@@ -45,7 +45,21 @@ describe('Subscription API', () => {
   });
 
   context('Updating a subscription', () => {
+    beforeEach(() => {
+      cy.get('ul#list-subscriptions li:first').click();
+      cy.get('button#btn-subscription-update').click();
+    });
 
+    it('updating name works correctly', () => {
+      cy.get('div#div-subscription-update').find('input#subscription-name').type('{selectall}{backspace}Updated Test');
+
+      cy.get('div#div-subscription-update').find('input#input-submit-desktop').click();
+
+      cy.wait(500);
+      cy.get('ul#list-subscriptions li:first').click();
+      
+      cy.get('div#div-subscription-detail').find('h2').should('have.text', 'Updated Test');
+    });
   });
 
   context('Deleting a subscription', () => {
