@@ -241,7 +241,7 @@ class Dashboard extends React.Component {
         );
       case 'createSubscription':
         return (
-          <div className="h-90 d-flex align-items-start">
+          <div className="h-90 d-flex align-items-start" id="div-subscription-create">
             <div className="col-11 p-1 mx-auto flex-column d-none d-md-flex">
               <div className="d-flex mb-4 justify-content-between align-items-center">
                 <h2 className="text-start">Create Subscription</h2>
