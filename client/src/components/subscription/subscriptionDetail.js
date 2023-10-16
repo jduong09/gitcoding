@@ -4,7 +4,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { parseWeeklyDates, parseMonthlyDates } from '../../utils/frontendDateUtils';
 import DetailCalendar from '../date/detailCalendar';
 
-const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, openDeleteModal }) => {
+const SubscriptionDetail = ({ setEditingSubscription, setActiveSubscription, handleDashboard, details, openDeleteModal }) => {
   const { name, nickname, dueDate, reminderDays, amount } = details;
 
   const [repeatString, setRepeatString] = useState('');
@@ -33,14 +33,16 @@ const SubscriptionDetail = ({ setActiveSubscription, handleDashboard, details, o
 
   const handleClose = useCallback((e) => {
     e.stopPropagation();
+    setEditingSubscription(false);
     handleDashboard('dashboardCalendar');
-  }, [handleDashboard]);
+  }, [setEditingSubscription, handleDashboard]);
 
   const handleEdit = useCallback((e) => {
     e.stopPropagation();
+    setEditingSubscription(details);
     setActiveSubscription(details);
     handleDashboard('updateSubscription');
-  }, [setActiveSubscription, details, handleDashboard]);
+  }, [setEditingSubscription, setActiveSubscription, details, handleDashboard]);
 
   const clickDelete = useCallback((e) => {
     e.stopPropagation();

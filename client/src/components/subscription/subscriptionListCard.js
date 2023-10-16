@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 
-const SubscriptionListCard = ({ details, setEditingSubscription, handleDashboard, openOffcanvas }) => {
+const SubscriptionListCard = ({ details, setActiveSubscription, setEditingSubscription, handleDashboard, openOffcanvas }) => {
   const { name, nickname, dueDate, amount } = details;
 
   const handleEdit = useCallback(async (e) => {
@@ -11,15 +11,16 @@ const SubscriptionListCard = ({ details, setEditingSubscription, handleDashboard
     handleDashboard('updateSubscription');
   }, [setEditingSubscription, details, handleDashboard]);
 
-  const openUpdateOffcanvas = useCallback((e) => {
+  const openUpdateOffcanvas = useCallback(async (e) => {
     e.stopPropagation();
+    await setEditingSubscription(details);
     openOffcanvas(details);
-  }, [details, openOffcanvas]);
+  }, [setEditingSubscription, details, openOffcanvas]);
 
   return (
     <div className="w-100 subscriptionListCard d-flex justify-content-between align-items-center">
       <button className="btn w-100" type="button" onClick={async () => {
-        await setEditingSubscription(details);
+        await setActiveSubscription(details);
         handleDashboard('subscriptionDetail');
       }}>
         <ul className="text-start px-0">

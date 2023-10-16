@@ -53,7 +53,7 @@ const ReactDayPicker = ({ handleUpdate, updating, nextDueDate, frequency }) => {
   
   return (
     <section className="day-picker">
-      <div id="dayPickerForm">
+      <div id={updating.length !== 0 ? 'dayPickerForm-update' : 'dayPickerForm-create'}>
         <DayPicker 
           onDayClick={handleDayClick}
           selectedDays={days}

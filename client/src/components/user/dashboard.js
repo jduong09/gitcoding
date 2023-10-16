@@ -146,7 +146,7 @@ class Dashboard extends React.Component {
   }
 
   setEditingSubscription = async (subscription) => {
-    await this.setState({ editingSubscription: subscription });
+    await this.setState({ editingSubscription: subscription, activeSubscription: subscription });
   }
 
   handleUpdate = async (newSubscriptionsList) => {
@@ -232,6 +232,7 @@ class Dashboard extends React.Component {
         return (
           <SubscriptionDetail 
             key={activeSubscription.subscriptionUuid}
+            setEditingSubscription={this.setEditingSubscription}
             setActiveSubscription={this.setActiveSubscription}
             handleDashboard={this.handleDashboardChange}
             handleDelete={this.handleDelete}
@@ -241,8 +242,8 @@ class Dashboard extends React.Component {
         );
       case 'createSubscription':
         return (
-          <div className="h-90 d-flex align-items-start" id="div-subscription-create">
-            <div className="col-11 p-1 mx-auto flex-column d-none d-md-flex">
+          <div className="h-90 d-flex align-items-start d-none d-md-flex" id="div-subscription-create">
+            <div className="col-11 p-1 mx-auto flex-column">
               <div className="d-flex mb-4 justify-content-between align-items-center">
                 <h2 className="text-start">Create Subscription</h2>
                 <button className="btn my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.handleDashboardChange('dashboardCalendar')}>
@@ -265,8 +266,8 @@ class Dashboard extends React.Component {
         );
       case 'updateSubscription': 
         return (
-          <div className="h-90 d-flex align-items-start">
-            <div className="col-11 p-1 mx-auto flex-column d-none d-md-flex"  id="div-subscription-update">
+          <div className="h-90 d-flex align-items-start d-none d-md-flex">
+            <div className="col-11 p-1 mx-auto flex-column"  id="div-subscription-update">
               <div className="d-flex mb-4 justify-content-between align-items-center">
                 <h2 className="text-start">Update Subscription</h2>
                 <button className="btn my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.handleDashboardChange('subscriptionDetail')} >
@@ -300,7 +301,8 @@ class Dashboard extends React.Component {
 
   render() {
     const { pfp, handleLogOut } = this.props;
-    const { subscriptions, addingSubscription, activeSubscription, isDeleting } = this.state;
+    const { subscriptions, addingSubscription, activeSubscription, editingSubscription, isDeleting } = this.state;
+    // --> SubscriptionForm will either be for create or update.
     const subscriptionForm = addingSubscription
       ? <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm">
           <div className="col d-flex justify-content-between align-items-center">
@@ -339,6 +341,12 @@ class Dashboard extends React.Component {
             closeOffcanvas={this.closeOffcanvas}
           />
         </div>;
+
+
+    console.log('AddSubscripton', addingSubscription);
+    console.log('EditingSubscription', editingSubscription);
+    console.log('ActiveSubscription', activeSubscription);
+    
     return (
       <div className="h-100 d-flex flex-column">
         <header className="navbar py-2 px-3 d-flex justify-content-between align-items-center text-dark border-bottom shadow-sm">
@@ -368,6 +376,7 @@ class Dashboard extends React.Component {
           <div className="col-md-4 p-3 order-md-first flex-fill border-end shadow-sm">
             <SubscriptionsList
               subscriptions={subscriptions}
+              setActiveSubscription={this.setActiveSubscription}
               setEditingSubscription={this.setEditingSubscription}
               handleDashboard={this.handleDashboardChange}
               activeSubscription={activeSubscription}
@@ -394,8 +403,8 @@ class Dashboard extends React.Component {
                 </button>
               </div>
             </div>
-            <div className="offcanvas offcanvas-bottom d-md-none overflow-auto offcanvasBorder" id="offcanvasExample">
-              {addingSubscription || activeSubscription ? subscriptionForm : ''}
+            <div className="offcanvas offcanvas-bottom d-lg-none overflow-auto offcanvasBorder" id="offcanvasExample">
+              {addingSubscription || editingSubscription ? subscriptionForm : ''}
             </div>
             <ModalComponent handleModalClick={this.handleModalClick} isDeleting={isDeleting} />
           </div>
