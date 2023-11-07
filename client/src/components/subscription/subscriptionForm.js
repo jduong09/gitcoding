@@ -34,6 +34,7 @@ class SubscriptionForm extends React.Component {
       days: prevSubscription ? parseDate : [],
       checkedDays: prevSubscription ? weekDays : [],
       nextDueDate: prevSubscription?.dueDate?.nextDueDate || '',
+      isUpdate: prevSubscription,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -130,7 +131,7 @@ class SubscriptionForm extends React.Component {
   }
 
   renderSwitch(frequency) {
-    const { days, nextDueDate, checkedDays } = this.state;
+    const { days, nextDueDate, checkedDays, isUpdate } = this.state;
     const weeklyCheckbox = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, idx) => 
       <label className="d-flex flex-column" htmlFor={day} key={day}>
         <div className="mx-auto col-md-3 form-check-label">{day}</div>
@@ -145,7 +146,7 @@ class SubscriptionForm extends React.Component {
             <div className="text-center d-none d-md-block">On which day do you want to be reminded?</div>
             <div className="col-12 col-md-6 dayPickerBorder">
               <div className="text-center" id="dayPickerForm">
-                <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='yearly' />
+                <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='yearly' isUpdate={isUpdate} />
               </div>
             </div>
           </div>
@@ -156,7 +157,7 @@ class SubscriptionForm extends React.Component {
             <div className="text-center d-none d-md-block">On which day(s) do you want to be reminded?</div>
             <div className="col-12 col-md-6 dayPickerBorder">
               <div className="text-center" id="dayPickerForm">
-                <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='monthly' />
+                <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='monthly' isUpdate={isUpdate} />
               </div>
             </div>
           </div>
@@ -167,7 +168,7 @@ class SubscriptionForm extends React.Component {
             <div className="col-12 d-flex justify-content-around" >{weeklyCheckbox}</div>
             <div className="col-12 col-md-6 dayPickerBorder">
               <div className="col mx-auto text-center" id="dayPickerForm">
-                <ReactDayPicker updating={days} nextDueDate={nextDueDate} frequency='weekly' />
+                <ReactDayPicker updating={days} nextDueDate={nextDueDate} frequency='weekly' isUpdate={isUpdate} />
               </div>
             </div>
           </div>
@@ -178,7 +179,7 @@ class SubscriptionForm extends React.Component {
             <div className="text-center d-none d-md-block">On which day do you want to be reminded?</div>
             <div className="col-12 col-md-6 dayPickerBorder">
               <div className="text-center" id="dayPickerForm">
-                <ReactDayPicker handleUpdate={this.handleDays} updating={days} frequency='daily' />
+                <ReactDayPicker handleUpdate={this.handleDays} updating={days} frequency='daily' isUpdate={isUpdate} />
               </div>
             </div>
           </div>

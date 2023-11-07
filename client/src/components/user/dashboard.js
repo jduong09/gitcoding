@@ -37,7 +37,8 @@ class Dashboard extends React.Component {
       editingSubscription: false,
       mainComponentView: 'dashboardCalendar',
       nextView: null,
-      isDeleting: false
+      isDeleting: false,
+      isDesktop: false
     };
 
     this.setAddingSubscription = this.setAddingSubscription.bind(this);
@@ -50,6 +51,7 @@ class Dashboard extends React.Component {
     this.openDeleteModal = this.openDeleteModal.bind(this);
     this.openOffcanvas=this.openOffcanvas.bind(this);
     this.closeOffcanvas = this.closeOffcanvas.bind(this);
+    this.updatePredicate = this.updatePredicate.bind(this);
   };
   
   async componentDidMount() {
@@ -89,7 +91,14 @@ class Dashboard extends React.Component {
     offcanvas.addEventListener('hide.bs.offcanvas', () => {
       this.setState({ addingSubscription: false, mainComponentView: 'dashboardCalendar', activeSubscription: false, editingSubscription: false});
     });
+
+    this.updatePredicate();
+    window.addEventListener("resize", this.updatePredicate);
   };
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updatePredicate);
+  }
 
   handleDashboardChange(newView) {
     const { mainComponentView, editingSubscription, activeSubscription } = this.state;
@@ -110,6 +119,10 @@ class Dashboard extends React.Component {
     // user is navigating from form, and requires a modal.
     this.setState({ nextView: newView, isDeleting: false });
     this.viewModal.show();
+  }
+
+  updatePredicate = () => {
+    this.setState({ isDesktop: window.innerWidth > 750 });
   }
 
   handleModalClick = (userInput) => {
@@ -301,8 +314,7 @@ class Dashboard extends React.Component {
 
   render() {
     const { pfp, handleLogOut } = this.props;
-    const { subscriptions, addingSubscription, activeSubscription, editingSubscription, isDeleting } = this.state;
-    // --> SubscriptionForm will either be for create or update.
+    const { subscriptions, addingSubscription, activeSubscription, editingSubscription, isDeleting, isDesktop } = this.state;
     const subscriptionForm = addingSubscription
       ? <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm">
           <div className="col d-flex justify-content-between align-items-center">
@@ -341,11 +353,6 @@ class Dashboard extends React.Component {
             closeOffcanvas={this.closeOffcanvas}
           />
         </div>;
-
-
-    console.log('AddSubscripton', addingSubscription);
-    console.log('EditingSubscription', editingSubscription);
-    console.log('ActiveSubscription', activeSubscription);
     
     return (
       <div className="h-100 d-flex flex-column">
@@ -371,7 +378,7 @@ class Dashboard extends React.Component {
         </header>
         <main className="d-flex flex-fill flex-column flex-md-row justify-content-between">
           <div className="col-md-8 flex-fill h-100 d-flex justify-content-center" id="mainContainer" >
-            {this.renderMainComponent()}
+            {isDesktop && this.renderMainComponent()}
           </div>
           <div className="col-md-4 p-3 order-md-first flex-fill border-end shadow-sm">
             <SubscriptionsList
@@ -403,9 +410,12 @@ class Dashboard extends React.Component {
                 </button>
               </div>
             </div>
-            <div className="offcanvas offcanvas-bottom d-lg-none overflow-auto offcanvasBorder" id="offcanvasExample">
-              {addingSubscription || editingSubscription ? subscriptionForm : ''}
-            </div>
+            {!isDesktop
+              &&
+              <div className="offcanvas offcanvas-bottom d-lg-none overflow-auto offcanvasBorder" id="offcanvasExample">
+                {addingSubscription || editingSubscription ? subscriptionForm : ''}
+              </div>
+            }
             <ModalComponent handleModalClick={this.handleModalClick} isDeleting={isDeleting} />
           </div>
         </main>

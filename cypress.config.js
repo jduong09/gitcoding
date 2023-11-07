@@ -18,4 +18,5 @@ module.exports = defineConfig({
     AUTH0_PASSWORD: process.env.AUTH0_PASSWORD,
     AUTH0_USER_UUID: process.env.AUTH0_USER_UUID
   },
+  defaultCommandTimeout: 10000
 });

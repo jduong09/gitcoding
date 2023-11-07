@@ -13,7 +13,7 @@ describe('Subscription API', () => {
       cy.get('input#subscription-reminder-days').type(1);
       cy.get('input#subscription-amount').type(1);
       cy.get('select#due-date-select').select('yearly');
-      cy.get('div#dayPickerForm-create div.DayPicker-Day[aria-label="Sun Oct 29 2023"]').click();
+      cy.get('div#dayPickerForm-create div.DayPicker-Day[aria-label="Sun Nov 19 2023"]').click();
       cy.get('input#input-submit-desktop').click();
 
       cy.get('ul#list-subscriptions').children().should('have.length', 1);
@@ -30,14 +30,13 @@ describe('Subscription API', () => {
       cy.get('input#subscription-reminder-days').type(2);
       cy.get('input#subscription-amount').type(2);
       cy.get('select#due-date-select').select('yearly');
-      cy.get('div#dayPickerForm-create div.DayPicker-Day[aria-label="Mon Oct 02 2023"]').click();
+      cy.get('div#dayPickerForm-create div.DayPicker-Day[aria-label="Sun Nov 19 2023"]').click();
       cy.get('input#input-submit-desktop').click();
 
       cy.get('ul#list-subscriptions').children().should('have.length', 2);
       cy.get('ul#list-subscriptions').children().should('not.have.length', 3);
     });
   });
-  /*
 
   context('Reading a subscription', () => {
     it('shows subscription highlighted in subscriptions list', () => {
@@ -49,7 +48,7 @@ describe('Subscription API', () => {
     it('shows calendar with subscription day selected', () => {
       cy.get('ul#list-subscriptions li:first').click();
 
-      cy.get('div#dayPickerForm').find('div.DayPicker-Day[aria-label="Sun Oct 29 2023"]').should('have.attr', 'aria-selected', 'true');
+      cy.get('div#dayPickerForm').find('div.DayPicker-Day[aria-label="Sun Nov 19 2023"]').should('have.attr', 'aria-selected', 'true');
     });
 
     it('shows subscription data correctly', () => {
@@ -58,10 +57,8 @@ describe('Subscription API', () => {
       cy.get('div#mainContainer').find('ul').children().should('have.length', 3);
     });
   });
-  */
 
   context('Updating a subscription', () => {
-    /*
     it('updating name works correctly', () => {
       cy.get('ul#list-subscriptions li:first').click();
       cy.get('button#btn-subscription-update').click();
@@ -132,7 +129,6 @@ describe('Subscription API', () => {
 
       cy.get('div#div-subscription-detail').find('ul li:first span').should('have.text', '$9.99');
     });
-    */
 
     it('updating yearly subscription to monthly, changing date correctly sets next due date', () => {
       cy.get('ul#list-subscriptions li:first').click();
@@ -140,24 +136,24 @@ describe('Subscription API', () => {
 
       cy.wait(4000);
 
+      cy.get('div#dayPickerForm-update div.DayPicker-Day[aria-label="Sun Nov 19 2023"]').click();
+
+
       cy.get('div#div-subscription-update select#due-date-select').select('monthly');
+      cy.wait(4000);
 
-      cy.get('div#dayPickerForm-update div.DayPicker-Day[aria-label="Sun Oct 29 2023"]').click();
-
-      cy.get('div#dayPickerForm-update div.DayPicker-Day[aria-label="Mon Oct 09 2023"]').click();
+      cy.get('div#dayPickerForm-update div.DayPicker-Day[aria-label="Mon Nov 20 2023"]').click();
 
       cy.get('div#div-subscription-update').find('input#input-submit-desktop').click();
 
-      cy.wait(500);
-      cy.get('ul#list-subscriptions li:first').click();
       cy.wait(4000);
+      cy.get('ul#list-subscriptions li:first').click();
 
-      cy.get('div#div-subscription-detail').find('ul li').eq(1).should('have.text', '11/9/2023, Every month on the 9th.');
+      cy.get('div#div-subscription-detail').find('ul li:nth-child(2) span').should('have.text', '11/20/2023, Every month on the 20th.');
 
     });
   });
 
-  /*
   context('Deleting a subscription', () => {
     it('deletes subscription', () => {
       cy.get('ul#list-subscriptions li:first').click();
@@ -180,5 +176,4 @@ describe('Subscription API', () => {
       cy.get('ul#list-subscriptions').children().should('have.length', 0);
     });
   });
-  */
 });
