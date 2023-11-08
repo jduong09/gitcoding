@@ -13,10 +13,6 @@ import SubscriptionDetail from '../subscription/subscriptionDetail';
 import ModalComponent from '../modalComponent';
 import logo from '../../assets/watering-can.png';
 
-const href = process.env && process.env.NODE_ENV === 'production'
-  ? '/auth/logout'
-  : 'http://localhost:5000/auth/logout';
-
 const todaysDate = new Date().toDateString();
 const year = todaysDate.slice(todaysDate.length - 4);
 const monthAndDay = todaysDate.slice(0, todaysDate.length - 5);
