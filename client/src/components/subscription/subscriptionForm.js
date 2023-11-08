@@ -34,6 +34,7 @@ class SubscriptionForm extends React.Component {
       days: prevSubscription ? parseDate : [],
       checkedDays: prevSubscription ? weekDays : [],
       nextDueDate: prevSubscription?.dueDate?.nextDueDate || '',
+      isUpdate: prevSubscription,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -130,7 +131,7 @@ class SubscriptionForm extends React.Component {
   }
 
   renderSwitch(frequency) {
-    const { days, nextDueDate, checkedDays } = this.state;
+    const { days, nextDueDate, checkedDays, isUpdate } = this.state;
     const weeklyCheckbox = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, idx) => 
       <label className="d-flex flex-column" htmlFor={day} key={day}>
         <div className="mx-auto col-md-3 form-check-label">{day}</div>
@@ -145,7 +146,7 @@ class SubscriptionForm extends React.Component {
             <div className="text-center d-none d-md-block">On which day do you want to be reminded?</div>
             <div className="col-12 col-md-6 dayPickerBorder">
               <div className="text-center" id="dayPickerForm">
-                <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='yearly' />
+                <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='yearly' isUpdate={isUpdate} />
               </div>
             </div>
           </div>
@@ -156,7 +157,7 @@ class SubscriptionForm extends React.Component {
             <div className="text-center d-none d-md-block">On which day(s) do you want to be reminded?</div>
             <div className="col-12 col-md-6 dayPickerBorder">
               <div className="text-center" id="dayPickerForm">
-                <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='monthly' />
+                <ReactDayPicker handleUpdate={this.handleDays} updating={days} nextDueDate={nextDueDate} frequency='monthly' isUpdate={isUpdate} />
               </div>
             </div>
           </div>
@@ -167,7 +168,7 @@ class SubscriptionForm extends React.Component {
             <div className="col-12 d-flex justify-content-around" >{weeklyCheckbox}</div>
             <div className="col-12 col-md-6 dayPickerBorder">
               <div className="col mx-auto text-center" id="dayPickerForm">
-                <ReactDayPicker updating={days} nextDueDate={nextDueDate} frequency='weekly' />
+                <ReactDayPicker updating={days} nextDueDate={nextDueDate} frequency='weekly' isUpdate={isUpdate} />
               </div>
             </div>
           </div>
@@ -178,7 +179,7 @@ class SubscriptionForm extends React.Component {
             <div className="text-center d-none d-md-block">On which day do you want to be reminded?</div>
             <div className="col-12 col-md-6 dayPickerBorder">
               <div className="text-center" id="dayPickerForm">
-                <ReactDayPicker handleUpdate={this.handleDays} updating={days} frequency='daily' />
+                <ReactDayPicker handleUpdate={this.handleDays} updating={days} frequency='daily' isUpdate={isUpdate} />
               </div>
             </div>
           </div>
@@ -204,21 +205,21 @@ class SubscriptionForm extends React.Component {
           <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-nickname">
             <div className="col-12 col-md-3 fw-bolder">Nickname</div>
             <div className="col-12 align-self-start col-md-7">
-              <input className="form-control" type="text" placeholder="e.g. My favorite streaming site"name="subscription-nickname" value={nickname} onChange={(event) => this.handleChange(event, 'nickname')}  /> 
+              <input className="form-control" type="text" id="subscription-nickname" placeholder="e.g. My favorite streaming site"name="subscription-nickname" value={nickname} onChange={(event) => this.handleChange(event, 'nickname')}  /> 
             </div>
           </label>
 
           <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-reminder-days">
             <div className="col-12 col-md-3 fw-bolder">Alert</div>
             <div className="col-12 align-self-start col-md-7">
-              <input className="form-control" type="number" name="subscription-reminder-days" min="0" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} required />
+              <input className="form-control" type="number" id="subscription-reminder-days" name="subscription-reminder-days" min="0" value={reminderDays} onChange={(event) => this.handleChange(event, 'reminderDays')} required />
             </div>
           </label>
 
           <label className="col-12 d-flex flex-column flex-md-row form-label align-items-center col-md-6" htmlFor="subscription-amount">
             <div className="col-12 col-md-3 fw-bolder">Amount</div>
             <div className="col-12 align-self-start col-md-7">
-              <input className="form-control" type="number" name="subscription-amount" min="0" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} required />
+              <input className="form-control" type="number" id="subscription-amount" name="subscription-amount" min="0" step="0.01" value={amount} onChange={(event) => this.handleChange(event, 'amount')} required />
             </div>
           </label>
 
@@ -253,8 +254,8 @@ class SubscriptionForm extends React.Component {
           {this.renderSwitch(frequency)}
 
           <div className="col-12 form-label text-center">
-            <input className="btn btn-primary form-control d-none d-sm-none d-md-block" type="submit" aria-label="closeDesktop" value="Submit" />
-            <input className="btn btn-primary form-control-sm d-md-none" type="submit" aria-label="closeMobile" value="Submit" />
+            <input className="btn btn-primary form-control d-none d-sm-none d-md-block" type="submit" id="input-submit-desktop" aria-label="closeDesktop" value="Submit" />
+            <input className="btn btn-primary form-control-sm d-md-none" type="submit" id="input-submit-mobile" aria-label="closeMobile" value="Submit" />
           </div>
         </form>
       </section>

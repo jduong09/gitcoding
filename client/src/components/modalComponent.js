@@ -19,7 +19,7 @@ const ModalComponent = ({ handleModalClick, isDeleting }) => (
           <button onClick={() => handleModalClick(false)} type="button" className="btn btn-primary" data-bs-dismiss="modal">
             {isDeleting ? 'Cancel' : 'Stay On Page'}
           </button>
-          <button onClick={() => handleModalClick(true)} type="button" className="btn btn-primary">
+          <button onClick={() => handleModalClick(true)} id="btn-modal-subscription-delete" type="button" className="btn btn-primary">
             {isDeleting ? 'Delete' : 'Discard Changes'}
           </button>
         </div>

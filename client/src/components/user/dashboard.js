@@ -13,12 +13,6 @@ import SubscriptionDetail from '../subscription/subscriptionDetail';
 import ModalComponent from '../modalComponent';
 import logo from '../../assets/watering-can.png';
 
-/*
-const href = process.env && process.env.NODE_ENV === 'production'
-  ? '/auth/logout'
-  : 'http://localhost:5000/auth/logout';
-*/
-
 const todaysDate = new Date().toDateString();
 const year = todaysDate.slice(todaysDate.length - 4);
 const monthAndDay = todaysDate.slice(0, todaysDate.length - 5);
@@ -37,7 +31,8 @@ class Dashboard extends React.Component {
       editingSubscription: false,
       mainComponentView: 'dashboardCalendar',
       nextView: null,
-      isDeleting: false
+      isDeleting: false,
+      isDesktop: false
     };
 
     this.setAddingSubscription = this.setAddingSubscription.bind(this);
@@ -50,6 +45,7 @@ class Dashboard extends React.Component {
     this.openDeleteModal = this.openDeleteModal.bind(this);
     this.openOffcanvas=this.openOffcanvas.bind(this);
     this.closeOffcanvas = this.closeOffcanvas.bind(this);
+    this.updatePredicate = this.updatePredicate.bind(this);
   };
   
   async componentDidMount() {
@@ -89,7 +85,14 @@ class Dashboard extends React.Component {
     offcanvas.addEventListener('hide.bs.offcanvas', () => {
       this.setState({ addingSubscription: false, mainComponentView: 'dashboardCalendar', activeSubscription: false, editingSubscription: false});
     });
+
+    this.updatePredicate();
+    window.addEventListener("resize", this.updatePredicate);
   };
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updatePredicate);
+  }
 
   handleDashboardChange(newView) {
     const { mainComponentView, editingSubscription, activeSubscription } = this.state;
@@ -110,6 +113,10 @@ class Dashboard extends React.Component {
     // user is navigating from form, and requires a modal.
     this.setState({ nextView: newView, isDeleting: false });
     this.viewModal.show();
+  }
+
+  updatePredicate = () => {
+    this.setState({ isDesktop: window.innerWidth > 750 });
   }
 
   handleModalClick = (userInput) => {
@@ -146,7 +153,7 @@ class Dashboard extends React.Component {
   }
 
   setEditingSubscription = async (subscription) => {
-    await this.setState({ editingSubscription: subscription });
+    await this.setState({ editingSubscription: subscription, activeSubscription: subscription });
   }
 
   handleUpdate = async (newSubscriptionsList) => {
@@ -232,6 +239,7 @@ class Dashboard extends React.Component {
         return (
           <SubscriptionDetail 
             key={activeSubscription.subscriptionUuid}
+            setEditingSubscription={this.setEditingSubscription}
             setActiveSubscription={this.setActiveSubscription}
             handleDashboard={this.handleDashboardChange}
             handleDelete={this.handleDelete}
@@ -241,8 +249,8 @@ class Dashboard extends React.Component {
         );
       case 'createSubscription':
         return (
-          <div className="h-90 d-flex align-items-start">
-            <div className="col-11 p-1 mx-auto flex-column d-none d-md-flex">
+          <div className="h-90 d-flex align-items-start d-none d-md-flex" id="div-subscription-create">
+            <div className="col-11 p-1 mx-auto flex-column">
               <div className="d-flex mb-4 justify-content-between align-items-center">
                 <h2 className="text-start">Create Subscription</h2>
                 <button className="btn my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.handleDashboardChange('dashboardCalendar')}>
@@ -265,8 +273,8 @@ class Dashboard extends React.Component {
         );
       case 'updateSubscription': 
         return (
-          <div className="h-90 d-flex align-items-start">
-            <div className="col-11 p-1 mx-auto flex-column d-none d-md-flex">
+          <div className="h-90 d-flex align-items-start d-none d-md-flex">
+            <div className="col-11 p-1 mx-auto flex-column"  id="div-subscription-update">
               <div className="d-flex mb-4 justify-content-between align-items-center">
                 <h2 className="text-start">Update Subscription</h2>
                 <button className="btn my-2 d-md-none" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => this.handleDashboardChange('subscriptionDetail')} >
@@ -300,7 +308,7 @@ class Dashboard extends React.Component {
 
   render() {
     const { pfp, handleLogOut } = this.props;
-    const { subscriptions, addingSubscription, activeSubscription, isDeleting } = this.state;
+    const { subscriptions, addingSubscription, activeSubscription, editingSubscription, isDeleting, isDesktop } = this.state;
     const subscriptionForm = addingSubscription
       ? <div className="p-3 m-2 d-flex flex-wrap borderSubscriptionForm">
           <div className="col d-flex justify-content-between align-items-center">
@@ -342,7 +350,7 @@ class Dashboard extends React.Component {
     return (
       <div className="h-100 d-flex flex-column">
         <header className="navbar py-2 px-3 d-flex justify-content-between align-items-center text-dark border-bottom shadow-sm">
-          <a className="navbar-brand d-flex text-dark" href="#changeThis">
+          <a className="navbar-brand d-flex text-dark" id="link-logo" href="#changeThis">
             <img src={logo} alt="wateringCanIcon" height="60" />
             <div className="align-self-center d-none d-md-block">Water Your Subs</div>
           </a>
@@ -353,7 +361,7 @@ class Dashboard extends React.Component {
             </a>
             <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
               <li>
-                <button className="dropdown-item d-flex align-items-center" type="button" onClick={handleLogOut}>
+                <button className="dropdown-item d-flex align-items-center" id="btn-logout" type="button" onClick={handleLogOut}>
                   <div className="p-2">Sign Out</div>
                   <FontAwesomeIcon icon={faSignOutAlt} />
                 </button>
@@ -363,11 +371,12 @@ class Dashboard extends React.Component {
         </header>
         <main className="d-flex flex-fill flex-column flex-md-row justify-content-between">
           <div className="col-md-8 flex-fill h-100 d-flex justify-content-center" id="mainContainer" >
-            {this.renderMainComponent()}
+            {isDesktop && this.renderMainComponent()}
           </div>
           <div className="col-md-4 p-3 order-md-first flex-fill border-end shadow-sm">
             <SubscriptionsList
               subscriptions={subscriptions}
+              setActiveSubscription={this.setActiveSubscription}
               setEditingSubscription={this.setEditingSubscription}
               handleDashboard={this.handleDashboardChange}
               activeSubscription={activeSubscription}
@@ -377,6 +386,7 @@ class Dashboard extends React.Component {
               <div className="d-none d-sm-none d-md-block">
                 <button
                   className="col-12 p-4 btn border-dashed border-primary btn-outline-primary"
+                  id="btn-subscription-create"
                   type="button"
                   onClick={() => this.handleDashboardChange('createSubscription')}
                 >
@@ -393,9 +403,12 @@ class Dashboard extends React.Component {
                 </button>
               </div>
             </div>
-            <div className="offcanvas offcanvas-bottom d-md-none overflow-auto offcanvasBorder" id="offcanvasExample">
-              {addingSubscription || activeSubscription ? subscriptionForm : ''}
-            </div>
+            {!isDesktop
+              &&
+              <div className="offcanvas offcanvas-bottom d-lg-none overflow-auto offcanvasBorder" id="offcanvasExample">
+                {addingSubscription || editingSubscription ? subscriptionForm : ''}
+              </div>
+            }
             <ModalComponent handleModalClick={this.handleModalClick} isDeleting={isDeleting} />
           </div>
         </main>

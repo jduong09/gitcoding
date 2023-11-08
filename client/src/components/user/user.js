@@ -1,5 +1,4 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Dashboard from './dashboard';
 
@@ -12,7 +11,6 @@ class User extends React.Component {
     super(props);
 
     this.state = {
-      isAuth: true,
       name: '',
       pfp: ''
     };
@@ -20,12 +18,10 @@ class User extends React.Component {
 
   async componentDidMount() {
     try {
-      const response = await fetch(`${window.location.pathname}/userInfo`);
+      await fetch(`${window.location.pathname}/userInfo`)
+        .then(response => response.json())
+        .then(userInfo => this.setState({ name: userInfo.name, pfp: userInfo.pfp }));
 
-      const userInfo = await response.json();
-      const { name, pfp } = userInfo;
-
-      this.setState({ name, pfp });
     } catch(error) {
       toast.error(`Error fetching user info: ${error}`);
     } 
@@ -49,8 +45,8 @@ class User extends React.Component {
   }
   
   render() {
-    const { isAuth, name, pfp } = this.state;
-    return (isAuth === true ) ? <Dashboard name={name} pfp={pfp} handleLogOut={User.handleLogOut} /> : <Navigate to='/' />;
+    const { name, pfp } = this.state;
+    return <Dashboard name={name} pfp={pfp} handleLogOut={User.handleLogOut} />;
   };
 }
 

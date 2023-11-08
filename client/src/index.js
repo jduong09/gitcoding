@@ -8,11 +8,9 @@ import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <React.StrictMode>
     <ReactRouter>
       <App />
-    </ReactRouter>
-  </React.StrictMode>,
+    </ReactRouter>,
   document.getElementById('root')
 );
 

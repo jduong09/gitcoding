@@ -3,7 +3,7 @@ import DayPicker, { DateUtils } from 'react-day-picker';
 import '../../customDayPicker.scss';
 import { toast } from 'react-toastify';
 
-const ReactDayPicker = ({ handleUpdate, updating, nextDueDate, frequency }) => {
+const ReactDayPicker = ({ handleUpdate, updating, nextDueDate, frequency, isUpdate }) => {
   const [days, setDate] = useState([]);
   const [disabledDay, setDisabledDay] = useState('');
   const [canChangeMonth, setCanChangeMonth] = useState(true);
@@ -53,7 +53,7 @@ const ReactDayPicker = ({ handleUpdate, updating, nextDueDate, frequency }) => {
   
   return (
     <section className="day-picker">
-      <div id="dayPickerForm">
+      <div id={isUpdate ? 'dayPickerForm-update' : 'dayPickerForm-create'}>
         <DayPicker 
           onDayClick={handleDayClick}
           selectedDays={days}
