@@ -13,11 +13,9 @@ import SubscriptionDetail from '../subscription/subscriptionDetail';
 import ModalComponent from '../modalComponent';
 import logo from '../../assets/watering-can.png';
 
-/*
 const href = process.env && process.env.NODE_ENV === 'production'
   ? '/auth/logout'
   : 'http://localhost:5000/auth/logout';
-*/
 
 const todaysDate = new Date().toDateString();
 const year = todaysDate.slice(todaysDate.length - 4);
@@ -353,7 +351,6 @@ class Dashboard extends React.Component {
             closeOffcanvas={this.closeOffcanvas}
           />
         </div>;
-    
     return (
       <div className="h-100 d-flex flex-column">
         <header className="navbar py-2 px-3 d-flex justify-content-between align-items-center text-dark border-bottom shadow-sm">
