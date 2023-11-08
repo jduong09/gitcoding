@@ -12,11 +12,6 @@ jobs:
       # and run all Cypress tests
       - name: Install dependencies
         run: npm install
-      - name: Set the values
-        run: |
-          echo "{CLIENT_ID}={process.env.CLIENT_ID}" >> "$GITHUB_ENV"
-          echo "{CLIENT_SECRET}={process.env.CLIENT_SECRET}" >> "$GITHUB_ENV"
-          echo "{ISSUER}={process.env.ISSUER}" >> "$GITHUB_ENV"
       - name: Run e2e tests
         uses: cypress-io/github-action@v6
         with:
