@@ -148,9 +148,36 @@ describe('Subscription API', () => {
 
       cy.wait(4000);
       cy.get('ul#list-subscriptions li:first').click();
+      cy.wait(4000);
 
       cy.get('div#div-subscription-detail').find('ul li:nth-child(2) span').should('have.text', '11/20/2023, Every month on the 20th.');
+    });
 
+    it('updating yearly subscription to weekly, changing date correctly sets next due date', () => {
+      cy.get('ul#list-subscriptions li:first').click();
+      cy.get('button#btn-subscription-update').click();
+
+      cy.wait(4000);
+
+      cy.get('div#dayPickerForm-update div.DayPicker-Day[aria-label="Sun Nov 19 2023"]').click();
+
+      
+      cy.get('div#div-subscription-update select#due-date-select').select('weekly');
+      cy.wait(4000);
+      
+      cy.get('div#div-subscription-update div#div-weeklyCheckbox input#Mon').click();
+
+      cy.get('div#div-subscription-update div#div-weeklyCheckbox input#Wed').click();
+
+      cy.get('div#div-subscription-update div#div-weeklyCheckbox input#Fri').click();
+
+      cy.get('div#div-subscription-update').find('input#input-submit-desktop').click();
+
+      cy.wait(4000);
+      cy.get('ul#list-subscriptions li:first').click();
+      cy.wait(4000);
+
+      cy.get('div#div-subscription-detail').find('ul li:nth-child(2) span').should('have.text', '11/8/2023, Every week on Monday, Wednesday, Friday.');
     });
   });
 

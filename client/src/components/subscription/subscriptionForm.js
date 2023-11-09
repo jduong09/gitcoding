@@ -165,7 +165,7 @@ class SubscriptionForm extends React.Component {
       case 'weekly':
         return (
           <div className="col-12">
-            <div className="col-12 d-flex justify-content-around" >{weeklyCheckbox}</div>
+            <div className="col-12 d-flex justify-content-around" id="div-weeklyCheckbox" >{weeklyCheckbox}</div>
             <div className="col-12 col-md-6 dayPickerBorder">
               <div className="col mx-auto text-center" id="dayPickerForm">
                 <ReactDayPicker updating={days} nextDueDate={nextDueDate} frequency='weekly' isUpdate={isUpdate} />
