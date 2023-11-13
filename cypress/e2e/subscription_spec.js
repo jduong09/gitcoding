@@ -37,7 +37,7 @@ describe('Subscription API', () => {
       cy.get('ul#list-subscriptions').children().should('not.have.length', 3);
     });
   });
-
+  
   context('Reading a subscription', () => {
     it('shows subscription highlighted in subscriptions list', () => {
       cy.get('ul#list-subscriptions li:first').click();
@@ -153,8 +153,9 @@ describe('Subscription API', () => {
       cy.get('div#div-subscription-detail').find('ul li:nth-child(2) span').should('have.text', '11/20/2023, Every month on the 20th.');
     });
 
+
     it('updating yearly subscription to weekly, changing date correctly sets next due date', () => {
-      cy.get('ul#list-subscriptions li:first').click();
+      cy.get('ul#list-subscriptions li:last').click();
       cy.get('button#btn-subscription-update').click();
 
       cy.wait(4000);
@@ -174,10 +175,10 @@ describe('Subscription API', () => {
       cy.get('div#div-subscription-update').find('input#input-submit-desktop').click();
 
       cy.wait(4000);
-      cy.get('ul#list-subscriptions li:first').click();
+      cy.get('ul#list-subscriptions li:last').click();
       cy.wait(4000);
 
-      cy.get('div#div-subscription-detail').find('ul li:nth-child(2) span').should('have.text', '11/8/2023, Every week on Monday, Wednesday, Friday.');
+      cy.get('div#div-subscription-detail').find('ul li:nth-child(3) span').should('have.text', '11/13/2023, Every week on Monday, Wednesday, Friday.');
     });
   });
 
