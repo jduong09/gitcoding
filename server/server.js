@@ -11,7 +11,6 @@ const apiRouter = require('./api');
 const db = require('./db/db');
 const users = require('./api/actions/users');
 
-
 dotenv.config();
 
 const app = express();
@@ -68,7 +67,9 @@ const strategy = new Auth0Strategy({
   }, async (req, accessToken, refreshToken, extraParams, profile, done) => {    
     let data;
     
-    const user = await users.getUserByIdentifier(profile.id).then(response => data = response);
+    const user = await users.getUserByIdentifier(profile.id).then(response => {
+      data = response;
+    });
     
     if (!user) {
       data = await users.createUser({
